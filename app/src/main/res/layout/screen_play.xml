@@ -49,7 +49,7 @@
         android:layout_marginEnd="16dp"
         android:elevation="200dp"
         android:gravity="end"
-        android:textColor="@color/black"
+
         android:textSize="18sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/txtCardCorrectlyGuessed"
@@ -66,7 +66,7 @@
         android:layout_marginEnd="16dp"
         android:elevation="200dp"
         android:gravity="end"
-        android:textColor="@color/black"
+
         android:textSize="18sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/btnOkay"
@@ -80,7 +80,7 @@
         android:id="@+id/lblCards"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+
         android:textSize="18sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/txtCardsRehearsed"
