@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btnNegative"
+        android:layout_width="@dimen/play_button_size"
+        android:layout_height="@dimen/play_button_size"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:alpha="0"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/colorNegative"
+        android:padding="4dp"
+        android:scaleType="fitStart"
+        android:src="@drawable/ic_smiley_negative_24dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnPositive"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:alpha="1"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/btnPositive"
+        android:layout_width="@dimen/play_button_size"
+        android:layout_height="@dimen/play_button_size"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:alpha="0"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/colorPositive"
+        android:padding="4dp"
+        android:scaleType="fitStart"
+        android:src="@drawable/ic_smiley_positive_24dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnNegative"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:alpha="1"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnFlip"
+        style="@style/PlayButtonStyle"
+        android:layout_width="@dimen/play_button_size"
+        android:layout_height="@dimen/play_button_size"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/colorNeutral"
+        android:text="@string/flip"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

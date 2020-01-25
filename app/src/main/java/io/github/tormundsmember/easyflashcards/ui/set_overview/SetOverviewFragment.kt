@@ -1,0 +1,162 @@
+package io.github.tormundsmember.easyflashcards.ui.set_overview
+
+import android.animation.Animator
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import io.github.tormundsmember.easyflashcards.R
+import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
+import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
+import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseAdapter
+import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
+import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_set.DialogAddEditSet
+import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
+import io.github.tormundsmember.easyflashcards.ui.play.PlayKey
+import io.github.tormundsmember.easyflashcards.ui.set.SetKey
+import io.github.tormundsmember.easyflashcards.ui.util.gone
+import io.github.tormundsmember.easyflashcards.ui.util.visible
+
+class SetOverviewFragment : BaseFragment() {
+
+    override val layoutId: Int = R.layout.screen_all_sets
+    private val adapter: Adapter =
+        Adapter(onSomethingSelected = { isSomethingSelected ->
+            animateButtons(isSomethingSelected)
+        }, onClick = {
+            goToSet(it.id)
+        })
+
+    private val viewModel: SetOverviewViewModel by lazy { getViewModel<SetOverviewViewModel>() }
+
+    private lateinit var txtNoItems: TextView
+    private lateinit var vTutorialBack: View
+    private lateinit var txtTutorialPlay: TextView
+    private lateinit var txtTutorialPlayInverse: TextView
+    private lateinit var txtTutorialOk: TextView
+    private lateinit var btnPlay: AppCompatImageButton
+    private lateinit var btnPlayInverse: AppCompatImageButton
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.findViewById<RecyclerView>(R.id.list_sets).let {
+            it.adapter = adapter
+            it.layoutManager = LinearLayoutManager(view.context)
+        }
+
+        txtNoItems = view.findViewById(R.id.txtNoItems)
+        vTutorialBack = view.findViewById(R.id.vTutorialBack)
+        txtTutorialPlay = view.findViewById(R.id.txtTutorialPlay)
+        txtTutorialPlayInverse = view.findViewById(R.id.txtTutorialPlayInverse)
+        txtTutorialOk = view.findViewById(R.id.txtTutorialOk)
+        btnPlay = view.findViewById(R.id.btnPlay)
+        btnPlayInverse = view.findViewById(R.id.btnPlayInverse)
+
+        viewModel.sets.observe {
+            adapter.items = it ?: emptyList()
+            if (it?.isNotEmpty() == true) {
+                txtNoItems.gone()
+            } else {
+                txtNoItems.visible()
+            }
+        }
+
+        btnPlay.setOnClickListener {
+            playSet(false)
+        }
+        btnPlayInverse.setOnClickListener {
+            playSet(true)
+        }
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_set_overview, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val ctx = context
+        if (ctx != null) {
+            when (item.itemId) {
+                R.id.action_add -> DialogAddEditSet.show(ctx)
+                R.id.action_more -> {
+                    adapter.deactiveAllItems()
+                    goTo(MoreKey())
+                }
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun goToSet(setId: Int){
+        adapter.deactiveAllItems()
+        goTo(SetKey(setId))
+    }
+
+    private fun animateButtons(isSomethingSelected: Boolean) {
+        if (isSomethingSelected) {
+            listOf(btnPlay, btnPlayInverse).forEach {
+                it.elevation = 0F
+                it.alpha = 0F
+                it.visible()
+                it.animate()
+                    .alpha(1F)
+                    .setDuration(300)
+                    .setListener(null)
+                    .start()
+                it.animate()
+                    .z(8F)
+                    .setDuration(300)
+                    .setStartDelay(300)
+                    .setListener(null)
+                    .start()
+            }
+        } else {
+            listOf(btnPlay, btnPlayInverse).forEach {
+                it.animate()
+                    .alpha(0F)
+                    .setDuration(300)
+                    .z(0F)
+                    .setListener(object : AnimationListener() {
+                        override fun onAnimationEnd(animation: Animator?) {
+                            it.gone()
+                        }
+                    })
+                    .start()
+            }
+        }
+    }
+
+    private fun playSet(flipCards: Boolean) {
+        adapter.deactiveAllItems()
+        goTo(PlayKey(adapter.getSelectedItems().map { it.id }, flipCards))
+    }
+
+    private class Adapter(onSomethingSelected: (Boolean) -> Unit, onClick: (Set) -> Unit) :
+        BaseAdapter<Set>(onSomethingSelected = onSomethingSelected, onClick = onClick) {
+        override fun getItemLayoutId(viewType: Int): Int = R.layout.listitem_set
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            with(holder.itemView) {
+                val txtSetName: TextView = findViewById(R.id.txtSetName)
+                val viewSelected: View = findViewById(R.id.viewSelected)
+                isLongClickable = true
+                txtSetName.text = items[holder.adapterPosition].name
+                viewSelected.setBackgroundResource((activeItems.contains(position)).mapActiveColor())
+                viewSelected.visibility = activeItems.contains(position).mapToVisibility()
+                setOnClickListener {
+                    onClick(items[holder.adapterPosition])
+                }
+                setOnLongClickListener(holder.longClick)
+            }
+        }
+
+    }
+}

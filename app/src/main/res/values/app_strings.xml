@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="flip">Flip</string>
+    <string name="tutorial_play">You can either go through your cards the way they are…</string>
+    <string name="tutorial_play_inverse">…or play them with the other side up first.</string>
+
+
+    <string name="results_cards_rehearsed">Cards rehearsed today:</string>
+    <string name="results_cards_correctly_guessed">Cards guessed correctly:</string>
+    <string name="okay_cool">Okay, cool!</string>
+
+    <string name="no_cards">You currently have no cards. Click the button on the bottom to add a new cards!</string>
+    <string name="no_sets">You currently have no sets. Click the button on the bottom to add a new set!</string>
+
+    <string name="more">More</string>
+
+    <string name="save_card">Save Card</string>
+    <string name="save_set_title">Save Set</string>
+    <string name="cancel">Cancel</string>
+    <string name="set_name">Set Name:</string>
+    <string name="front_text">Front Text:</string>
+    <string name="back_text">Back Text:</string>
+    <string name="add">Add</string>
+    <string name="edit_set">Edit Set</string>
+    <string name="repository">https://tormundsmember.github.io</string>
+    <string name="issueTracker">https://tormundsmember.github.io</string>
+
+    <string name="enableDarkMode">Enable Dark Mode</string>
+    <string name="export_csv">Export local sets as CSV</string>
+    <string name="licenses">Licenses</string>
+    <string name="sourceCodeOnGithub">Sourcecode on Github</string>
+    <string name="openAnIssue">Feedback?\n\nOpen an issue on my github page.</string>
+    <string name="generalError">Oops, something went wrong!</string>
+</resources>
