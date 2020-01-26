@@ -44,4 +44,5 @@
         If you remembered correctly, the interval on when the card comes up next will increase, otherwise the interval will be set to 1 day.\n\n&lt;a href=\"https://en.wikipedia.org/wiki/Spaced_repetition\"&gt;Wikipedia&lt;/a&gt; has a more detailed explanation."</string>
     <string name="play">Play</string>
     <string name="playReverse">Play with backside up first</string>
+    <string name="enableCrashReporting">Allow Easy Flashcards to collect crash- &amp; usage-data. &lt;b&gt;NO personal data is collected!&lt;b&gt;</string>
 </resources>

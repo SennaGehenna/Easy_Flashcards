@@ -6,6 +6,23 @@
     android:orientation="vertical">
 
     <Switch
+        android:id="@+id/switchCrashUsageData"
+        style="@style/TextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/big_margin"
+        android:text="@string/enableCrashReporting"
+        tools:checked="true" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/big_margin"
+        android:layout_marginEnd="@dimen/big_margin"
+        android:background="@color/colorAccent" />
+
+
+    <Switch
         android:id="@+id/switchDarkMode"
         style="@style/TextStyle"
         android:layout_width="match_parent"
@@ -16,7 +33,6 @@
         tools:checked="true" />
 
     <View
-        style="@style/TextStyle"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/big_margin"
@@ -42,7 +58,6 @@
         tools:text="What is Spatial Repetition?" />
 
     <View
-        style="@style/TextStyle"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/big_margin"

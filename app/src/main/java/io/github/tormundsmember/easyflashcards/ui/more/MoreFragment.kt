@@ -37,6 +37,7 @@ class MoreFragment : BaseFragment() {
     private lateinit var txtSourceCode: AppCompatTextView
     private lateinit var txtIssueTracker: AppCompatTextView
     private lateinit var hintSpatialRepetition: AppCompatTextView
+    private lateinit var switchCrashUsageData: Switch
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,6 +49,13 @@ class MoreFragment : BaseFragment() {
         txtSourceCode = view.findViewById(R.id.txtSourceCode)
         txtIssueTracker = view.findViewById(R.id.txtIssueTracker)
         hintSpatialRepetition = view.findViewById(R.id.hintSpatialRepetition)
+        switchCrashUsageData = view.findViewById(R.id.switchCrashUsageData)
+
+        switchCrashUsageData.text = getString(R.string.enableCrashReporting).prepareLinkText(view.context)
+        switchCrashUsageData.isChecked = Dependencies.userData.allowCrashReporting
+        switchCrashUsageData.setOnCheckedChangeListener { _, isChecked ->
+            Dependencies.userData.allowCrashReporting = isChecked
+        }
 
         switchDarkMode.isChecked = Dependencies.userData.useDarkMode
         switchDarkMode.setOnCheckedChangeListener { _, isChecked ->

@@ -12,6 +12,7 @@ class UserData(private val context: Context) {
         const val HAS_SEEN_OVERVIEW_TUTORIAL = "HAS_SEEN_OVERVIEW_TUTORIAL"
         const val USE_DARKMODE = "USE_DARKMODE"
         const val USE_SPACED_REPETITION = "USE_SPACED_REPETITION "
+        const val ALLOW_CRASHREPORTING = "ALLOW_CRASHREPORTING"
     }
 
     private val sharedPref: SharedPreferences
@@ -46,6 +47,14 @@ class UserData(private val context: Context) {
         set(value) {
             sharedPref.edit {
                 putBoolean(USE_SPACED_REPETITION, value)
+            }
+        }
+
+    var allowCrashReporting: Boolean
+        get() = sharedPref.getBoolean(ALLOW_CRASHREPORTING, false)
+        set(value) {
+            sharedPref.edit {
+                putBoolean(ALLOW_CRASHREPORTING, value)
             }
         }
 }
