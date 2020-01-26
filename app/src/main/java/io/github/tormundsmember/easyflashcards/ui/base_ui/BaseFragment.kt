@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import io.github.tormundsmember.easyflashcards.ui.MainActivity
 
 abstract class BaseFragment : Fragment() {
@@ -33,12 +33,16 @@ abstract class BaseFragment : Fragment() {
 
 
     inline fun <reified VM : ViewModel> Fragment.getViewModel(): VM {
-        return activity?.let { ViewModelProviders.of(it)[VM::class.java] }
+        return activity?.let { ViewModelProvider(it)[VM::class.java] }
             ?: throw IllegalStateException("attempted to get viewModel for fragment ${this.javaClass.simpleName} but activity was null")
     }
 
 
     fun goTo(key: BaseKey) {
-        (activity as MainActivity?)?.backstack?.goTo(key)
+        (activity as MainActivity?)?.getBackstack()?.goTo(key)
+    }
+
+    fun goBack() {
+        activity?.onBackPressed()
     }
 }

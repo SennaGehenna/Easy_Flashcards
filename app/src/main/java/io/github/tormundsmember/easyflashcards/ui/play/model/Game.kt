@@ -3,6 +3,7 @@ package io.github.tormundsmember.easyflashcards.ui.play.model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.github.tormundsmember.easyflashcards.data.Database
+import io.github.tormundsmember.easyflashcards.ui.play.PlayViewModel
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
 import io.github.tormundsmember.easyflashcards.ui.util.plusAssign
@@ -18,8 +19,8 @@ class Game(
     var correctGuesses: Int = 0
         private set
 
-    private val _isFinished: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { this += false }
-    val isFinished: LiveData<Boolean>
+    private val _isFinished: MutableLiveData<PlayViewModel.GameState> = MutableLiveData<PlayViewModel.GameState>()
+    val isFinished: LiveData<PlayViewModel.GameState>
         get() = _isFinished
 
     private val _currentCard: MutableLiveData<FlippableCard> = MutableLiveData<FlippableCard>().apply {
@@ -30,7 +31,9 @@ class Game(
 
     init {
         if (cards.isEmpty()) {
-            _isFinished += true
+            _isFinished += PlayViewModel.GameState.NoCardsToRehearse
+        } else {
+            _isFinished += PlayViewModel.GameState.Running
         }
     }
 
@@ -74,7 +77,7 @@ class Game(
         if (cards.isNotEmpty()) {
             _currentCard += cards[0].copy(isFlipped = false)
         } else {
-            _isFinished += true
+            _isFinished += PlayViewModel.GameState.Finished
         }
     }
 

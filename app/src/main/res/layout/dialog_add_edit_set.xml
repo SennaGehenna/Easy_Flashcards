@@ -8,6 +8,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/lblOriginalTerm"
+        style="@style/TextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
@@ -18,16 +19,30 @@
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/txtOriginalTerm"
+        style="@style/TextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
+        android:imeOptions="actionDone"
+        android:inputType="text|textCapWords"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/lblOriginalTerm"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Lesson 1" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDelete"
+        style="@android:style/Widget.Material.Button.Borderless.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:text="@string/delete"
+        android:textColor="@color/colorDelete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtOriginalTerm" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSaveTerm"
@@ -42,7 +57,7 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnCancel"
-        style="@android:style/Widget.Material.Button"
+        style="@android:style/Widget.Material.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"

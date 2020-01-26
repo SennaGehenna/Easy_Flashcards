@@ -1,11 +1,51 @@
 package io.github.tormundsmember.easyflashcards.data
 
-class UserData {
+import android.content.Context
+import android.content.SharedPreferences
+import androidx.core.content.edit
 
-    var hasSeenSetsTutorial = true
+class UserData(private val context: Context) {
 
-    var hasSeenSetOverviewTutorial = true
+    companion object {
+        const val SHARED_PREF_NAME = "easy_flashcards"
+        const val HAS_SEEN_TUTORIAL = "HAS_SEEN_TUTORIAL"
+        const val HAS_SEEN_OVERVIEW_TUTORIAL = "HAS_SEEN_OVERVIEW_TUTORIAL"
+        const val USE_DARKMODE = "USE_DARKMODE"
+        const val USE_SPACED_REPETITION = "USE_SPACED_REPETITION "
+    }
 
-    var useDarkMode = false
+    private val sharedPref: SharedPreferences
+        get() = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
 
+    var hasSeenSetsTutorial: Boolean
+        get() = sharedPref.getBoolean(HAS_SEEN_TUTORIAL, false)
+        set(value) {
+            sharedPref.edit {
+                putBoolean(HAS_SEEN_TUTORIAL, value)
+            }
+        }
+
+    var hasSeenSetOverviewTutorial: Boolean
+        get() = sharedPref.getBoolean(HAS_SEEN_OVERVIEW_TUTORIAL, false)
+        set(value) {
+            sharedPref.edit {
+                putBoolean(HAS_SEEN_OVERVIEW_TUTORIAL, value)
+            }
+        }
+
+    var useDarkMode: Boolean
+        get() = sharedPref.getBoolean(USE_DARKMODE, false)
+        set(value) {
+            sharedPref.edit {
+                putBoolean(USE_DARKMODE, value)
+            }
+        }
+
+    var useSpacedRepetition: Boolean
+        get() = sharedPref.getBoolean(USE_SPACED_REPETITION, false)
+        set(value) {
+            sharedPref.edit {
+                putBoolean(USE_SPACED_REPETITION, value)
+            }
+        }
 }

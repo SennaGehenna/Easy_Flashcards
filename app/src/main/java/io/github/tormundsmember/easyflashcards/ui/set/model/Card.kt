@@ -12,11 +12,13 @@ import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
         ForeignKey(
             entity = Set::class,
             parentColumns = ["id"],
-            childColumns = ["setId"]
+            childColumns = ["setId"],
+            onDelete = ForeignKey.CASCADE,
+            onUpdate = ForeignKey.NO_ACTION
         )
     ],
     indices = [
-    Index(value=["setId"])]
+        Index(value = ["setId"])]
 )
 data class Card(
     @PrimaryKey

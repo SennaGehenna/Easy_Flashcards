@@ -4,6 +4,6 @@ import com.zhuinden.simplestack.Backstack
 
 interface BackstackHandler {
 
-  val backstack: Backstack
+  fun getBackstack(): Backstack
 
 }

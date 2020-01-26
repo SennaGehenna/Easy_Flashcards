@@ -1,23 +1,18 @@
 package io.github.tormundsmember.easyflashcards.data
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import io.github.tormundsmember.easyflashcards.ui.more.model.CardWithSetData
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
-import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
 import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
-import java.util.concurrent.TimeUnit
 
 @Dao
 interface Database {
 
-    @Query("select max(id) from `set`")
+    @Query("select coalesce(max(id),0)+1 from `set`")
     fun getHighestSetId(): Int
 
-    @Query("select max(id) from card where setId = :setId")
+    @Query("select coalesce(max(id),0)+1 from card where setId = :setId")
     fun getHighestCardIdForSet(setId: Int): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -41,10 +36,19 @@ interface Database {
     @Query("select * from card where setId in (:ids)")
     fun getCardsByMultipleSetIds(ids: List<Int>): List<Card>
 
+    @Query("select * from card where setId in (:ids) and card.nextRecheck <= :currentTime")
+    fun getCardsByMultipleSetIdsWithSpacedRepetion(ids: List<Int>, currentTime: Long = System.currentTimeMillis()): List<Card>
+
     @Query("select * from `set` where id = :id")
     fun getSetById(id: Int): Set
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addOrUpdateCard(card: Card)
+
+    @Delete
+    fun deleteSet(set: Set)
+
+    @Delete
+    fun deleteCard(card: Card)
 
 }

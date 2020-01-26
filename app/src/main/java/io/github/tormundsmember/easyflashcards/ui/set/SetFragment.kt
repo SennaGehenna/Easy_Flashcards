@@ -12,7 +12,6 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.tormundsmember.easyflashcards.R
-import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseAdapter
@@ -21,6 +20,7 @@ import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_card.DialogAdd
 import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_set.DialogAddEditSet
 import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
 import io.github.tormundsmember.easyflashcards.ui.play.PlayKey
+import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.util.gone
 import io.github.tormundsmember.easyflashcards.ui.util.visible
 
@@ -64,6 +64,7 @@ open class SetFragment : BaseFragment() {
         btnPlayInverse = view.findViewById(R.id.btnPlayInverse)
 
         if (!Dependencies.userData.hasSeenSetOverviewTutorial) {
+            Dependencies.userData.hasSeenSetOverviewTutorial = true
             showTutorial()
         }
         vTutorialBack.setOnClickListener {
@@ -107,7 +108,13 @@ open class SetFragment : BaseFragment() {
         if (ctx != null) {
             when (item.itemId) {
                 R.id.action_add -> DialogAddEditCard.show(ctx, getKey<SetKey>().setId)
-                R.id.action_edit -> DialogAddEditSet.show(ctx, getKey<SetKey>().setId)
+                R.id.action_edit -> DialogAddEditSet.show(
+                    context = ctx,
+                    setId = getKey<SetKey>().setId,
+                    onSetAdded = { },
+                    onDeleted = {
+                        goBack()
+                    })
                 R.id.action_more -> {
                     goTo(MoreKey())
                     adapter.deactiveAllItems()

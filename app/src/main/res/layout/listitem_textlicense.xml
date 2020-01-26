@@ -12,12 +12,13 @@
         tools:text="Some Library"
         android:layout_marginBottom="@dimen/default_margin"
         android:textSize="22sp"
-
+        style="@style/TextStyle"
         android:layout_height="wrap_content" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtLicenseText"
         android:layout_width="match_parent"
+        style="@style/TextStyle"
         android:layout_height="wrap_content"
         tools:text="Copyright 2017-2020 Some Dude\n\n
 Licensed under the Apache License, Version 2.0 (the ''License'');

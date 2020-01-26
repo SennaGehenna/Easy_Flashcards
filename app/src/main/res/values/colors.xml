@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ffc850</color>
-    <color name="colorPrimaryDark">#fea82f</color>
-    <color name="colorAccent">#51ffb4</color>
-
-
-    <color name="background">#F7F7F7</color>
+    <color name="black">#000000</color>
+    <color name="colorAccent">#7C4DFF</color>
     <color name="card_background">#FFFFFF</color>
-
-    <color name="colorPositive">#00E676</color>
+    <color name="colorDelete">#FF1744</color>
     <color name="colorNegative">#FF1744</color>
     <color name="colorNeutral">#FF9100</color>
-    <color name="white">#FFFFFF</color>
-    <color name="transparent">#00FFFFFF</color>
-    <color name="black">#000000</color>
+    <color name="colorPositive">#00E676</color>
+    <color name="colorPrimary">#E91E63</color>
+    <color name="colorPrimaryDark">#C2185B</color>
     <color name="divider_color">@android:color/darker_gray</color>
-
-
+    <color name="playButtonColor">#FFFFFF</color>
     <color name="textColor">#303030</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="tutorialTextColor">#CACACA</color>
+    <color name="white">#FFFFFF</color>
 </resources>

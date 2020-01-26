@@ -14,10 +14,7 @@ import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.PlayButtonsLayout
 import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
-import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_card.DialogAddEditCard
-import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_set.DialogAddEditSet
 import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
-import io.github.tormundsmember.easyflashcards.ui.set.SetKey
 import io.github.tormundsmember.easyflashcards.ui.util.gone
 import io.github.tormundsmember.easyflashcards.ui.util.visible
 
@@ -35,6 +32,7 @@ class PlayFragment : BaseFragment() {
     private lateinit var btnOkay: AppCompatButton
     private lateinit var lblCards: AppCompatTextView
     private lateinit var lblCardsGuessed: AppCompatTextView
+    private lateinit var txtNoCardsToRehease: AppCompatTextView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,15 +51,18 @@ class PlayFragment : BaseFragment() {
         btnOkay = view.findViewById(R.id.btnOkay)
         lblCards = view.findViewById(R.id.lblCards)
         lblCardsGuessed = view.findViewById(R.id.lblCardsGuessed)
+        txtNoCardsToRehease = view.findViewById(R.id.txtNoCardsToRehease)
 
         btnOkay.setOnClickListener {
-            activity?.onBackPressed()
+            goBack()
         }
 
         viewModel.isFinished.observe {
-            if (it == true) {
-                showSetDone()
+            when (it) {
+                PlayViewModel.GameState.Finished -> showSetDone()
+                PlayViewModel.GameState.NoCardsToRehearse -> showNoCardsToRehease()
             }
+
         }
 
         viewModel.currentCard.observe { currentCard ->
@@ -137,6 +138,34 @@ class PlayFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
+
+    private fun showNoCardsToRehease() {
+
+        listOf(vCard, vPlayButtons).forEach {
+            it.animate().alpha(0F)
+                .setDuration(300)
+                .setListener(object : AnimationListener() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        it.gone()
+                    }
+                })
+        }
+        listOf<View>(
+            txtNoCardsToRehease,
+            btnOkay
+        ).forEach {
+            it.alpha = 0F
+            it.visible()
+            it.animate().alpha(1F)
+                .setStartDelay(600)
+                .setDuration(300)
+                .setListener(object : AnimationListener() {
+                    override fun onAnimationEnd(animation: Animator?) {
+
+                    }
+                })
+        }
+    }
 
     private fun showSetDone() {
         txtCardsRehearsed.text = getString(R.string.results_cards_rehearsed)

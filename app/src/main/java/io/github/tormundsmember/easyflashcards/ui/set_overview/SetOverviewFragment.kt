@@ -11,7 +11,6 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.tormundsmember.easyflashcards.R
-import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseAdapter
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
@@ -19,6 +18,7 @@ import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_set.DialogAddE
 import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
 import io.github.tormundsmember.easyflashcards.ui.play.PlayKey
 import io.github.tormundsmember.easyflashcards.ui.set.SetKey
+import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 import io.github.tormundsmember.easyflashcards.ui.util.gone
 import io.github.tormundsmember.easyflashcards.ui.util.visible
 
@@ -34,6 +34,8 @@ class SetOverviewFragment : BaseFragment() {
 
     private val viewModel: SetOverviewViewModel by lazy { getViewModel<SetOverviewViewModel>() }
 
+    private var tutorialStep: TutorialStep = TutorialStep.STEP1
+
     private lateinit var txtNoItems: TextView
     private lateinit var vTutorialBack: View
     private lateinit var txtTutorialPlay: TextView
@@ -48,6 +50,8 @@ class SetOverviewFragment : BaseFragment() {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(view.context)
         }
+
+
 
         txtNoItems = view.findViewById(R.id.txtNoItems)
         vTutorialBack = view.findViewById(R.id.vTutorialBack)
@@ -67,11 +71,19 @@ class SetOverviewFragment : BaseFragment() {
         }
 
         btnPlay.setOnClickListener {
-            playSet(false)
+            playSets(false)
         }
         btnPlayInverse.setOnClickListener {
-            playSet(true)
+            playSets(true)
         }
+
+//        if (!Dependencies.userData.hasSeenSetsTutorial) {
+//            Dependencies.userData.hasSeenSetsTutorial = true
+//            showTutorial()
+//        }
+//        vTutorialBack.setOnClickListener {
+//            nextTutorialStep()
+//        }
 
         setHasOptionsMenu(true)
     }
@@ -85,7 +97,13 @@ class SetOverviewFragment : BaseFragment() {
         val ctx = context
         if (ctx != null) {
             when (item.itemId) {
-                R.id.action_add -> DialogAddEditSet.show(ctx)
+                R.id.action_add -> DialogAddEditSet.show(
+                    context = ctx,
+                    onSetAdded = {
+                        goTo(SetKey(it))
+                    },
+                    onDeleted = {}
+                )
                 R.id.action_more -> {
                     adapter.deactiveAllItems()
                     goTo(MoreKey())
@@ -95,7 +113,29 @@ class SetOverviewFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun goToSet(setId: Int){
+    private fun showTutorial() {
+        vTutorialBack.alpha = 0F
+        vTutorialBack.visible()
+        vTutorialBack.animate()
+            .alpha(0.8F)
+            .setDuration(300)
+            .start()
+        listOf(
+            txtTutorialPlay,
+            txtTutorialOk
+        ).forEach {
+            it.alpha = 0F
+            it.visible()
+            it.animate()
+                .alpha(1F)
+                .setStartDelay(400)
+                .setDuration(300)
+                .start()
+        }
+    }
+
+
+    private fun goToSet(setId: Int) {
         adapter.deactiveAllItems()
         goTo(SetKey(setId))
     }
@@ -134,9 +174,52 @@ class SetOverviewFragment : BaseFragment() {
         }
     }
 
-    private fun playSet(flipCards: Boolean) {
-        adapter.deactiveAllItems()
+    private fun nextTutorialStep() {
+        tutorialStep = when (tutorialStep) {
+            TutorialStep.STEP1 -> {
+                txtTutorialPlay.animate()
+                    .alpha(0F)
+                    .setDuration(300)
+                    .setListener(object : AnimationListener() {
+                        override fun onAnimationEnd(animation: Animator?) {
+                            txtTutorialPlay.gone()
+                        }
+                    })
+                    .start()
+                txtTutorialPlayInverse.alpha = 0F
+                txtTutorialPlayInverse.visible()
+                txtTutorialPlayInverse.animate()
+                    .alpha(1F)
+                    .setDuration(300)
+                    .setStartDelay(400)
+                    .start()
+                TutorialStep.STEP2
+            }
+            TutorialStep.STEP2 -> {
+                listOf(
+                    vTutorialBack,
+                    txtTutorialOk,
+                    txtTutorialPlayInverse
+                ).forEach {
+                    it.animate()
+                        .alpha(0F)
+                        .setDuration(300)
+                        .setListener(object : AnimationListener() {
+                            override fun onAnimationEnd(animation: Animator?) {
+                                it.gone()
+                            }
+                        })
+                        .start()
+                }
+                TutorialStep.DONE
+            }
+            TutorialStep.DONE -> TutorialStep.DONE
+        }
+    }
+
+    private fun playSets(flipCards: Boolean) {
         goTo(PlayKey(adapter.getSelectedItems().map { it.id }, flipCards))
+        adapter.deactiveAllItems()
     }
 
     private class Adapter(onSomethingSelected: (Boolean) -> Unit, onClick: (Set) -> Unit) :
@@ -158,5 +241,11 @@ class SetOverviewFragment : BaseFragment() {
             }
         }
 
+    }
+
+    private sealed class TutorialStep {
+        object STEP1 : TutorialStep()
+        object STEP2 : TutorialStep()
+        object DONE : TutorialStep()
     }
 }

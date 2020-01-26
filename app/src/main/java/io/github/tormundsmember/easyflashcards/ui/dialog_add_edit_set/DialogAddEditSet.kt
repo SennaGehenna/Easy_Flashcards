@@ -4,25 +4,32 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import io.github.tormundsmember.easyflashcards.R
-import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
+import io.github.tormundsmember.easyflashcards.ui.dialog_delete_set.DialogDeleteSet
+import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
+import io.github.tormundsmember.easyflashcards.ui.util.Action
+import io.github.tormundsmember.easyflashcards.ui.util.gone
 import io.github.tormundsmember.easyflashcards.ui.util.putCursorInTextview
+import io.github.tormundsmember.easyflashcards.ui.util.visible
 
 class DialogAddEditSet private constructor(
     private val dialog: AlertDialog,
     viewHolder: ViewHolder,
-    private val set: Set?
+    private val set: Set?,
+    private val onDeleted: Action,
+    private val onSetAdded: (Int) -> Unit
 ) {
 
 
     companion object {
 
         @SuppressLint("InflateParams")
-        fun show(context: Context, setId: Int? = null): DialogAddEditSet {
+        fun show(context: Context, setId: Int? = null, onDeleted: Action, onSetAdded: (Int) -> Unit): DialogAddEditSet {
             val view = LayoutInflater.from(context).inflate(R.layout.dialog_add_edit_set, null, false)
 
             val set = if (setId != null) {
@@ -35,7 +42,7 @@ class DialogAddEditSet private constructor(
                 .setView(view)
                 .create()
 
-            return DialogAddEditSet(dialog, ViewHolder(view), set).also {
+            return DialogAddEditSet(dialog, ViewHolder(view), set, onDeleted, onSetAdded).also {
                 dialog.show()
             }
         }
@@ -43,6 +50,7 @@ class DialogAddEditSet private constructor(
 
     init {
         with(viewHolder) {
+            val set = set
             txtOriginalTerm.setText(set?.name ?: "")
 
             btnSaveTerm.setOnClickListener {
@@ -51,7 +59,25 @@ class DialogAddEditSet private constructor(
             btnCancel.setOnClickListener {
                 dismiss()
             }
-            txtOriginalTerm.putCursorInTextview()
+            txtOriginalTerm.putCursorInTextview(true)
+            txtOriginalTerm.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    addOrSaveTerm(txtOriginalTerm.text.toString())
+                }
+                true
+            }
+
+            if (set != null) {
+                btnDelete.visible()
+                btnDelete.setOnClickListener {
+                    DialogDeleteSet.show(it.context, set.id) {
+                        onDeleted()
+                        dismiss()
+                    }
+                }
+            } else {
+                btnDelete.gone()
+            }
         }
     }
 
@@ -66,6 +92,9 @@ class DialogAddEditSet private constructor(
                 title
             )
             Dependencies.database.addOrUpdateSet(newSet)
+            if (set == null) {
+                onSetAdded(newSet.id)
+            }
             dismiss()
         }
     }
@@ -75,5 +104,6 @@ class DialogAddEditSet private constructor(
         val txtOriginalTerm: AppCompatEditText = view.findViewById(R.id.txtOriginalTerm)
         val btnSaveTerm: AppCompatButton = view.findViewById(R.id.btnSaveTerm)
         val btnCancel: AppCompatButton = view.findViewById(R.id.btnCancel)
+        val btnDelete: View = view.findViewById(R.id.btnDelete)
     }
 }

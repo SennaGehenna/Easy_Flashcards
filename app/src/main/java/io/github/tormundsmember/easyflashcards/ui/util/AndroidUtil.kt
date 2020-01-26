@@ -3,27 +3,28 @@ package io.github.tormundsmember.easyflashcards.ui.util
 import android.animation.Animator
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.text.Html
 import android.text.SpannableStringBuilder
-import android.text.Spanned
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.widget.Toast
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.app.ActivityCompat
 import io.github.tormundsmember.easyflashcards.R
+import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 
 operator fun <T> MutableLiveData<T>.plusAssign(value: T?) {
@@ -39,6 +40,7 @@ fun View.gone() {
     visibility = View.GONE
 }
 
+@Suppress("UNUSED_PARAMETER")
 fun View.invisible(animate: Boolean = false) {
     visibility = View.INVISIBLE
 }
@@ -56,6 +58,7 @@ fun View.animateVisible() {
     }
 }
 
+@Suppress("unused")
 fun View.animateInvisible() {
     if (visibility != View.INVISIBLE) {
         alpha = 1F
@@ -90,20 +93,22 @@ fun String.isNotEmptyOrBlank() = isNotEmpty() && isNotBlank()
 
 
 fun EditText.putCursorInTextview(selectAll: Boolean = false) {
-    isFocusable = true
-    isFocusableInTouchMode = true
-    requestFocus()
-    requestFocusFromTouch()
+    post {
+        isFocusable = true
+        isFocusableInTouchMode = true
+        requestFocus()
+        requestFocusFromTouch()
 
-    if (selectAll) {
-        setSelection(0, text.length)
-    } else {
-        setSelection(text.length)
+        if (selectAll) {
+            setSelection(0, text.length)
+        } else {
+            setSelection(text.length)
+        }
+
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
     }
-
-    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-    imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
 }
 
 fun RecyclerView.setDivider(@DrawableRes drawableRes: Int) {
@@ -120,11 +125,6 @@ fun RecyclerView.setDivider(@DrawableRes drawableRes: Int) {
         addItemDecoration(divider)
     }
 }
-
-fun String.extractHtml(): Spanned {
-    return Html.fromHtml(this)
-}
-
 
 fun openUrlInCustomTabs(context: Context, data: Uri) {
     val intent = CustomTabsIntent.Builder()
@@ -144,7 +144,7 @@ fun openUrlInCustomTabs(context: Context, data: Uri) {
     }
 }
 
-fun Context.showGeneralErrorMessage(){
+fun Context.showGeneralErrorMessage() {
     Toast.makeText(this, R.string.generalError, Toast.LENGTH_SHORT).show()
 }
 
@@ -165,6 +165,7 @@ fun String.prepareLinkText(context: Context): SpannableStringBuilder {
         strBuilder.removeSpan(span)
     }
 
+    @Suppress("DEPRECATION") //what's the alternative? the other ones require SDK 28
     val seq = Html.fromHtml(this)
     val stringBuilder = SpannableStringBuilder(seq)
     val urls = stringBuilder.getSpans(0, seq.length, URLSpan::class.java)
@@ -180,3 +181,16 @@ fun String.prepareLinkText(context: Context): SpannableStringBuilder {
 fun Activity.hasPermission(permission: String): Boolean {
     return ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 }
+
+/*
+ * you could just use a custom getter, which functions the same way. this is simply a delegate to emulate DI-methods
+ */
+@Suppress("ClassName")//this is a delegated property, they're all lowercase
+class factory<T>(val factory: () -> T) : ReadOnlyProperty<Any, T> {
+    override fun getValue(thisRef: Any, property: KProperty<*>): T {
+        return factory()
+    }
+
+}
+
+typealias Action = () -> Unit

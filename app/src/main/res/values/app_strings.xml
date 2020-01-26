@@ -32,4 +32,16 @@
     <string name="sourceCodeOnGithub">Sourcecode on Github</string>
     <string name="openAnIssue">Feedback?\n\nOpen an issue on my github page.</string>
     <string name="generalError">Oops, something went wrong!</string>
+    <string name="delete">Delete</string>
+    <string name="deleteSet">Delete Set</string>
+    <string name="deleteCard">Delete Card</string>
+    <string name="confirmDeleteSet">Do you really want to delete this set?</string>
+    <string name="confirmDeleteCard">Do you really want to delete this card?</string>
+    <string name="noRehearsal">There are no cards to rehearse today!</string>
+    <string name="useSpacedRepetition">Use Spaced Repetition</string>
+    <string name="promptExplanationSpacedRepetition">What is spaced repetition?</string>
+    <string name="explanationSpacedRepetition">"Spaced Repetition is a learning technique, where new flashcards are rehearsed more frequently.
+        If you remembered correctly, the interval on when the card comes up next will increase, otherwise the interval will be set to 1 day.\n\n&lt;a href=\"https://en.wikipedia.org/wiki/Spaced_repetition\"&gt;Wikipedia&lt;/a&gt; has a more detailed explanation."</string>
+    <string name="play">Play</string>
+    <string name="playReverse">Play with backside up first</string>
 </resources>

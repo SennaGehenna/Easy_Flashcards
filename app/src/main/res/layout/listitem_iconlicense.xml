@@ -11,6 +11,7 @@
         android:id="@+id/icon1"
         android:layout_width="@dimen/play_button_size"
         android:layout_height="@dimen/play_button_size"
+        android:contentDescription="@null"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_ace" />
@@ -19,6 +20,7 @@
         android:id="@+id/icon2"
         android:layout_width="@dimen/play_button_size"
         android:layout_height="@dimen/play_button_size"
+        android:contentDescription="@null"
         app:layout_constraintStart_toEndOf="@+id/icon1"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_flipped_ace" />
@@ -27,6 +29,7 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtAttribution"
         android:layout_width="0dp"
+        style="@style/TextStyle"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

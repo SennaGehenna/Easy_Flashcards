@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:minWidth="300dp">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/lblOriginalTerm"
-        android:layout_width="wrap_content"
+        style="@style/TextStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/default_margin"
+        android:text="@string/confirmDeleteSet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Do you really want to delete set ?" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnSaveTerm"
+        android:id="@+id/btnDeleteTerm"
         style="@android:style/Widget.Material.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
+        android:text="@string/deleteSet"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblOriginalTerm"
-        tools:text="Delete Set" />
+        app:layout_constraintTop_toBottomOf="@+id/lblOriginalTerm" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnCancel"
-        style="@android:style/Widget.Material.Button"
+        style="@android:style/Widget.Material.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
-        app:layout_constraintEnd_toStartOf="@+id/btnSaveTerm"
-        app:layout_constraintTop_toBottomOf="@+id/lblOriginalTerm"
-        tools:text="Cancel" />
+        android:text="@string/cancel"
+        app:layout_constraintEnd_toStartOf="@+id/btnDeleteTerm"
+        app:layout_constraintTop_toBottomOf="@+id/lblOriginalTerm" />
 </androidx.constraintlayout.widget.ConstraintLayout>
