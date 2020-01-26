@@ -12,6 +12,8 @@ import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.MainActivity
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.licenses.LicensesKey
+import io.github.tormundsmember.easyflashcards.ui.set.model.Card
+import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 import io.github.tormundsmember.easyflashcards.ui.util.hasPermission
 import io.github.tormundsmember.easyflashcards.ui.util.openUrlInCustomTabs
 import io.github.tormundsmember.easyflashcards.ui.util.prepareLinkText
@@ -147,5 +149,73 @@ class MoreFragment : BaseFragment() {
             }
         }
 
+    }
+
+    private fun importFromCsv(csv: List<String>) {
+
+
+        val setIdKey = "setId"
+        val setNameKey = "setName"
+        val cardIdKey = "cardId"
+        val frontTextKey = "frontText"
+        val backTextKey = "backText"
+        val currentIntervalKey = "currentInterval"
+        val nextRecheckKey = "nextRecheck"
+        val checkCountKey = "checkCount"
+        val positiveCheckCountKey = "positiveCheckCount"
+        val requiredColumns = listOf(
+            setIdKey,
+            setNameKey,
+            cardIdKey,
+            frontTextKey,
+            backTextKey,
+            currentIntervalKey,
+            nextRecheckKey,
+            checkCountKey,
+            positiveCheckCountKey
+        )
+
+
+        val columnNames = csv.first().split(";").withIndex().associate {
+            Pair(it.value, it.index)
+        }
+
+        val setIds: MutableList<Int> = mutableListOf()
+
+        val setId = columnNames[setIdKey]
+        val setName = columnNames[setNameKey]
+        val cardId = columnNames[cardIdKey]
+        val frontText = columnNames[frontTextKey]
+        val backText = columnNames[backTextKey]
+        val currentInterval = columnNames[currentIntervalKey]
+        val nextRecheck = columnNames[nextRecheckKey]
+        val checkCount = columnNames[checkCountKey]
+        val positiveCheckCount = columnNames[positiveCheckCountKey]
+
+        try {
+            if (columnNames.keys.containsAll(requiredColumns)) {
+                csv.drop(1).map { it.split(";") }.forEach { row ->
+                    if (setIds.none { it == row[setId!!].toInt() }) {
+                        val set = Set(row[setId!!].toInt(), row[setName!!])
+                        setIds += set.id
+                        Dependencies.database.addOrUpdateSet(set)
+                    }
+                    val card = Card(
+                        id = row[cardId!!].toInt(),
+                        frontText = row[frontText!!],
+                        backText = row[backText!!],
+                        currentInterval = row[currentInterval!!].toInt(),
+                        nextRecheck = row[nextRecheck!!].toLong(),
+                        setId = row[setId!!].toInt(),
+                        checkCount = row[checkCount!!].toInt(),
+                        positiveCheckCount = row[positiveCheckCount!!].toInt()
+                    )
+                    Dependencies.database.addOrUpdateCard(card)
+                }
+
+            }
+        } catch (e: java.lang.Exception) {
+
+        }
     }
 }
