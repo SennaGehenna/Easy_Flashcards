@@ -12,12 +12,14 @@ import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.MainActivity
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.licenses.LicensesKey
-import io.github.tormundsmember.easyflashcards.ui.set.model.Card
-import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 import io.github.tormundsmember.easyflashcards.ui.util.hasPermission
 import io.github.tormundsmember.easyflashcards.ui.util.openUrlInCustomTabs
 import io.github.tormundsmember.easyflashcards.ui.util.prepareLinkText
 import io.github.tormundsmember.easyflashcards.ui.util.showGeneralErrorMessage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,7 +29,8 @@ class MoreFragment : BaseFragment() {
 
     companion object {
         const val RQ_STORAGE = 1
-        const val PICKFILE_RESULT_CODE = 2
+        const val RQ_EXPORT = 2
+        const val RQ_IMPORT = 3
     }
 
     override val layoutId: Int = R.layout.screen_more
@@ -35,11 +38,14 @@ class MoreFragment : BaseFragment() {
     private lateinit var switchDarkMode: Switch
     private lateinit var switchSpatialRepetition: Switch
     private lateinit var txtExportToCsv: AppCompatTextView
+    private lateinit var txtImportFromCsvSubtitle: AppCompatTextView
+    private lateinit var txtImportFromCsv: AppCompatTextView
     private lateinit var txtLicenses: AppCompatTextView
     private lateinit var txtSourceCode: AppCompatTextView
     private lateinit var txtIssueTracker: AppCompatTextView
     private lateinit var hintSpatialRepetition: AppCompatTextView
     private lateinit var switchCrashUsageData: Switch
+    private val viewModel: MoreViewModel by lazy { getViewModel<MoreViewModel>() }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,6 +53,8 @@ class MoreFragment : BaseFragment() {
         switchDarkMode = view.findViewById(R.id.switchDarkMode)
         switchSpatialRepetition = view.findViewById(R.id.switchSpatialRepetition)
         txtExportToCsv = view.findViewById(R.id.txtExportToCsv)
+        txtImportFromCsvSubtitle = view.findViewById(R.id.txtImportFromCsvSubtitle)
+        txtImportFromCsv = view.findViewById(R.id.txtImportFromCsv)
         txtLicenses = view.findViewById(R.id.txtLicenses)
         txtSourceCode = view.findViewById(R.id.txtSourceCode)
         txtIssueTracker = view.findViewById(R.id.txtIssueTracker)
@@ -75,6 +83,13 @@ class MoreFragment : BaseFragment() {
             openUrlInCustomTabs(it.context, Uri.parse("https://en.wikipedia.org/wiki/Spaced_repetition"))
         }
 
+        txtImportFromCsvSubtitle.setOnClickListener {
+            importFromCsv()
+        }
+        txtImportFromCsv.setOnClickListener {
+            importFromCsv()
+        }
+
         txtExportToCsv.setOnClickListener {
             exportToCsv()
         }
@@ -101,46 +116,72 @@ class MoreFragment : BaseFragment() {
             )
             startActivityForResult(
                 Intent.createChooser(chooseFile, "Choose a file"),
-                PICKFILE_RESULT_CODE
+                RQ_EXPORT
             )
         } catch (e: Exception) {
             context?.showGeneralErrorMessage()
         }
     }
 
+    private fun continueWithImport() {
+        try {
+            val chooseFile = Intent(Intent.ACTION_GET_CONTENT).apply {
+                addCategory(Intent.CATEGORY_OPENABLE)
+                type = "text/*"
+            }
+            startActivityForResult(
+                Intent.createChooser(chooseFile, "Choose a file"),
+                RQ_IMPORT
+            )
+
+        } catch (e: java.lang.Exception) {
+            context?.showGeneralErrorMessage()
+        }
+    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val data1 = data?.data
-        if (requestCode == PICKFILE_RESULT_CODE && data != null && data1 != null) {
+        if (requestCode == RQ_EXPORT && data1 != null) {
             activity?.applicationContext?.contentResolver?.openFileDescriptor(data1, "w")?.use {
-
-                val text =
-                    (mutableListOf("setId;setName;cardId;frontText;backText;currentInterval;nextRecheck;checkCount;positiveCheckCount") +
-                            Dependencies.database.getCardsWithSetNames().map { card ->
-                                card.getCsv()
-                            }).joinToString(separator = "\r\n")
-
-                FileOutputStream(it.fileDescriptor).use { stream ->
-                    stream.write(text.toByteArray())
+                viewModel.exportToCsv(FileOutputStream(it.fileDescriptor))
+            }
+        }
+        if (requestCode == RQ_IMPORT && data1 != null) {
+            activity?.applicationContext?.contentResolver?.openFileDescriptor(data1, "r")?.use {
+                CoroutineScope(Dispatchers.IO).launch {
+                    viewModel.importFromCsv(FileInputStream(it.fileDescriptor))
                 }
-
             }
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == RQ_STORAGE) {
-            if (permissions[0] == android.Manifest.permission.WRITE_EXTERNAL_STORAGE) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        when (requestCode) {
+            RQ_STORAGE -> when (permissions[0]) {
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     continueWithExport()
+                }
+                android.Manifest.permission.READ_EXTERNAL_STORAGE -> if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    continueWithImport()
                 }
             }
         }
     }
 
-    private fun exportToCsv() {
+    private fun importFromCsv() {
+        activity?.let {
+            if (it.hasPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                continueWithImport()
+            } else {
+                requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), RQ_STORAGE)
+            }
+        }
+    }
 
+    private fun exportToCsv() {
         activity?.let {
             if (it.hasPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 continueWithExport()
@@ -149,73 +190,5 @@ class MoreFragment : BaseFragment() {
             }
         }
 
-    }
-
-    private fun importFromCsv(csv: List<String>) {
-
-
-        val setIdKey = "setId"
-        val setNameKey = "setName"
-        val cardIdKey = "cardId"
-        val frontTextKey = "frontText"
-        val backTextKey = "backText"
-        val currentIntervalKey = "currentInterval"
-        val nextRecheckKey = "nextRecheck"
-        val checkCountKey = "checkCount"
-        val positiveCheckCountKey = "positiveCheckCount"
-        val requiredColumns = listOf(
-            setIdKey,
-            setNameKey,
-            cardIdKey,
-            frontTextKey,
-            backTextKey,
-            currentIntervalKey,
-            nextRecheckKey,
-            checkCountKey,
-            positiveCheckCountKey
-        )
-
-
-        val columnNames = csv.first().split(";").withIndex().associate {
-            Pair(it.value, it.index)
-        }
-
-        val setIds: MutableList<Int> = mutableListOf()
-
-        val setId = columnNames[setIdKey]
-        val setName = columnNames[setNameKey]
-        val cardId = columnNames[cardIdKey]
-        val frontText = columnNames[frontTextKey]
-        val backText = columnNames[backTextKey]
-        val currentInterval = columnNames[currentIntervalKey]
-        val nextRecheck = columnNames[nextRecheckKey]
-        val checkCount = columnNames[checkCountKey]
-        val positiveCheckCount = columnNames[positiveCheckCountKey]
-
-        try {
-            if (columnNames.keys.containsAll(requiredColumns)) {
-                csv.drop(1).map { it.split(";") }.forEach { row ->
-                    if (setIds.none { it == row[setId!!].toInt() }) {
-                        val set = Set(row[setId!!].toInt(), row[setName!!])
-                        setIds += set.id
-                        Dependencies.database.addOrUpdateSet(set)
-                    }
-                    val card = Card(
-                        id = row[cardId!!].toInt(),
-                        frontText = row[frontText!!],
-                        backText = row[backText!!],
-                        currentInterval = row[currentInterval!!].toInt(),
-                        nextRecheck = row[nextRecheck!!].toLong(),
-                        setId = row[setId!!].toInt(),
-                        checkCount = row[checkCount!!].toInt(),
-                        positiveCheckCount = row[positiveCheckCount!!].toInt()
-                    )
-                    Dependencies.database.addOrUpdateCard(card)
-                }
-
-            }
-        } catch (e: java.lang.Exception) {
-
-        }
     }
 }
