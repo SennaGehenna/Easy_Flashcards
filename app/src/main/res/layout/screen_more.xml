@@ -83,6 +83,37 @@
         android:background="@color/colorAccent" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtImportFromCsv"
+        style="@style/TextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="@dimen/big_margin"
+        android:background="@color/transparent"
+        android:gravity="start|center_vertical"
+        android:text="@string/import_csv"
+        android:textColor="@color/colorAccent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtImportFromCsvSubtitle"
+        style="@style/TextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/big_margin"
+        android:layout_marginRight="@dimen/big_margin"
+        android:layout_marginBottom="@dimen/big_margin"
+        android:background="@color/transparent"
+        android:gravity="start|center_vertical"
+        android:text="@string/import_csv_subtitle"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/big_margin"
+        android:layout_marginEnd="@dimen/big_margin"
+        android:background="@color/colorAccent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txtLicenses"
         style="@style/TextStyle"
         android:layout_width="match_parent"

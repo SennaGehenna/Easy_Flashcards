@@ -28,6 +28,18 @@
 
     <string name="enableDarkMode">Enable Dark Mode</string>
     <string name="export_csv">Export local sets as CSV</string>
+    <string name="import_csv">Import sets from CSV</string>
+    <string name="import_csv_subtitle">"Required fields:
+
+setId
+setName
+cardId
+frontText
+backText
+currentInterval
+nextRecheck
+checkCount
+positiveCheckCount"</string>
     <string name="licenses">Licenses</string>
     <string name="sourceCodeOnGithub">Sourcecode on Github</string>
     <string name="openAnIssue">Feedback?\n\nOpen an issue on my github page.</string>
