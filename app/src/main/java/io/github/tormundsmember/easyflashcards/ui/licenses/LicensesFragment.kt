@@ -3,7 +3,6 @@ package io.github.tormundsmember.easyflashcards.ui.licenses
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +10,10 @@ import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseAdapter
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.licenses.model.License
-import io.github.tormundsmember.easyflashcards.ui.util.*
+import io.github.tormundsmember.easyflashcards.ui.util.gone
+import io.github.tormundsmember.easyflashcards.ui.util.prepareLinkText
+import io.github.tormundsmember.easyflashcards.ui.util.setDivider
+import io.github.tormundsmember.easyflashcards.ui.util.visible
 
 class LicensesFragment : BaseFragment() {
 
