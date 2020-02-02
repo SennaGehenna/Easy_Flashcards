@@ -53,7 +53,7 @@ class Game(
         val nextInterval: RehearsalInterval
         val positiveCheckCount: Int
         if (correctGuess) {
-            nextInterval = RehearsalInterval.getFromInterval(card.currentInterval).getNext()
+            nextInterval = card.currentInterval.getNext()
             positiveCheckCount = card.positiveCheckCount + 1
         } else {
             nextInterval = RehearsalInterval.STAGE_1
@@ -70,7 +70,7 @@ class Game(
 
         database.addOrUpdateCard(
             card.copy(
-                currentInterval = nextInterval.getInterval(),
+                currentInterval = nextInterval,
                 checkCount = card.checkCount + 1,
                 nextRecheck = nextRecheck,
                 positiveCheckCount = positiveCheckCount

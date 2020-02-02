@@ -1,6 +1,7 @@
 package io.github.tormundsmember.easyflashcards.ui.more
 
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
+import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
 import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
@@ -15,8 +16,8 @@ class MoreViewModelTest {
 
         val input: InputStream = listOf(
             "setId;setName;cardId;frontText;backText;currentInterval;nextRecheck;checkCount;positiveCheckCount",
-            "1;japanese;1;grandfather;ojiisan;1;1;1;1",
-            "1;japanese;2;grandmother;obaasan;1;1;1;1"
+            "1;japanese;1;grandfather;ojiisan;STAGE_1;1;1;1",
+            "1;japanese;2;grandmother;obaasan;STAGE_1;1;1;1"
         ).joinToString(separator = System.lineSeparator()).byteInputStream()
 
 
@@ -28,10 +29,10 @@ class MoreViewModelTest {
         assertTrue(cards.size == 2)
         assertTrue(Set(1, "japanese") == sets[0])
         assertTrue(
-            Card(1, "grandfather", "ojiisan", 1, 1, 1, 1, 1) == cards[0]
+            Card(1, "grandfather", "ojiisan", RehearsalInterval.STAGE_1, 1, 1, 1, 1) == cards[0]
         )
         assertTrue(
-            Card(2, "grandmother", "obaasan", 1, 1, 1, 1, 1) == cards[1]
+            Card(2, "grandmother", "obaasan", RehearsalInterval.STAGE_1, 1, 1, 1, 1) == cards[1]
         )
     }
 
