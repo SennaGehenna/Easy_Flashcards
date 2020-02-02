@@ -60,11 +60,19 @@ class Game(
             positiveCheckCount = card.positiveCheckCount
         }
 
+        val nextRecheck = System.currentTimeMillis().let { currentTime ->
+            TimeUnit.MILLISECONDS.toDays(currentTime).let { asDay ->
+                TimeUnit.DAYS.toMillis(asDay).let {
+                    it + TimeUnit.DAYS.toMillis(nextInterval.getInterval().toLong())
+                }
+            }
+        }
+
         database.addOrUpdateCard(
             card.copy(
                 currentInterval = nextInterval.getInterval(),
                 checkCount = card.checkCount + 1,
-                nextRecheck = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(nextInterval.getInterval().toLong()),
+                nextRecheck = nextRecheck,
                 positiveCheckCount = positiveCheckCount
             )
         )
