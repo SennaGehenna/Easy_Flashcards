@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.EditorInfo.IME_ACTION_NEXT
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
@@ -52,6 +53,13 @@ class DialogAddEditCard private constructor(
             val card = card
             txtOriginalTerm.setText(card?.frontText)
             txtRevealedTerm.setText(card?.backText)
+
+            txtOriginalTerm.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == IME_ACTION_NEXT)
+                    txtRevealedTerm.putCursorInTextview(true)
+                true
+            }
+
             btnSaveTerm.setOnClickListener {
                 saveCard(txtOriginalTerm.text.toString(), txtRevealedTerm.text.toString())
             }
@@ -91,7 +99,7 @@ class DialogAddEditCard private constructor(
                 id = Dependencies.database.getHighestCardIdForSet(setId),
                 frontText = originalTerm,
                 backText = revealedTerm,
-                currentInterval = RehearsalInterval.STAGE_1.getInterval(),
+                currentInterval = RehearsalInterval.STAGE_1,
                 nextRecheck = System.currentTimeMillis(),
                 setId = setId,
                 checkCount = 0,
