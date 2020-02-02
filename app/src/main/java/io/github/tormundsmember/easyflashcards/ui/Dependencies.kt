@@ -6,6 +6,7 @@ import androidx.room.Room
 import io.github.tormundsmember.easyflashcards.data.Database
 import io.github.tormundsmember.easyflashcards.data.RoomDb
 import io.github.tormundsmember.easyflashcards.data.UserData
+import io.github.tormundsmember.easyflashcards.data.migrations.Migration1_2
 import io.github.tormundsmember.easyflashcards.ui.util.factory
 
 @SuppressLint("StaticFieldLeak") //this is friggin DI, if we leak this context, we're doing something seriously wrong
@@ -126,6 +127,7 @@ object Dependencies {
 
     private val roomDb: RoomDb by lazy {
         Room.databaseBuilder(context, RoomDb::class.java, "flashcards_db")
+            .addMigrations(Migration1_2())
             .allowMainThreadQueries()
             .build()
 

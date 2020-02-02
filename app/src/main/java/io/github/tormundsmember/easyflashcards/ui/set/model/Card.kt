@@ -25,7 +25,7 @@ data class Card(
     val id: Int,
     val frontText: String,
     val backText: String,
-    val currentInterval: Day,
+    val currentInterval: RehearsalInterval,
     val nextRecheck: Date,
     val setId: Int,
     val checkCount: Int, //how many times this card was rehearsed

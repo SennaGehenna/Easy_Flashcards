@@ -28,16 +28,14 @@ enum class RehearsalInterval {
     }
 
 
-    companion object{
-        fun getFromInterval(interval: Int): RehearsalInterval {
-            return when (interval) {
-                1 -> STAGE_1
-                3 -> STAGE_2
-                7 -> STAGE_3
-                14 -> STAGE_4
-                20 -> STAGE_5
-                else -> DONE
-            }
-        }
+    object TypeConverter {
+
+        @androidx.room.TypeConverter
+        @JvmStatic
+        fun toString(interval: RehearsalInterval) = interval.name
+
+        @androidx.room.TypeConverter
+        @JvmStatic
+        fun fromString(string: String) = valueOf(string)
     }
 }

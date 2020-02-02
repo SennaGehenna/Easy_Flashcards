@@ -2,7 +2,9 @@ package io.github.tormundsmember.easyflashcards.data
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
+import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
 import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 
 @Database(
@@ -10,9 +12,12 @@ import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
         Set::class,
         Card::class
     ],
-    version = 1
+    version = 2
+)
+@TypeConverters(
+    RehearsalInterval.TypeConverter::class
 )
 abstract class RoomDb : RoomDatabase() {
 
-    abstract fun getDao() : io.github.tormundsmember.easyflashcards.data.Database
+    abstract fun getDao(): io.github.tormundsmember.easyflashcards.data.Database
 }

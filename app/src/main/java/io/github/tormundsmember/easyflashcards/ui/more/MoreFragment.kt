@@ -149,8 +149,9 @@ class MoreFragment : BaseFragment() {
             }
         }
         if (requestCode == RQ_IMPORT && data1 != null) {
-            activity?.applicationContext?.contentResolver?.openFileDescriptor(data1, "r")?.use {
-                CoroutineScope(Dispatchers.IO).launch {
+
+            CoroutineScope(Dispatchers.IO).launch {
+                activity?.applicationContext?.contentResolver?.openFileDescriptor(data1, "r")?.use {
                     viewModel.importFromCsv(FileInputStream(it.fileDescriptor))
                 }
             }

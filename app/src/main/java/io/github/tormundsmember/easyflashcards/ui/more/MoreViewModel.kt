@@ -3,6 +3,7 @@ package io.github.tormundsmember.easyflashcards.ui.more
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseViewModel
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
+import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
 import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -12,7 +13,11 @@ class MoreViewModel : BaseViewModel() {
 
 
     suspend fun importFromCsv(inputStream: InputStream) = withContext(Dispatchers.IO) {
-        obtainImportedData(inputStream)
+        val (sets, cards) = obtainImportedData(inputStream)
+        with(Dependencies.database) {
+            sets.forEach { addOrUpdateSet(it) }
+            cards.forEach { addOrUpdateCard(it) }
+        }
     }
 
     fun obtainImportedData(inputStream: InputStream): Pair<List<Set>, List<Card>> {
@@ -74,7 +79,8 @@ class MoreViewModel : BaseViewModel() {
                     val _id = row.getOrNullWithNullableKey(cardId)?.toInt()!!
                     val _frontText = row.getOrNullWithNullableKey(frontText)!!
                     val _backText = row.getOrNullWithNullableKey(backText)!!
-                    val _currentInterval = row.getOrNullWithNullableKey(currentInterval)?.toInt()!!
+                    val _currentInterval =
+                        RehearsalInterval.TypeConverter.fromString(row.getOrNullWithNullableKey(currentInterval)!!)
                     val _nextRecheck = row.getOrNullWithNullableKey(nextRecheck)?.toLong()!!
                     val _setId = row.getOrNullWithNullableKey(setId)?.toInt()!!
                     val _checkCount = row.getOrNullWithNullableKey(checkCount)?.toInt()!!
