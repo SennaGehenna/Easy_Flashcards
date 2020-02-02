@@ -22,6 +22,7 @@ import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
 import io.github.tormundsmember.easyflashcards.ui.play.PlayKey
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.util.gone
+import io.github.tormundsmember.easyflashcards.ui.util.invisible
 import io.github.tormundsmember.easyflashcards.ui.util.visible
 
 open class SetFragment : BaseFragment() {
@@ -63,10 +64,7 @@ open class SetFragment : BaseFragment() {
         btnPlay = view.findViewById(R.id.btnPlay)
         btnPlayInverse = view.findViewById(R.id.btnPlayInverse)
 
-        if (!Dependencies.userData.hasSeenSetOverviewTutorial) {
-            Dependencies.userData.hasSeenSetOverviewTutorial = true
-            showTutorial()
-        }
+
         vTutorialBack.setOnClickListener {
             nextTutorialStep()
         }
@@ -77,10 +75,23 @@ open class SetFragment : BaseFragment() {
         }
 
         viewModel.cards.observe {
+            if (it != null && it.isNotEmpty()) {
+                btnPlay.visible()
+                btnPlayInverse.visible()
+            } else {
+                btnPlay.gone()
+                btnPlayInverse.gone()
+            }
             adapter.items = it ?: emptyList()
             txtNoItems.visibility = when {
                 it == null || it.isNotEmpty() -> View.GONE
                 else -> View.VISIBLE
+            }
+            if (adapter.items.isNotEmpty()) {
+                if (!Dependencies.userData.hasSeenSetOverviewTutorial) {
+                    Dependencies.userData.hasSeenSetOverviewTutorial = true
+                    showTutorial()
+                }
             }
         }
 
@@ -125,6 +136,7 @@ open class SetFragment : BaseFragment() {
     }
 
     private fun showTutorial() {
+        btnPlayInverse.elevation = 0F
         vTutorialBack.alpha = 0F
         vTutorialBack.visible()
         vTutorialBack.animate()
@@ -148,12 +160,14 @@ open class SetFragment : BaseFragment() {
     private fun nextTutorialStep() {
         tutorialStep = when (tutorialStep) {
             TutorialStep.STEP1 -> {
+                btnPlay.animate().z(0F).setDuration(300).setListener(null).start()
+                btnPlayInverse.animate().z(8F).setDuration(300).setListener(null).start()
                 txtTutorialPlay.animate()
                     .alpha(0F)
                     .setDuration(300)
                     .setListener(object : AnimationListener() {
                         override fun onAnimationEnd(animation: Animator?) {
-                            txtTutorialPlay.gone()
+                            txtTutorialPlay.invisible()
                         }
                     })
                     .start()
@@ -167,6 +181,7 @@ open class SetFragment : BaseFragment() {
                 TutorialStep.STEP2
             }
             TutorialStep.STEP2 -> {
+                btnPlay.animate().z(0F).setDuration(300).setListener(null).start()
                 listOf(
                     vTutorialBack,
                     txtTutorialOk,
@@ -184,7 +199,9 @@ open class SetFragment : BaseFragment() {
                 }
                 TutorialStep.DONE
             }
-            TutorialStep.DONE -> TutorialStep.DONE
+            TutorialStep.DONE -> {
+                TutorialStep.DONE
+            }
         }
     }
 
