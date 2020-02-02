@@ -21,16 +21,24 @@ import io.github.tormundsmember.easyflashcards.ui.set.SetKey
 import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 import io.github.tormundsmember.easyflashcards.ui.util.gone
 import io.github.tormundsmember.easyflashcards.ui.util.visible
+import kotlin.properties.Delegates
 
 class SetOverviewFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.screen_all_sets
     private val adapter: Adapter =
         Adapter(onSomethingSelected = { isSomethingSelected ->
-            animateButtons(isSomethingSelected)
+            shouldShowButtons = isSomethingSelected
         }, onClick = {
             goToSet(it.id)
         })
+
+
+    private var shouldShowButtons: Boolean by Delegates.observable(false) { _, old, new ->
+        if (old != new) {
+            animateButtons(new)
+        }
+    }
 
     private val viewModel: SetOverviewViewModel by lazy { getViewModel<SetOverviewViewModel>() }
 
@@ -235,7 +243,11 @@ class SetOverviewFragment : BaseFragment() {
                 viewSelected.setBackgroundResource((activeItems.contains(position)).mapActiveColor())
                 viewSelected.visibility = activeItems.contains(position).mapToVisibility()
                 setOnClickListener {
-                    onClick(items[holder.adapterPosition])
+                    if (activeItems.isNotEmpty()) {
+                        holder.longClick(this)
+                    } else {
+                        onClick(items[holder.adapterPosition])
+                    }
                 }
                 setOnLongClickListener(holder.longClick)
             }
