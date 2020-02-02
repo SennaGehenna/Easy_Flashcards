@@ -1,161 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <Switch
-        android:id="@+id/switchCrashUsageData"
-        style="@style/TextStyle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/big_margin"
-        android:text="@string/enableCrashReporting"
-        tools:checked="true" />
+        android:orientation="vertical">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/big_margin"
-        android:layout_marginEnd="@dimen/big_margin"
-        android:background="@color/colorAccent" />
+        <Switch
+            android:id="@+id/switchCrashUsageData"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/big_margin"
+            android:text="@string/enableCrashReporting"
+            tools:checked="true" />
 
-
-    <Switch
-        android:id="@+id/switchDarkMode"
-        style="@style/TextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/big_margin"
-
-        android:text="@string/enableDarkMode"
-        tools:checked="true" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/big_margin"
-        android:layout_marginEnd="@dimen/big_margin"
-        android:background="@color/colorAccent" />
-
-    <Switch
-        android:id="@+id/switchSpatialRepetition"
-        style="@style/TextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/big_margin"
-        android:text="@string/useSpacedRepetition"
-        tools:checked="true" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/hintSpatialRepetition"
-        style="@style/TextStyleHint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/big_margin"
-        android:text="@string/promptExplanationSpacedRepetition"
-        tools:text="What is Spatial Repetition?" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/big_margin"
-        android:layout_marginEnd="@dimen/big_margin"
-        android:background="@color/colorAccent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txtExportToCsv"
-        style="@style/TextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="@dimen/big_margin"
-        android:background="@color/transparent"
-        android:gravity="start|center_vertical"
-        android:text="@string/export_csv"
-        android:textColor="@color/colorAccent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/big_margin"
-        android:layout_marginEnd="@dimen/big_margin"
-        android:background="@color/colorAccent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txtImportFromCsv"
-        style="@style/TextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="@dimen/big_margin"
-        android:background="@color/transparent"
-        android:gravity="start|center_vertical"
-        android:text="@string/import_csv"
-        android:textColor="@color/colorAccent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txtImportFromCsvSubtitle"
-        style="@style/TextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/big_margin"
-        android:layout_marginRight="@dimen/big_margin"
-        android:layout_marginBottom="@dimen/big_margin"
-        android:background="@color/transparent"
-        android:gravity="start|center_vertical"
-        android:text="@string/import_csv_subtitle"
-        android:textSize="14sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/big_margin"
-        android:layout_marginEnd="@dimen/big_margin"
-        android:background="@color/colorAccent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txtLicenses"
-        style="@style/TextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="@dimen/big_margin"
-        android:background="@color/transparent"
-        android:gravity="start|center_vertical"
-        android:text="@string/licenses" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/big_margin"
-        android:layout_marginEnd="@dimen/big_margin"
-        android:background="@color/colorAccent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txtSourceCode"
-        style="@style/TextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_margin="@dimen/big_margin"
-        android:background="@color/transparent"
-        android:gravity="start|center_vertical"
-        android:text="@string/sourceCodeOnGithub" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="@dimen/big_margin"
-        android:layout_marginEnd="@dimen/big_margin"
-        android:background="@color/colorAccent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txtIssueTracker"
-        style="@style/TextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/big_margin"
-        android:background="@color/transparent"
-        android:gravity="start|center_vertical"
-        android:text="@string/openAnIssue" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/big_margin"
+            android:layout_marginEnd="@dimen/big_margin"
+            android:background="@color/colorAccent" />
 
 
-</LinearLayout>
+        <Switch
+            android:id="@+id/switchDarkMode"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/big_margin"
+
+            android:text="@string/enableDarkMode"
+            tools:checked="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/big_margin"
+            android:layout_marginEnd="@dimen/big_margin"
+            android:background="@color/colorAccent" />
+
+        <Switch
+            android:id="@+id/switchSpatialRepetition"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/big_margin"
+            android:text="@string/useSpacedRepetition"
+            tools:checked="true" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/hintSpatialRepetition"
+            style="@style/TextStyleHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/big_margin"
+            android:text="@string/promptExplanationSpacedRepetition"
+            tools:text="What is Spatial Repetition?" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/big_margin"
+            android:layout_marginEnd="@dimen/big_margin"
+            android:background="@color/colorAccent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtExportToCsv"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="@dimen/big_margin"
+            android:background="@color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="@string/export_csv"
+            android:textColor="@color/colorAccent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/big_margin"
+            android:layout_marginEnd="@dimen/big_margin"
+            android:background="@color/colorAccent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtImportFromCsv"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="@dimen/big_margin"
+            android:background="@color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="@string/import_csv"
+            android:textColor="@color/colorAccent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtImportFromCsvSubtitle"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/big_margin"
+            android:layout_marginRight="@dimen/big_margin"
+            android:layout_marginBottom="@dimen/big_margin"
+            android:background="@color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="@string/import_csv_subtitle"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/big_margin"
+            android:layout_marginEnd="@dimen/big_margin"
+            android:background="@color/colorAccent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtLicenses"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="@dimen/big_margin"
+            android:background="@color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="@string/licenses" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/big_margin"
+            android:layout_marginEnd="@dimen/big_margin"
+            android:background="@color/colorAccent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtSourceCode"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_margin="@dimen/big_margin"
+            android:background="@color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="@string/sourceCodeOnGithub" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/big_margin"
+            android:layout_marginEnd="@dimen/big_margin"
+            android:background="@color/colorAccent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtIssueTracker"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/big_margin"
+            android:background="@color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="@string/openAnIssue" />
+
+
+    </LinearLayout>
+</ScrollView>
