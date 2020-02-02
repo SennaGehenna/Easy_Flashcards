@@ -91,7 +91,10 @@ class DialogAddEditSet private constructor(
                 Dependencies.database.getHighestSetId(),
                 title
             )
-            Dependencies.database.addOrUpdateSet(newSet)
+            if (set != null)
+                Dependencies.database.updateSet(newSet)
+            else
+                Dependencies.database.addSet(newSet)
             if (set == null) {
                 onSetAdded(newSet.id)
             }
