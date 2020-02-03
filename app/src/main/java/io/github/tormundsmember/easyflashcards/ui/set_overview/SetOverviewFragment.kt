@@ -144,6 +144,7 @@ class SetOverviewFragment : BaseFragment() {
 
 
     private fun goToSet(setId: Int) {
+        shouldShowButtons = false
         adapter.deactiveAllItems()
         goTo(SetKey(setId))
     }
