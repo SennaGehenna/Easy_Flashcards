@@ -13,6 +13,8 @@ class UserData(private val context: Context) {
         const val USE_DARKMODE = "USE_DARKMODE"
         const val USE_SPACED_REPETITION = "USE_SPACED_REPETITION "
         const val ALLOW_CRASHREPORTING = "ALLOW_CRASHREPORTING"
+        const val LIMIT_CARDS = "LIMIT_CARDS"
+        const val LIMIT_CARDS_AMOUNT = "LIMIT_CARDS_AMOUNT"
     }
 
     private val sharedPref: SharedPreferences
@@ -55,6 +57,22 @@ class UserData(private val context: Context) {
         set(value) {
             sharedPref.edit {
                 putBoolean(ALLOW_CRASHREPORTING, value)
+            }
+        }
+
+    var limitCards: Boolean
+        get() = sharedPref.getBoolean(LIMIT_CARDS, false)
+        set(value) {
+            sharedPref.edit {
+                putBoolean(LIMIT_CARDS, value)
+            }
+        }
+
+    var limitCardsAmount: Int
+        get() = sharedPref.getInt(LIMIT_CARDS_AMOUNT, 20)
+        set(value) {
+            sharedPref.edit {
+                putInt(LIMIT_CARDS_AMOUNT, value)
             }
         }
 }

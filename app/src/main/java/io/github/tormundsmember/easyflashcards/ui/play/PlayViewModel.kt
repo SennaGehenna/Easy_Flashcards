@@ -27,7 +27,14 @@ class PlayViewModel : BaseViewModel() {
         } else {
             Dependencies.database.getCardsByMultipleSetIds(setIds)
         }
-        val cards = setsById.map { Game.FlippableCard(it, isInverse, false) }.shuffled().toMutableList()
+        val cardsTmp = setsById.map { Game.FlippableCard(it, isInverse, false) }.shuffled()
+
+        val cards = if (Dependencies.userData.limitCards) {
+            cardsTmp.take(Dependencies.userData.limitCardsAmount)
+        } else {
+            cardsTmp
+        }.toMutableList()
+
         game = Game(cards, Dependencies.database)
     }
 

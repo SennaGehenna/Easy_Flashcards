@@ -6,16 +6,14 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Switch
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.MainActivity
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.licenses.LicensesKey
-import io.github.tormundsmember.easyflashcards.ui.util.hasPermission
-import io.github.tormundsmember.easyflashcards.ui.util.openUrlInCustomTabs
-import io.github.tormundsmember.easyflashcards.ui.util.prepareLinkText
-import io.github.tormundsmember.easyflashcards.ui.util.showGeneralErrorMessage
+import io.github.tormundsmember.easyflashcards.ui.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,6 +43,8 @@ class MoreFragment : BaseFragment() {
     private lateinit var txtIssueTracker: AppCompatTextView
     private lateinit var hintSpatialRepetition: AppCompatTextView
     private lateinit var switchCrashUsageData: Switch
+    private lateinit var switchLimitCards: Switch
+    private lateinit var txtCardLimit: AppCompatEditText
     private val viewModel: MoreViewModel by lazy { getViewModel<MoreViewModel>() }
 
 
@@ -60,6 +60,8 @@ class MoreFragment : BaseFragment() {
         txtIssueTracker = view.findViewById(R.id.txtIssueTracker)
         hintSpatialRepetition = view.findViewById(R.id.hintSpatialRepetition)
         switchCrashUsageData = view.findViewById(R.id.switchCrashUsageData)
+        switchLimitCards = view.findViewById(R.id.switchLimitCards)
+        txtCardLimit = view.findViewById(R.id.txtCardLimit)
 
         switchCrashUsageData.text = getString(R.string.enableCrashReporting).prepareLinkText(view.context)
         switchCrashUsageData.isChecked = Dependencies.userData.allowCrashReporting
@@ -77,6 +79,20 @@ class MoreFragment : BaseFragment() {
         switchSpatialRepetition.setOnCheckedChangeListener { _, isChecked ->
             Dependencies.userData.useSpacedRepetition = isChecked
         }
+
+        with(Dependencies.userData) {
+            txtCardLimit.isEnabled = limitCards
+            switchLimitCards.isChecked = limitCards
+        }
+        switchLimitCards.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                txtCardLimit.putCursorInTextview(true)
+            }
+            Dependencies.userData.limitCards = isChecked
+            txtCardLimit.isEnabled = isChecked
+        }
+
+        txtCardLimit.setText(Dependencies.userData.limitCardsAmount.toString())
 
         hintSpatialRepetition.text = getString(R.string.explanationSpacedRepetition).prepareLinkText(view.context)
         hintSpatialRepetition.setOnClickListener {
@@ -101,6 +117,15 @@ class MoreFragment : BaseFragment() {
         }
         txtIssueTracker.setOnClickListener {
             openUrlInCustomTabs(it.context, Uri.parse(getString(R.string.issueTracker)))
+        }
+    }
+
+
+    override fun onStop() {
+        super.onStop()
+        val newCardLimit = txtCardLimit.text?.toString()?.toIntOrNull()
+        if (newCardLimit != null) {
+            Dependencies.userData.limitCardsAmount = newCardLimit
         }
     }
 

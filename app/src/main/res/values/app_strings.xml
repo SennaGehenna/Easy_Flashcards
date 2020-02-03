@@ -57,5 +57,9 @@ positiveCheckCount"</string>
     <string name="play">Play</string>
     <string name="playReverse">Play with backside up first</string>
     <string name="enableCrashReporting">Allow Easy Flashcards to collect crash- &amp; usage-data. &lt;b&gt;NO personal data is collected!&lt;b&gt;</string>
-    <string name="select_all">Select all</string>
+
+    <string name="useCardLimit">Limit cards to rehearse</string>
+    <string name="card_limit">Amount of cards to rehearse per sitting:</string>
+  <string name="select_all">Select all</string>
+
 </resources>
