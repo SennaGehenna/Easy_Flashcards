@@ -49,8 +49,16 @@ abstract class BaseAdapter<T>(val onSomethingSelected: ((Boolean) -> Unit) = {},
 
     override fun getItemCount(): Int = items.size
 
+    fun activateAllItems() {
+        activeItems.clear()
+        activeItems.addAll(items.indices)
+        onSomethingSelected(activeItems.isNotEmpty())
+        notifyDataSetChanged()
+    }
+
     fun deactiveAllItems() {
         activeItems.clear()
+        onSomethingSelected(false)
         notifyDataSetChanged()
     }
 

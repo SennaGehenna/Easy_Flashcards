@@ -112,6 +112,9 @@ class SetOverviewFragment : BaseFragment() {
                     },
                     onDeleted = {}
                 )
+                R.id.action_select_all -> {
+                    adapter.activateAllItems()
+                }
                 R.id.action_more -> {
                     adapter.deactiveAllItems()
                     goTo(MoreKey())
