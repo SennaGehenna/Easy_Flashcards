@@ -15,7 +15,7 @@ class MoreViewModel : BaseViewModel() {
     suspend fun importFromCsv(inputStream: InputStream) = withContext(Dispatchers.IO) {
         val (sets, cards) = obtainImportedData(inputStream)
         with(Dependencies.database) {
-            sets.forEach { updateSet(it) }
+            sets.forEach { addSet(it) }
             cards.forEach { addOrUpdateCard(it) }
         }
     }
