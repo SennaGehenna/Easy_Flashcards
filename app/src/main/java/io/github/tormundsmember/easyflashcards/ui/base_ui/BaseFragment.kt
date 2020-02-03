@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.MainActivity
 
 abstract class BaseFragment : Fragment() {
@@ -26,6 +27,10 @@ abstract class BaseFragment : Fragment() {
         return inflater.inflate(layoutId, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        activity?.title = titleText
+    }
 
     fun <T> LiveData<T>.observe(action: (T?) -> Unit) {
         observe(viewLifecycleOwner, Observer { action(it) })
@@ -44,5 +49,18 @@ abstract class BaseFragment : Fragment() {
 
     fun goBack() {
         activity?.onBackPressed()
+    }
+
+    open val titleText: String
+        get() = getString(R.string.app_name)
+
+    open fun canGoBack(): Boolean {
+        return true
+    }
+
+    fun handleBackPress() {
+        if (canGoBack()) {
+            (activity as? MainActivity)?.goBack()
+        }
     }
 }
