@@ -112,6 +112,9 @@ class SetOverviewFragment : BaseFragment() {
                     },
                     onDeleted = {}
                 )
+                R.id.action_select_all -> {
+                    adapter.activateAllItems()
+                }
                 R.id.action_more -> {
                     adapter.deactiveAllItems()
                     goTo(MoreKey())
@@ -119,6 +122,15 @@ class SetOverviewFragment : BaseFragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun canGoBack(): Boolean {
+        return if (adapter.getSelectedItems().isNotEmpty()) {
+            adapter.deactiveAllItems()
+            false
+        } else {
+            super.canGoBack()
+        }
     }
 
     private fun showTutorial() {
