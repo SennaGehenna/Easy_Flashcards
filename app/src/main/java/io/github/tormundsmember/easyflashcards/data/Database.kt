@@ -16,7 +16,10 @@ interface Database {
     fun getHighestCardIdForSet(setId: Int): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addOrUpdateSet(set: Set)
+    fun addSet(set: Set)
+
+    @Update
+    fun updateSet(set:Set)
 
     @Query("select * from `set`")
     fun getSets(): List<Set>
