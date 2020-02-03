@@ -9,6 +9,8 @@ import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BackstackHandler
+import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
+import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseKey
 import io.github.tormundsmember.easyflashcards.ui.base_ui.FragmentStateChanger
 import io.github.tormundsmember.easyflashcards.ui.set_overview.SetOverviewKey
 
@@ -49,8 +51,18 @@ class MainActivity : AppCompatActivity(), StateChanger, BackstackHandler {
 
     override fun onBackPressed() {
         if (!backstackDelegate.onBackPressed()) {
-            super.onBackPressed()
+            val fragmentTag = backstackDelegate.manager.backstack.top<BaseKey>()?.fragmentTag
+            val fragment = supportFragmentManager.findFragmentByTag(fragmentTag)
+            if (fragment != null && fragment is BaseFragment) {
+                fragment.handleBackPress()
+            } else {
+                goBack()
+            }
         }
+    }
+
+    fun goBack(){
+        super.onBackPressed()
     }
 
     fun setDarkMode() {

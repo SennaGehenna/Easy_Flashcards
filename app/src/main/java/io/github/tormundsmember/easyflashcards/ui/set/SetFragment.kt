@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Database
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
@@ -28,6 +29,8 @@ import io.github.tormundsmember.easyflashcards.ui.util.visible
 open class SetFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.screen_set_overview
+    override val titleText: String
+        get() = Dependencies.database.getSetById(getKey<SetKey>().setId).name
 
     private lateinit var vTutorialBack: View
     private lateinit var txtTutorialPlay: AppCompatTextView
