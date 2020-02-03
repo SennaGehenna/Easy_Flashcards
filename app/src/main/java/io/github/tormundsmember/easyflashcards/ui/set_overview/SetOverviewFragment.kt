@@ -124,6 +124,15 @@ class SetOverviewFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun canGoBack(): Boolean {
+        return if (adapter.getSelectedItems().isNotEmpty()) {
+            adapter.deactiveAllItems()
+            false
+        } else {
+            super.canGoBack()
+        }
+    }
+
     private fun showTutorial() {
         vTutorialBack.alpha = 0F
         vTutorialBack.visible()
