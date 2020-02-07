@@ -251,8 +251,9 @@ class SetOverviewFragment : BaseFragment() {
             with(holder.itemView) {
                 val txtSetName: TextView = findViewById(R.id.txtSetName)
                 val viewSelected: View = findViewById(R.id.viewSelected)
-                isLongClickable = true
                 txtSetName.text = items[holder.adapterPosition].name
+
+                isLongClickable = true
                 viewSelected.setBackgroundResource((activeItems.contains(position)).mapActiveColor())
                 viewSelected.visibility = activeItems.contains(position).mapToVisibility()
                 setOnClickListener {
