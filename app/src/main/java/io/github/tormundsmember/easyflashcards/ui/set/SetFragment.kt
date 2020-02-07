@@ -109,7 +109,6 @@ open class SetFragment : BaseFragment() {
 
         setHasOptionsMenu(true)
 
-        activity?.actionBar?.title = Dependencies.database.getSetById(getKey<SetKey>().setId).name
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -125,7 +124,9 @@ open class SetFragment : BaseFragment() {
                 R.id.action_edit -> DialogAddEditSet.show(
                     context = ctx,
                     setId = getKey<SetKey>().setId,
-                    onSetAdded = { },
+                    onSetAdded = {
+                        activity?.title = Dependencies.database.getSetById(getKey<SetKey>().setId).name
+                    },
                     onDeleted = {
                         goBack()
                     })
