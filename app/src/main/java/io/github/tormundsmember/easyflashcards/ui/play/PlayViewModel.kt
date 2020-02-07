@@ -21,6 +21,10 @@ class PlayViewModel : BaseViewModel() {
         get() = game.guesses
     val correctGuesses: Int
         get() = game.correctGuesses
+    val cardCount: Int
+        get() = game.cardCount
+    val currentCardIndex: Int
+        get() = game.currentCardIndex
 
     fun initialize(setIds: List<Int>, isInverse: Boolean) {
 
@@ -40,7 +44,7 @@ class PlayViewModel : BaseViewModel() {
         game = Game(cards, Dependencies.database)
     }
 
-    fun undo(){
+    fun undo() {
         game.undo()
     }
 

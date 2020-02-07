@@ -33,6 +33,9 @@ class PlayFragment : BaseFragment() {
     private lateinit var lblCards: AppCompatTextView
     private lateinit var lblCardsGuessed: AppCompatTextView
     private lateinit var txtNoCardsToRehease: AppCompatTextView
+    private lateinit var lblCardCount: AppCompatTextView
+    private lateinit var lblCurrentCardIndex: AppCompatTextView
+    private lateinit var lblSeparator: AppCompatTextView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -52,6 +55,9 @@ class PlayFragment : BaseFragment() {
         lblCards = view.findViewById(R.id.lblCards)
         lblCardsGuessed = view.findViewById(R.id.lblCardsGuessed)
         txtNoCardsToRehease = view.findViewById(R.id.txtNoCardsToRehease)
+        lblCardCount = view.findViewById(R.id.lblCardCount)
+        lblCurrentCardIndex = view.findViewById(R.id.lblCurrentCardIndex)
+        lblSeparator = view.findViewById(R.id.lblSeparator)
 
         btnOkay.setOnClickListener {
             goBack()
@@ -66,13 +72,18 @@ class PlayFragment : BaseFragment() {
         }
 
         viewModel.canUndoCard.observe {
-            when(it){
+            when (it) {
                 true -> vPlayButtons.showUndoButton()
                 false -> vPlayButtons.hideUndoButton()
             }
         }
 
+
+        lblCardCount.text = viewModel.cardCount.toString()
         viewModel.currentCard.observe { currentCard ->
+
+            lblCurrentCardIndex.text = viewModel.currentCardIndex.toString()
+
             if (currentCard != null) {
                 if (currentCard.isFlipped) {
                     vCard.animate()
@@ -151,14 +162,8 @@ class PlayFragment : BaseFragment() {
 
     private fun showNoCardsToRehease() {
 
-        listOf(vCard, vPlayButtons).forEach {
-            it.animate().alpha(0F)
-                .setDuration(0)
-                .setListener(object : AnimationListener() {
-                    override fun onAnimationEnd(animation: Animator?) {
-                        it.gone()
-                    }
-                })
+        listOf(vCard, vPlayButtons, lblSeparator, lblCardCount, lblCurrentCardIndex).forEach {
+            it.gone()
         }
         listOf<View>(
             txtNoCardsToRehease,
@@ -183,7 +188,7 @@ class PlayFragment : BaseFragment() {
         lblCards.text = viewModel.guesses.toString()
         lblCardsGuessed.text = viewModel.correctGuesses.toString()
 
-        listOf(vCard, vPlayButtons).forEach {
+        listOf(vCard, vPlayButtons, lblSeparator, lblCardCount, lblCurrentCardIndex).forEach {
             it.animate().alpha(0F)
                 .setDuration(300)
                 .setListener(object : AnimationListener() {

@@ -61,5 +61,6 @@ positiveCheckCount"</string>
     <string name="useCardLimit">Limit cards to rehearse</string>
     <string name="card_limit">Amount of cards to rehearse per sitting:</string>
   <string name="select_all">Select all</string>
+    <string name="separator_slash">/</string>
 
 </resources>

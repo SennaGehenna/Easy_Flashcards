@@ -18,10 +18,11 @@ class Game(
         private set
     var correctGuesses: Int = 0
         private set
+    val cardCount = cards.size
 
     private var wasLastGuessCorrect: Boolean? = null
 
-    private var currentCardIndex: Int = 0
+    internal var currentCardIndex: Int = 0
         set(value) {
             field = value
             if (cards.isNotEmpty()) {
