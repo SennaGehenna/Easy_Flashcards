@@ -17,4 +17,8 @@ class SetViewModel : BaseViewModel() {
         this.setId = setId
     }
 
+    fun flipCards(selectedItems: List<Card>) {
+        Dependencies.database.addOrUpdateCards(selectedItems.map { it.copy(backText = it.frontText, frontText = it.backText) })
+    }
+
 }

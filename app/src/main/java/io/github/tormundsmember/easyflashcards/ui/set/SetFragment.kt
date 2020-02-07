@@ -40,14 +40,17 @@ open class SetFragment : BaseFragment() {
     private lateinit var btnPlay: View
     private lateinit var btnPlayInverse: View
 
-
+    private var somethingSelected: Boolean = false
     private var tutorialStep: TutorialStep = TutorialStep.STEP1
 
-    private val adapter: MyAdapter = MyAdapter {
+    private val adapter: MyAdapter = MyAdapter(onClick = {
         context?.let { ctx ->
             DialogAddEditCard.show(ctx, it.setId, it)
         }
-    }
+    }, onSomethingSelected = {
+        somethingSelected = it
+        activity?.invalidateOptionsMenu()
+    })
     private val viewModel: SetViewModel
         get() = getViewModel()
 
@@ -112,7 +115,10 @@ open class SetFragment : BaseFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_set, menu)
+        if (somethingSelected)
+            inflater.inflate(R.menu.menu_set_cards_selected, menu)
+        else
+            inflater.inflate(R.menu.menu_set, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -132,6 +138,10 @@ open class SetFragment : BaseFragment() {
                     })
                 R.id.action_more -> {
                     goTo(MoreKey())
+                    adapter.deactiveAllItems()
+                }
+                R.id.action_flip_selected -> {
+                    viewModel.flipCards(adapter.getSelectedItems())
                     adapter.deactiveAllItems()
                 }
             }
@@ -209,7 +219,8 @@ open class SetFragment : BaseFragment() {
         }
     }
 
-    protected class MyAdapter(onClick: (Card) -> Unit) : BaseAdapter<Card>(onClick = onClick) {
+    protected class MyAdapter(onClick: (Card) -> Unit, onSomethingSelected: ((Boolean) -> Unit)) :
+        BaseAdapter<Card>(onClick = onClick, onSomethingSelected = onSomethingSelected) {
         override fun getItemLayoutId(viewType: Int): Int = R.layout.listitem_card
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -218,13 +229,18 @@ open class SetFragment : BaseFragment() {
                 val txtOriginalTerm: TextView = findViewById(R.id.txtOriginalTerm)
                 val txtTranslatedTerm: TextView = findViewById(R.id.txtTranslatedTerm)
                 val viewSelected: View = findViewById(R.id.viewSelected)
+                txtTranslatedTerm.text = items[holder.adapterPosition].backText
+                txtOriginalTerm.text = items[holder.adapterPosition].frontText
 
                 isLongClickable = true
-                txtOriginalTerm.text = items[holder.adapterPosition].frontText
-                txtTranslatedTerm.text = items[holder.adapterPosition].backText
                 viewSelected.setBackgroundResource((activeItems.contains(position)).mapActiveColor())
+                viewSelected.visibility = activeItems.contains(position).mapToVisibility()
                 setOnClickListener {
-                    onClick(items[holder.adapterPosition])
+                    if (activeItems.isNotEmpty()) {
+                        holder.longClick(this)
+                    } else {
+                        onClick(items[holder.adapterPosition])
+                    }
                 }
                 setOnLongClickListener(holder.longClick)
             }
