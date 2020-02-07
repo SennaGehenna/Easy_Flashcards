@@ -18,6 +18,9 @@ interface Database {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addSet(set: Set)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addSets(set: List<Set>)
+
     @Update
     fun updateSet(set:Set)
 
@@ -47,6 +50,9 @@ interface Database {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addOrUpdateCard(card: Card)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addOrUpdateCards(card: List<Card>)
 
     @Delete
     fun deleteSet(set: Set)
