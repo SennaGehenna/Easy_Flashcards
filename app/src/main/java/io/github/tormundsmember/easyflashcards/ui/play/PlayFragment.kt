@@ -143,7 +143,7 @@ class PlayFragment : BaseFragment() {
 
         listOf(vCard, vPlayButtons).forEach {
             it.animate().alpha(0F)
-                .setDuration(300)
+                .setDuration(0)
                 .setListener(object : AnimationListener() {
                     override fun onAnimationEnd(animation: Animator?) {
                         it.gone()
