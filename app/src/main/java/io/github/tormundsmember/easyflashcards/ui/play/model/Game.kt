@@ -19,6 +19,19 @@ class Game(
     var correctGuesses: Int = 0
         private set
 
+    private var currentCardIndex: Int = 0
+        set(value) {
+            field = value
+            if (cards.isNotEmpty()) {
+                _currentCard += cards.getOrNull(value)
+            }
+            _canUndoCard += value > 0
+        }
+
+    private val _canUndoCard = MutableLiveData<Boolean>().apply { postValue(false) }
+    val canUndoCard: LiveData<Boolean>
+        get() = _canUndoCard
+
     private val _isFinished: MutableLiveData<PlayViewModel.GameState> = MutableLiveData()
     val isFinished: LiveData<PlayViewModel.GameState>
         get() = _isFinished
@@ -48,7 +61,7 @@ class Game(
         if (correctGuess) correctGuesses++
 
 
-        val card = cards[0].card
+        val card = cards[currentCardIndex].card
 
         val nextInterval: RehearsalInterval
         val positiveCheckCount: Int
@@ -79,14 +92,15 @@ class Game(
 
 
 
-        if (cards.isNotEmpty()) {
-            cards.removeAt(0)
-        }
-        if (cards.isNotEmpty()) {
-            _currentCard += cards[0].copy(isFlipped = false)
+        if ((currentCardIndex + 1) < cards.size) {
+            currentCardIndex++
         } else {
             _isFinished += PlayViewModel.GameState.Finished
         }
+    }
+
+    fun undo() {
+        currentCardIndex--
     }
 
     data class FlippableCard(

@@ -14,6 +14,8 @@ class PlayViewModel : BaseViewModel() {
         get() = game.isFinished
     val currentCard: LiveData<Game.FlippableCard>
         get() = game.currentCard
+    val canUndoCard: LiveData<Boolean>
+        get() = game.canUndoCard
 
     val guesses: Int
         get() = game.guesses
@@ -38,6 +40,9 @@ class PlayViewModel : BaseViewModel() {
         game = Game(cards, Dependencies.database)
     }
 
+    fun undo(){
+        game.undo()
+    }
 
     fun flipCard() {
         game.flipCard()

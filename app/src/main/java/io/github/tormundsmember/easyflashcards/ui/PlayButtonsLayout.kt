@@ -26,6 +26,7 @@ class PlayButtonsLayout(context: Context, attributeSet: AttributeSet?) : Constra
     val btnNegative: AppCompatImageButton = findViewById(R.id.btnNegative)
     val btnPositive: AppCompatImageButton = findViewById(R.id.btnPositive)
     val btnFlip: AppCompatButton = findViewById(R.id.btnFlip)
+    val btnUndo: AppCompatImageButton = findViewById(R.id.btnUndo)
 
 
     fun showFeedbackButtons() {
@@ -38,5 +39,13 @@ class PlayButtonsLayout(context: Context, attributeSet: AttributeSet?) : Constra
         btnNegative.animateGone()
         btnPositive.animateGone()
         btnFlip.animateVisible()
+    }
+
+    fun showUndoButton() {
+        btnUndo.animateVisible()
+    }
+
+    fun hideUndoButton() {
+        btnUndo.animateGone()
     }
 }
