@@ -65,6 +65,13 @@ class PlayFragment : BaseFragment() {
 
         }
 
+        viewModel.canUndoCard.observe {
+            when(it){
+                true -> vPlayButtons.showUndoButton()
+                false -> vPlayButtons.hideUndoButton()
+            }
+        }
+
         viewModel.currentCard.observe { currentCard ->
             if (currentCard != null) {
                 if (currentCard.isFlipped) {
@@ -119,6 +126,9 @@ class PlayFragment : BaseFragment() {
         }
         vPlayButtons.btnNegative.setOnClickListener {
             viewModel.nextCard(false)
+        }
+        vPlayButtons.btnUndo.setOnClickListener {
+            viewModel.undo()
         }
         setHasOptionsMenu(true)
     }
