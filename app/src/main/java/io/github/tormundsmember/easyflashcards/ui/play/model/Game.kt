@@ -19,6 +19,8 @@ class Game(
     var correctGuesses: Int = 0
         private set
 
+    private var wasLastGuessCorrect: Boolean? = null
+
     private var currentCardIndex: Int = 0
         set(value) {
             field = value
@@ -57,6 +59,7 @@ class Game(
     }
 
     fun nextCard(correctGuess: Boolean) {
+        wasLastGuessCorrect = correctGuess
         guesses++
         if (correctGuess) correctGuesses++
 
@@ -101,6 +104,12 @@ class Game(
 
     fun undo() {
         currentCardIndex--
+        wasLastGuessCorrect?.let {
+            if (it) {
+                correctGuesses--
+            }
+        }
+        guesses--
     }
 
     data class FlippableCard(
