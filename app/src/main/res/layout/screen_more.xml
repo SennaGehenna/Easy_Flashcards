@@ -9,6 +9,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtVersionCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/big_margin"
+            android:layout_marginEnd="@dimen/big_margin"
+            android:gravity="center"
+            tools:text="v1.1.2" />
+
+
         <Switch
             android:id="@+id/switchCrashUsageData"
             style="@style/TextStyle"

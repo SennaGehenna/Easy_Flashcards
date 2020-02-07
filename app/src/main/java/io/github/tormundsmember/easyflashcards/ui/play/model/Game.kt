@@ -19,7 +19,7 @@ class Game(
     var correctGuesses: Int = 0
         private set
 
-    private val _isFinished: MutableLiveData<PlayViewModel.GameState> = MutableLiveData<PlayViewModel.GameState>()
+    private val _isFinished: MutableLiveData<PlayViewModel.GameState> = MutableLiveData()
     val isFinished: LiveData<PlayViewModel.GameState>
         get() = _isFinished
 

@@ -1,5 +1,6 @@
 package io.github.tormundsmember.easyflashcards.ui.more
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -8,6 +9,7 @@ import android.view.View
 import android.widget.Switch
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
+import io.github.tormundsmember.easyflashcards.BuildConfig
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.MainActivity
@@ -45,9 +47,11 @@ class MoreFragment : BaseFragment() {
     private lateinit var switchCrashUsageData: Switch
     private lateinit var switchLimitCards: Switch
     private lateinit var txtCardLimit: AppCompatEditText
+    private lateinit var txtVersionCode: AppCompatTextView
     private val viewModel: MoreViewModel by lazy { getViewModel<MoreViewModel>() }
 
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         switchDarkMode = view.findViewById(R.id.switchDarkMode)
@@ -62,6 +66,9 @@ class MoreFragment : BaseFragment() {
         switchCrashUsageData = view.findViewById(R.id.switchCrashUsageData)
         switchLimitCards = view.findViewById(R.id.switchLimitCards)
         txtCardLimit = view.findViewById(R.id.txtCardLimit)
+        txtVersionCode = view.findViewById(R.id.txtVersionCode)
+
+        txtVersionCode.text = "v${BuildConfig.VERSION_NAME}"
 
         switchCrashUsageData.text = getString(R.string.enableCrashReporting).prepareLinkText(view.context)
         switchCrashUsageData.isChecked = Dependencies.userData.allowCrashReporting
