@@ -44,7 +44,7 @@ abstract class BaseFragment : Fragment() {
 
 
     fun goTo(key: BaseKey) {
-        (activity as MainActivity?)?.getBackstack()?.goTo(key)
+        (activity as MainActivity?)?.backstack?.goTo(key)
     }
 
     fun goBack() {
