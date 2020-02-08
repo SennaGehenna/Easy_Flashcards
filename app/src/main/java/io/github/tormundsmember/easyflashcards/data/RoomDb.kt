@@ -12,7 +12,7 @@ import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
         Set::class,
         Card::class
     ],
-    version = 2
+    version = 3
 )
 @TypeConverters(
     RehearsalInterval.TypeConverter::class

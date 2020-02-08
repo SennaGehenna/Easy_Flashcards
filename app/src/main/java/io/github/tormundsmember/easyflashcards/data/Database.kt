@@ -22,7 +22,7 @@ interface Database {
     fun addSets(set: List<Set>)
 
     @Update
-    fun updateSet(set:Set)
+    fun updateSet(set: Set)
 
     @Query("select * from `set`")
     fun getSets(): List<Set>
@@ -59,5 +59,13 @@ interface Database {
 
     @Delete
     fun deleteCard(card: Card)
+
+
+    @Query(
+        """select * from Card where 
+  frontText in (select frontText from Card group by frontText having count(*) != 1) or
+  backText in (select backText from Card group by frontText having count(*) != 1)"""
+    )
+    fun getDuplicates(): List<Card>
 
 }

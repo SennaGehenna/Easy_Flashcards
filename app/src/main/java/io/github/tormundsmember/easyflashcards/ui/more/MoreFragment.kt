@@ -14,6 +14,7 @@ import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.MainActivity
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
+import io.github.tormundsmember.easyflashcards.ui.duplicate_finder.DuplicateFinderKey
 import io.github.tormundsmember.easyflashcards.ui.licenses.LicensesKey
 import io.github.tormundsmember.easyflashcards.ui.settings.SettingsKey
 import io.github.tormundsmember.easyflashcards.ui.util.*
@@ -46,6 +47,7 @@ class MoreFragment : BaseFragment() {
     private lateinit var txtIssueTracker: AppCompatTextView
     private lateinit var txtVersionCode: AppCompatTextView
     private lateinit var txtSettings: AppCompatTextView
+    private lateinit var txtDuplicateFinder: AppCompatTextView
 
     private val viewModel: MoreViewModel by lazy { getViewModel<MoreViewModel>() }
 
@@ -53,6 +55,7 @@ class MoreFragment : BaseFragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         txtExportToCsv = view.findViewById(R.id.txtExportToCsv)
         txtImportFromCsvSubtitle = view.findViewById(R.id.txtImportFromCsvSubtitle)
         txtImportFromCsv = view.findViewById(R.id.txtImportFromCsv)
@@ -61,32 +64,19 @@ class MoreFragment : BaseFragment() {
         txtIssueTracker = view.findViewById(R.id.txtIssueTracker)
         txtSettings = view.findViewById(R.id.txtSettings)
         txtVersionCode = view.findViewById(R.id.txtVersionCode)
+        txtDuplicateFinder = view.findViewById(R.id.txtDuplicateFinder)
+
         txtVersionCode.text = "v${BuildConfig.VERSION_NAME}"
 
-        txtSettings.setOnClickListener {
-            goTo(SettingsKey())
-        }
+        txtSettings.setOnClickListener { goTo(SettingsKey()) }
 
-
-        txtImportFromCsvSubtitle.setOnClickListener {
-            importFromCsv()
-        }
-        txtImportFromCsv.setOnClickListener {
-            importFromCsv()
-        }
-
-        txtExportToCsv.setOnClickListener {
-            exportToCsv()
-        }
-        txtLicenses.setOnClickListener {
-            goTo(LicensesKey())
-        }
-        txtSourceCode.setOnClickListener {
-            openUrlInCustomTabs(it.context, Uri.parse(getString(R.string.repository)))
-        }
-        txtIssueTracker.setOnClickListener {
-            openUrlInCustomTabs(it.context, Uri.parse(getString(R.string.issueTracker)))
-        }
+        txtImportFromCsvSubtitle.setOnClickListener { importFromCsv() }
+        txtImportFromCsv.setOnClickListener { importFromCsv() }
+        txtExportToCsv.setOnClickListener { exportToCsv() }
+        txtLicenses.setOnClickListener { goTo(LicensesKey()) }
+        txtSourceCode.setOnClickListener { openUrlInCustomTabs(it.context, Uri.parse(getString(R.string.repository))) }
+        txtIssueTracker.setOnClickListener { openUrlInCustomTabs(it.context, Uri.parse(getString(R.string.issueTracker))) }
+        txtDuplicateFinder.setOnClickListener { goTo(DuplicateFinderKey()) }
     }
 
 
