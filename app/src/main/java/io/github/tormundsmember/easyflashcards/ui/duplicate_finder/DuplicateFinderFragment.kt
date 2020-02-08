@@ -11,7 +11,6 @@ import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseAdapter
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_card.DialogAddEditCard
-import io.github.tormundsmember.easyflashcards.ui.set.SetFragment
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 
 class DuplicateFinderFragment : BaseFragment() {

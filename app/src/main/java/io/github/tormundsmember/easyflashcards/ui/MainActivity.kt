@@ -3,7 +3,10 @@ package io.github.tormundsmember.easyflashcards.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import com.zhuinden.simplestack.*
+import com.zhuinden.simplestack.Backstack
+import com.zhuinden.simplestack.History
+import com.zhuinden.simplestack.SimpleStateChanger
+import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.navigator.Navigator
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BackstackHandler

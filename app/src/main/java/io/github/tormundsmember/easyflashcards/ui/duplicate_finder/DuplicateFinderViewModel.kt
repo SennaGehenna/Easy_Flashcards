@@ -1,6 +1,5 @@
 package io.github.tormundsmember.easyflashcards.ui.duplicate_finder
 
-import androidx.lifecycle.LiveData
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseViewModel
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card

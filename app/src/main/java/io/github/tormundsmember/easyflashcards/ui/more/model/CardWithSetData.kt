@@ -1,9 +1,7 @@
 package io.github.tormundsmember.easyflashcards.ui.more.model
 
-import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.set.model.Date
 import io.github.tormundsmember.easyflashcards.ui.set.model.Day
-import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 
 class CardWithSetData(
     val setId: Int,

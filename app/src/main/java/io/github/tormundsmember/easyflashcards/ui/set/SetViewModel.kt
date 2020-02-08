@@ -1,9 +1,9 @@
 package io.github.tormundsmember.easyflashcards.ui.set
 
 import androidx.lifecycle.LiveData
-import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseViewModel
+import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 
 class SetViewModel : BaseViewModel() {
 

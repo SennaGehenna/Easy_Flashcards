@@ -1,4 +1,5 @@
 package io.github.tormundsmember.easyflashcards.ui.set.model
+
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
