@@ -20,11 +20,11 @@ class MigrationTest {
 
     // Array of all migrations
     private val ALL_MIGRATIONS = arrayOf(
-        Migration1_2(), Migration2_3()
+        Migration1_2, Migration2_3
     )
 
     @get:Rule
-    public val helper: MigrationTestHelper = MigrationTestHelper(
+    val helper: MigrationTestHelper = MigrationTestHelper(
         InstrumentationRegistry.getInstrumentation(),
         RoomDb::class.java.canonicalName,
         FrameworkSQLiteOpenHelperFactory()
@@ -41,7 +41,7 @@ class MigrationTest {
         // Open latest version of the database. Room will validate the schema
         // once all migrations execute.
         Room.databaseBuilder(
-            InstrumentationRegistry.getInstrumentation().getTargetContext(),
+            InstrumentationRegistry.getInstrumentation().targetContext,
             RoomDb::class.java,
             TEST_DB
         ).addMigrations(*ALL_MIGRATIONS).build().apply {

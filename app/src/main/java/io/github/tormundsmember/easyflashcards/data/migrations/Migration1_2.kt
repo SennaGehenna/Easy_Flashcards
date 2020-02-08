@@ -3,22 +3,21 @@ package io.github.tormundsmember.easyflashcards.data.migrations
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-class Migration1_2 : Migration(1, 2) {
+val Migration1_2 = object : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
-            """
-            
-            CREATE TABLE CardsTemp (
-                `id` INTEGER NOT NULL, 
-                `frontText` TEXT NOT NULL, 
-                `backText` TEXT NOT NULL, 
-                `currentInterval` TEXT NOT NULL, 
-                `nextRecheck` INTEGER NOT NULL, 
-                `setId` INTEGER NOT NULL, 
-                `checkCount` INTEGER NOT NULL, 
-                `positiveCheckCount` INTEGER NOT NULL 
-            );
-            insert into CardsTemp select 
+        database.execSQL("""CREATE TABLE IF NOT EXISTS `CardsTemp` (
+            `id` INTEGER NOT NULL, 
+            `frontText` TEXT NOT NULL, 
+            `backText` TEXT NOT NULL, 
+            `currentInterval` TEXT NOT NULL, 
+            `nextRecheck` INTEGER NOT NULL, 
+            `setId` INTEGER NOT NULL, 
+            `checkCount` INTEGER NOT NULL, 
+            `positiveCheckCount` INTEGER NOT NULL, 
+            PRIMARY KEY(`id`), 
+            FOREIGN KEY(`setId`) REFERENCES `Set`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE );
+        """)
+        database.execSQL("""insert into CardsTemp select 
                 id, 
                 frontText, 
                 backText, 
@@ -34,13 +33,10 @@ class Migration1_2 : Migration(1, 2) {
                 setId,
                 checkCount,
                 positiveCheckCount
-            from Card;
-            
-            Drop Table Card;
-            
-            Alter Table CardsTemp rename to Card;
-        """.trimIndent()
-        )
+            from Card;""")
+        database.execSQL("Drop Table Card;")
+        database.execSQL("Alter Table CardsTemp rename to Card;")
+        database.execSQL("CREATE INDEX IF NOT EXISTS `index_Card_setId` ON `Card` (`setId`)")
 
 
     }

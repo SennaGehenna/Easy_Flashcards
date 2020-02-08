@@ -129,8 +129,8 @@ object Dependencies {
     private val roomDb: RoomDb by lazy {
         Room.databaseBuilder(context, RoomDb::class.java, "flashcards_db")
             .addMigrations(
-                Migration1_2(),
-                Migration2_3()
+                Migration1_2,
+                Migration2_3
             )
             .allowMainThreadQueries()
             .build()
