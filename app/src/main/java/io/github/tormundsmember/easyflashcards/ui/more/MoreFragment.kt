@@ -6,13 +6,10 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Switch
-import androidx.appcompat.widget.AppCompatEditText
+import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatTextView
 import io.github.tormundsmember.easyflashcards.BuildConfig
 import io.github.tormundsmember.easyflashcards.R
-import io.github.tormundsmember.easyflashcards.ui.Dependencies
-import io.github.tormundsmember.easyflashcards.ui.MainActivity
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.duplicate_finder.DuplicateFinderKey
 import io.github.tormundsmember.easyflashcards.ui.licenses.LicensesKey
@@ -48,6 +45,7 @@ class MoreFragment : BaseFragment() {
     private lateinit var txtVersionCode: AppCompatTextView
     private lateinit var txtSettings: AppCompatTextView
     private lateinit var txtDuplicateFinder: AppCompatTextView
+    private lateinit var progressBar: ProgressBar
 
     private val viewModel: MoreViewModel by lazy { getViewModel<MoreViewModel>() }
 
@@ -65,6 +63,7 @@ class MoreFragment : BaseFragment() {
         txtSettings = view.findViewById(R.id.txtSettings)
         txtVersionCode = view.findViewById(R.id.txtVersionCode)
         txtDuplicateFinder = view.findViewById(R.id.txtDuplicateFinder)
+        progressBar = view.findViewById(R.id.progressBar)
 
         txtVersionCode.text = "v${BuildConfig.VERSION_NAME}"
 
@@ -79,6 +78,13 @@ class MoreFragment : BaseFragment() {
         txtDuplicateFinder.setOnClickListener { goTo(DuplicateFinderKey()) }
     }
 
+    private fun showLoadingSpinner() {
+        progressBar.visible()
+    }
+
+    private fun hideLoadingSpinner() {
+        progressBar.gone()
+    }
 
     private fun continueWithExport() {
         try {
@@ -125,10 +131,11 @@ class MoreFragment : BaseFragment() {
             }
         }
         if (requestCode == RQ_IMPORT && data1 != null) {
-
+            showLoadingSpinner()
             CoroutineScope(Dispatchers.IO).launch {
                 activity?.applicationContext?.contentResolver?.openFileDescriptor(data1, "r")?.use {
                     viewModel.importFromCsv(FileInputStream(it.fileDescriptor))
+                    hideLoadingSpinner()
                 }
             }
         }
