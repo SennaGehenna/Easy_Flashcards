@@ -64,4 +64,5 @@ positiveCheckCount"</string>
     <string name="separator_slash">/</string>
     <string name="flipSelected">Flip selected cards</string>
     <string name="settings">Settings</string>
+    <string name="duplicateFinder">Duplicate Finder</string>
 </resources>

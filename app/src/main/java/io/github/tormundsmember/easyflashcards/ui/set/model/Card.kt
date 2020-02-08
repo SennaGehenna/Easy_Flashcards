@@ -1,11 +1,12 @@
 package io.github.tormundsmember.easyflashcards.ui.set.model
-
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 
+typealias Day = Int
+typealias Date = Long
 
 @Entity(
     foreignKeys = [
@@ -18,7 +19,10 @@ import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
         )
     ],
     indices = [
-        Index(value = ["setId"])]
+        Index(value = ["setId"]),
+        Index(value = ["frontText"]),
+        Index(value = ["backText"])
+    ]
 )
 data class Card(
     @PrimaryKey
@@ -33,5 +37,4 @@ data class Card(
 
 )
 
-typealias Day = Int
-typealias Date = Long
+

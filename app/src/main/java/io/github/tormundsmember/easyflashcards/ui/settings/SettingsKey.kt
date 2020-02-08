@@ -5,6 +5,6 @@ import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseKey
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class SettingsKey(private val id: String = SettingsKey::class.java.simpleName) : BaseKey() {
+data class SettingsKey(private val id: String = SettingsKey::class.java.simpleName) : BaseKey() {
     override fun createFragment() = SettingsFragment()
 }
