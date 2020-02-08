@@ -15,6 +15,7 @@ import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.MainActivity
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.licenses.LicensesKey
+import io.github.tormundsmember.easyflashcards.ui.settings.SettingsKey
 import io.github.tormundsmember.easyflashcards.ui.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,77 +35,38 @@ class MoreFragment : BaseFragment() {
     }
 
     override val layoutId: Int = R.layout.screen_more
+    override val titleText: String
+        get() = getString(R.string.more)
 
-    private lateinit var switchDarkMode: Switch
-    private lateinit var switchSpatialRepetition: Switch
     private lateinit var txtExportToCsv: AppCompatTextView
     private lateinit var txtImportFromCsvSubtitle: AppCompatTextView
     private lateinit var txtImportFromCsv: AppCompatTextView
     private lateinit var txtLicenses: AppCompatTextView
     private lateinit var txtSourceCode: AppCompatTextView
     private lateinit var txtIssueTracker: AppCompatTextView
-    private lateinit var hintSpatialRepetition: AppCompatTextView
-    private lateinit var switchCrashUsageData: Switch
-    private lateinit var switchLimitCards: Switch
-    private lateinit var txtCardLimit: AppCompatEditText
     private lateinit var txtVersionCode: AppCompatTextView
+    private lateinit var txtSettings: AppCompatTextView
+
     private val viewModel: MoreViewModel by lazy { getViewModel<MoreViewModel>() }
 
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        switchDarkMode = view.findViewById(R.id.switchDarkMode)
-        switchSpatialRepetition = view.findViewById(R.id.switchSpatialRepetition)
         txtExportToCsv = view.findViewById(R.id.txtExportToCsv)
         txtImportFromCsvSubtitle = view.findViewById(R.id.txtImportFromCsvSubtitle)
         txtImportFromCsv = view.findViewById(R.id.txtImportFromCsv)
         txtLicenses = view.findViewById(R.id.txtLicenses)
         txtSourceCode = view.findViewById(R.id.txtSourceCode)
         txtIssueTracker = view.findViewById(R.id.txtIssueTracker)
-        hintSpatialRepetition = view.findViewById(R.id.hintSpatialRepetition)
-        switchCrashUsageData = view.findViewById(R.id.switchCrashUsageData)
-        switchLimitCards = view.findViewById(R.id.switchLimitCards)
-        txtCardLimit = view.findViewById(R.id.txtCardLimit)
+        txtSettings = view.findViewById(R.id.txtSettings)
         txtVersionCode = view.findViewById(R.id.txtVersionCode)
-
         txtVersionCode.text = "v${BuildConfig.VERSION_NAME}"
 
-        switchCrashUsageData.text = getString(R.string.enableCrashReporting).prepareLinkText(view.context)
-        switchCrashUsageData.isChecked = Dependencies.userData.allowCrashReporting
-        switchCrashUsageData.setOnCheckedChangeListener { _, isChecked ->
-            Dependencies.userData.allowCrashReporting = isChecked
+        txtSettings.setOnClickListener {
+            goTo(SettingsKey())
         }
 
-        switchDarkMode.isChecked = Dependencies.userData.useDarkMode
-        switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
-            Dependencies.userData.useDarkMode = isChecked
-            (activity as MainActivity?)?.setDarkMode()
-        }
-
-        switchSpatialRepetition.isChecked = Dependencies.userData.useSpacedRepetition
-        switchSpatialRepetition.setOnCheckedChangeListener { _, isChecked ->
-            Dependencies.userData.useSpacedRepetition = isChecked
-        }
-
-        with(Dependencies.userData) {
-            txtCardLimit.isEnabled = limitCards
-            switchLimitCards.isChecked = limitCards
-        }
-        switchLimitCards.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                txtCardLimit.putCursorInTextview(true)
-            }
-            Dependencies.userData.limitCards = isChecked
-            txtCardLimit.isEnabled = isChecked
-        }
-
-        txtCardLimit.setText(Dependencies.userData.limitCardsAmount.toString())
-
-        hintSpatialRepetition.text = getString(R.string.explanationSpacedRepetition).prepareLinkText(view.context)
-        hintSpatialRepetition.setOnClickListener {
-            openUrlInCustomTabs(it.context, Uri.parse("https://en.wikipedia.org/wiki/Spaced_repetition"))
-        }
 
         txtImportFromCsvSubtitle.setOnClickListener {
             importFromCsv()
@@ -127,14 +89,6 @@ class MoreFragment : BaseFragment() {
         }
     }
 
-
-    override fun onStop() {
-        super.onStop()
-        val newCardLimit = txtCardLimit.text?.toString()?.toIntOrNull()
-        if (newCardLimit != null) {
-            Dependencies.userData.limitCardsAmount = newCardLimit
-        }
-    }
 
     private fun continueWithExport() {
         try {

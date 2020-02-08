@@ -38,6 +38,10 @@ abstract class BaseFragment : Fragment() {
 
 
     inline fun <reified VM : ViewModel> Fragment.getViewModel(): VM {
+        return ViewModelProvider(this)[VM::class.java]
+    }
+
+    inline fun <reified VM : ViewModel> Fragment.getSharedViewModel(): VM {
         return activity?.let { ViewModelProvider(it)[VM::class.java] }
             ?: throw IllegalStateException("attempted to get viewModel for fragment ${this.javaClass.simpleName} but activity was null")
     }
