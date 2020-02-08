@@ -3,10 +3,8 @@ package io.github.tormundsmember.easyflashcards.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import com.zhuinden.simplestack.BackstackDelegate
-import com.zhuinden.simplestack.History
-import com.zhuinden.simplestack.StateChange
-import com.zhuinden.simplestack.StateChanger
+import com.zhuinden.simplestack.*
+import com.zhuinden.simplestack.navigator.Navigator
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BackstackHandler
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
@@ -17,11 +15,10 @@ import io.github.tormundsmember.easyflashcards.ui.set_overview.SetOverviewKey
 /**
  * design available in https://projects.invisionapp.com/freehand/document/Qjl32e0Ze
  */
-class MainActivity : AppCompatActivity(), StateChanger, BackstackHandler {
+class MainActivity : AppCompatActivity(), BackstackHandler, SimpleStateChanger.NavigationHandler {
 
     private lateinit var fragmentStateChanger: FragmentStateChanger
-    override fun getBackstack() = backstackDelegate.backstack
-    private lateinit var backstackDelegate: BackstackDelegate
+    override lateinit var backstack: Backstack
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -29,29 +26,23 @@ class MainActivity : AppCompatActivity(), StateChanger, BackstackHandler {
 
         setDarkMode()
 
-        backstackDelegate = BackstackDelegate()
-        @Suppress("DEPRECATION")
-        backstackDelegate.onCreate(savedInstanceState, lastCustomNonConfigurationInstance, History.of(SetOverviewKey()))
-        backstackDelegate.registerForLifecycleCallbacks(this)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fragmentStateChanger = FragmentStateChanger(supportFragmentManager, R.id.fragmentContainer)
-        backstackDelegate.setStateChanger(this)
 
+        backstack = Navigator.configure()
+            .setStateChanger(SimpleStateChanger(this))
+            .install(this, findViewById(R.id.fragmentContainer), History.single(SetOverviewKey()))
     }
 
-    override fun handleStateChange(stateChange: StateChange, completionCallback: StateChanger.Callback) {
-        if (stateChange.topNewState<Any>() == stateChange.topPreviousState<Any>()) {
-            completionCallback.stateChangeComplete()
-            return
-        }
+    override fun onNavigationEvent(stateChange: StateChange) {
         fragmentStateChanger.handleStateChange(stateChange)
-        completionCallback.stateChangeComplete()
     }
 
     override fun onBackPressed() {
-        if (!backstackDelegate.onBackPressed()) {
-            val fragmentTag = backstackDelegate.manager.backstack.top<BaseKey>()?.fragmentTag
+        if (!backstack.goBack()) {
+            val fragmentTag = backstack.top<BaseKey>().fragmentTag
             val fragment = supportFragmentManager.findFragmentByTag(fragmentTag)
             if (fragment != null && fragment is BaseFragment) {
                 fragment.handleBackPress()
@@ -61,7 +52,7 @@ class MainActivity : AppCompatActivity(), StateChanger, BackstackHandler {
         }
     }
 
-    fun goBack(){
+    fun goBack() {
         super.onBackPressed()
     }
 
