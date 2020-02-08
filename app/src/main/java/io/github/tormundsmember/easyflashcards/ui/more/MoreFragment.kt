@@ -135,7 +135,9 @@ class MoreFragment : BaseFragment() {
             CoroutineScope(Dispatchers.IO).launch {
                 activity?.applicationContext?.contentResolver?.openFileDescriptor(data1, "r")?.use {
                     viewModel.importFromCsv(FileInputStream(it.fileDescriptor))
-                    hideLoadingSpinner()
+                    CoroutineScope(Dispatchers.Main).launch {
+                        hideLoadingSpinner()
+                    }
                 }
             }
         }

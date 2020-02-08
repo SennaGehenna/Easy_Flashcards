@@ -2,6 +2,7 @@ package io.github.tormundsmember.easyflashcards.ui.more.model
 
 import io.github.tormundsmember.easyflashcards.ui.set.model.Date
 import io.github.tormundsmember.easyflashcards.ui.set.model.Day
+import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
 
 class CardWithSetData(
     val setId: Int,
@@ -9,7 +10,7 @@ class CardWithSetData(
     val cardId: Int,
     val frontText: String,
     val backText: String,
-    val currentInterval: Day,
+    val currentInterval: RehearsalInterval,
     val nextRecheck: Date,
     val checkCount: Int,
     val positiveCheckCount: Int
