@@ -20,7 +20,9 @@ class DuplicateFinderFragment : BaseFragment() {
 
     private val adapter: MyAdapter = MyAdapter(onClick = {
         context?.let { ctx ->
-            DialogAddEditCard.show(ctx, it.setId, it)
+            DialogAddEditCard.show(ctx, it.setId, it) {
+
+            }
         }
     }, onSomethingSelected = {
         somethingSelected = it

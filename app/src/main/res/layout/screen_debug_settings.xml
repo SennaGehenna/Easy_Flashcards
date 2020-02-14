@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
+
+    <Switch
+        android:id="@+id/hasSeenTutorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/big_margin"
+        android:text="Has seen tutorial for all sets" />
+
+    <Switch
+        android:id="@+id/hasSeenTutorialWithExistingItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/big_margin"
+        android:text="Has seen tutorial for all sets with existing items" />
+
+    <Switch
+        android:id="@+id/hasSeenOverviewTutorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/big_margin"
+        android:text="Has seen tutorial for specific set" />
+
+    <Switch
+        android:id="@+id/hasSeenOverviewTutorialWithExistingItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/big_margin"
+        android:text="Has seen tutorial for specific set with existing items" />
+
+</LinearLayout>

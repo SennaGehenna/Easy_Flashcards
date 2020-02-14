@@ -2,6 +2,8 @@ package io.github.tormundsmember.easyflashcards.ui.settings
 
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.Spanned
 import android.view.View
 import android.widget.Switch
 import androidx.appcompat.widget.AppCompatEditText
@@ -66,7 +68,7 @@ class SettingsFragment : BaseFragment() {
             txtCardLimit.isEnabled = isChecked
         }
 
-        txtCardLimit.setText(Dependencies.userData.limitCardsAmount.toString())
+        txtCardLimit.setText(Dependencies.userData.limitCardsAmount.takeIf { it > 0 }?.toString() ?: "")
 
         hintSpatialRepetition.text = getString(R.string.explanationSpacedRepetition).prepareLinkText(view.context)
         hintSpatialRepetition.setOnClickListener {

@@ -25,6 +25,39 @@
             tools:text="v1.1.2" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtDebugSettings"
+            style="@style/TextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="@string/debugSettings"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/view11"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtVersionCode"
+            tools:visibility="visible" />
+
+        <View
+            android:id="@+id/view11"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintBottom_toTopOf="@+id/txtSettings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtDebugSettings" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtSettings"
             style="@style/TextStyle"
             android:layout_width="0dp"
@@ -39,7 +72,7 @@
             app:layout_constraintBottom_toTopOf="@+id/view12"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtVersionCode" />
+            app:layout_constraintTop_toBottomOf="@+id/view11" />
 
         <View
             android:id="@+id/view12"
@@ -241,8 +274,8 @@
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

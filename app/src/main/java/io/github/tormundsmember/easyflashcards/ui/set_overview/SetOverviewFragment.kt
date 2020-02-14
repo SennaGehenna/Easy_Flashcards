@@ -1,5 +1,6 @@
 package io.github.tormundsmember.easyflashcards.ui.set_overview
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -7,20 +8,24 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.tormundsmember.easyflashcards.R
+import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseAdapter
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
+import io.github.tormundsmember.easyflashcards.ui.base_ui.MainScreen
 import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_set.DialogAddEditSet
 import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
 import io.github.tormundsmember.easyflashcards.ui.play.PlayKey
 import io.github.tormundsmember.easyflashcards.ui.set.SetKey
 import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
-import io.github.tormundsmember.easyflashcards.ui.util.gone
-import io.github.tormundsmember.easyflashcards.ui.util.resetListener
-import io.github.tormundsmember.easyflashcards.ui.util.setListener
-import io.github.tormundsmember.easyflashcards.ui.util.visible
+import io.github.tormundsmember.easyflashcards.ui.util.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
 class SetOverviewFragment : BaseFragment() {
@@ -42,7 +47,7 @@ class SetOverviewFragment : BaseFragment() {
 
     private val viewModel: SetOverviewViewModel by lazy { getViewModel<SetOverviewViewModel>() }
 
-    private var tutorialStep: TutorialStep = TutorialStep.STEP1
+    private var tutorialStep: TutorialStep = TutorialStep.SHOW_MULTISELECT
 
     private lateinit var txtNoItems: TextView
     private lateinit var vTutorialBack: View
@@ -51,6 +56,10 @@ class SetOverviewFragment : BaseFragment() {
     private lateinit var txtTutorialOk: TextView
     private lateinit var btnPlay: AppCompatImageButton
     private lateinit var btnPlayInverse: AppCompatImageButton
+    private lateinit var txtTutorialSelect: TextView
+    private lateinit var itemRoot: View
+    private lateinit var card: CardView
+    private lateinit var viewSelected: View
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,20 +68,34 @@ class SetOverviewFragment : BaseFragment() {
             it.layoutManager = LinearLayoutManager(view.context)
         }
 
-
-
-        txtNoItems = view.findViewById(R.id.txtNoItems)
-        vTutorialBack = view.findViewById(R.id.vTutorialBack)
-        txtTutorialPlay = view.findViewById(R.id.txtTutorialPlay)
-        txtTutorialPlayInverse = view.findViewById(R.id.txtTutorialPlayInverse)
-        txtTutorialOk = view.findViewById(R.id.txtTutorialOk)
-        btnPlay = view.findViewById(R.id.btnPlay)
-        btnPlayInverse = view.findViewById(R.id.btnPlayInverse)
+        with(view) {
+            card = by(R.id.card)
+            txtNoItems = by(R.id.txtNoItems)
+            vTutorialBack = by(R.id.vTutorialBack)
+            txtTutorialPlay = by(R.id.txtTutorialPlay)
+            txtTutorialPlayInverse = by(R.id.txtTutorialPlayInverse)
+            txtTutorialOk = by(R.id.txtTutorialOk)
+            btnPlay = by(R.id.btnPlay)
+            btnPlayInverse = by(R.id.btnPlayInverse)
+            txtTutorialSelect = by(R.id.txtTutorialSelect)
+            itemRoot = by(R.id.itemRoot)
+            viewSelected = by(R.id.viewSelected)
+            card = by(R.id.card)
+        }
 
         viewModel.sets.observe {
-            adapter.items = it ?: emptyList()
-            if (it?.isNotEmpty() == true) {
+            val items = it ?: emptyList()
+            adapter.items = items
+            if (items.isNotEmpty()) {
                 txtNoItems.gone()
+                if (items.size > 1) {
+                    with(Dependencies.userData) {
+                        if (!hasSeenSetsTutorialWithExistingItems) {
+                            hasSeenSetsTutorialWithExistingItems = true
+                            showTutorial()
+                        }
+                    }
+                }
             } else {
                 txtNoItems.visible()
             }
@@ -85,15 +108,31 @@ class SetOverviewFragment : BaseFragment() {
             playSets(true)
         }
 
-//        if (!Dependencies.userData.hasSeenSetsTutorial) {
-//            Dependencies.userData.hasSeenSetsTutorial = true
-//            showTutorial()
-//        }
-//        vTutorialBack.setOnClickListener {
-//            nextTutorialStep()
-//        }
+        with(Dependencies.userData) {
+            if (!hasSeenSetsTutorial) {
+                val activity = activity
+                (activity as? MainScreen)?.showSetsTutorial {
+                    hasSeenSetsTutorial = true
+                    showAddEditSetDialog(activity)
+                }
+            }
+        }
+
+        vTutorialBack.setOnClickListener {
+            nextTutorialStep()
+        }
 
         setHasOptionsMenu(true)
+    }
+
+    private fun showAddEditSetDialog(context: Context) {
+        DialogAddEditSet.show(
+            context = context,
+            onSetAdded = {
+                goTo(SetKey(it))
+            },
+            onDeleted = {}
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -105,16 +144,8 @@ class SetOverviewFragment : BaseFragment() {
         val ctx = context
         if (ctx != null) {
             when (item.itemId) {
-                R.id.action_add -> DialogAddEditSet.show(
-                    context = ctx,
-                    onSetAdded = {
-                        goTo(SetKey(it))
-                    },
-                    onDeleted = {}
-                )
-                R.id.action_select_all -> {
-                    adapter.activateAllItems()
-                }
+                R.id.action_add -> showAddEditSetDialog(ctx)
+                R.id.action_select_all -> adapter.activateAllItems()
                 R.id.action_more -> {
                     adapter.deactiveAllItems()
                     goTo(MoreKey())
@@ -134,26 +165,62 @@ class SetOverviewFragment : BaseFragment() {
     }
 
     private fun showTutorial() {
+
+        //region select adapter item
+
+        itemRoot.alpha = 0F
+        itemRoot.visible()
+        itemRoot.animate()
+            .alpha(1F)
+            .setDuration(300)
+            .resetListener()
+            .start()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(600)
+            CoroutineScope(Dispatchers.Main).launch {
+                viewSelected.visible()
+            }
+        }
+        //endregion
+        //region show PlayButton and PlayInverseButton at elevation 0
+        listOf(btnPlay, btnPlayInverse).forEach {
+            it.elevation = 0F
+            it.alpha = 0F
+            it.visible()
+            it.animate()
+                .alpha(1F)
+                .setStartDelay(300)
+                .setDuration(300)
+                .resetListener()
+                .start()
+        }
+        //endregion
+        //region show TutorialBackground
         vTutorialBack.alpha = 0F
         vTutorialBack.visible()
         vTutorialBack.animate()
             .alpha(0.8F)
+            .setStartDelay(300)
             .setDuration(300)
             .resetListener()
             .start()
+        //endregion
+        //region show Initial Tutorial Textx
         listOf(
-            txtTutorialPlay,
+            txtTutorialSelect,
             txtTutorialOk
         ).forEach {
             it.alpha = 0F
             it.visible()
             it.animate()
                 .alpha(1F)
-                .setStartDelay(400)
+                .setStartDelay(700)
                 .setDuration(300)
                 .resetListener()
                 .start()
         }
+        //endregion
     }
 
 
@@ -199,16 +266,69 @@ class SetOverviewFragment : BaseFragment() {
 
     private fun nextTutorialStep() {
         tutorialStep = when (tutorialStep) {
-            TutorialStep.STEP1 -> {
+            TutorialStep.SHOW_MULTISELECT -> {
+
+                //region lift PlayButton
+                btnPlay.z = 0F
+                btnPlay.animate()
+                    .z(8F)
+                    .setDuration(300)
+                    .resetListener()
+                    .start()
+                //endregion
+                //region hide TutorialSelect
+                txtTutorialSelect.animate()
+                    .alpha(0F)
+                    .setDuration(300)
+                    .setListener(
+                        onAnimationEnd = {
+                            txtTutorialSelect.gone()
+                        }
+                    )
+                    .start()
+                //endregion
+                //region show TutorialPlay
+                txtTutorialPlay.alpha = 0F
+                txtTutorialPlay.visible()
+                txtTutorialPlay.animate()
+                    .alpha(1F)
+                    .setDuration(300)
+                    .setStartDelay(400)
+                    .resetListener()
+                    .start()
+                //endregion
+
+                TutorialStep.SHOW_PLAY_NORMAL
+            }
+            TutorialStep.SHOW_PLAY_NORMAL -> {
+
+                //region drop PlayButton
+                btnPlay.animate()
+                    .z(0F)
+                    .setDuration(300)
+                    .resetListener()
+                    .start()
+                //endregion
+                //region lift PlayInverseButton
+                btnPlayInverse.z = 0F
+                btnPlayInverse.animate()
+                    .z(8F)
+                    .setDuration(300)
+                    .resetListener()
+                    .start()
+                //endregion
+                //region hide TutorialPlay
                 txtTutorialPlay.animate()
                     .alpha(0F)
                     .setDuration(300)
                     .setListener(
                         onAnimationEnd = {
-                            txtTutorialPlay.gone()
+                            txtTutorialPlay.invisible()
                         }
                     )
                     .start()
+                //endregion
+                //region show TutorialPlayInverse
                 txtTutorialPlayInverse.alpha = 0F
                 txtTutorialPlayInverse.visible()
                 txtTutorialPlayInverse.animate()
@@ -217,16 +337,30 @@ class SetOverviewFragment : BaseFragment() {
                     .setStartDelay(400)
                     .resetListener()
                     .start()
-                TutorialStep.STEP2
+                //endregion
+
+                TutorialStep.SHOW_PLAY_INVERTED
             }
-            TutorialStep.STEP2 -> {
+            TutorialStep.SHOW_PLAY_INVERTED -> {
+
+                //region drop PlayInverseButton
+                btnPlayInverse.animate()
+                    .z(0F)
+                    .setDuration(300)
+                    .resetListener()
+                    .start()
+                //endregion
+                //region hide Everything
                 listOf(
+                    btnPlay,
+                    btnPlayInverse,
                     vTutorialBack,
                     txtTutorialOk,
                     txtTutorialPlayInverse
                 ).forEach {
                     it.animate()
                         .alpha(0F)
+                        .setStartDelay(300)
                         .setDuration(300)
                         .setListener(
                             onAnimationEnd = {
@@ -235,9 +369,44 @@ class SetOverviewFragment : BaseFragment() {
                         )
                         .start()
                 }
+                adapter.deactiveAllItems()
+                //endregion
+
                 TutorialStep.DONE
             }
-            TutorialStep.DONE -> TutorialStep.DONE
+            TutorialStep.DONE -> {
+
+                //region drop PlayInverseButton
+                btnPlayInverse.animate()
+                    .z(0F)
+                    .setDuration(300)
+                    .resetListener()
+                    .start()
+                //endregion
+                //region hide Everything
+                listOf(
+                    btnPlay,
+                    btnPlayInverse,
+                    vTutorialBack,
+                    txtTutorialOk,
+                    txtTutorialPlayInverse
+                ).forEach {
+                    it.animate()
+                        .alpha(0F)
+                        .setStartDelay(300)
+                        .setDuration(300)
+                        .setListener(
+                            onAnimationEnd = {
+                                it.gone()
+                            }
+                        )
+                        .start()
+                }
+                adapter.deactiveAllItems()
+                //endregion
+
+                TutorialStep.DONE
+            }
         }
     }
 
@@ -248,6 +417,14 @@ class SetOverviewFragment : BaseFragment() {
 
     private class Adapter(onSomethingSelected: (Boolean) -> Unit, onClick: (Set) -> Unit) :
         BaseAdapter<Set>(onSomethingSelected = onSomethingSelected, onClick = onClick) {
+
+        fun selectFirst() {
+            if (items.isNotEmpty()) {
+                activeItems.add(0)
+                notifyItemChanged(0)
+            }
+        }
+
         override fun getItemLayoutId(viewType: Int): Int = R.layout.listitem_set
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -273,8 +450,9 @@ class SetOverviewFragment : BaseFragment() {
     }
 
     private sealed class TutorialStep {
-        object STEP1 : TutorialStep()
-        object STEP2 : TutorialStep()
+        object SHOW_MULTISELECT : TutorialStep()
+        object SHOW_PLAY_NORMAL : TutorialStep()
+        object SHOW_PLAY_INVERTED : TutorialStep()
         object DONE : TutorialStep()
     }
 }
