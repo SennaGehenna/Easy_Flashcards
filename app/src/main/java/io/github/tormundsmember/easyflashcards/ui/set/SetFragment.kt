@@ -1,6 +1,5 @@
 package io.github.tormundsmember.easyflashcards.ui.set
 
-import android.animation.Animator
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
-import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseAdapter
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_card.DialogAddEditCard
@@ -21,9 +19,7 @@ import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_set.DialogAddE
 import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
 import io.github.tormundsmember.easyflashcards.ui.play.PlayKey
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
-import io.github.tormundsmember.easyflashcards.ui.util.gone
-import io.github.tormundsmember.easyflashcards.ui.util.invisible
-import io.github.tormundsmember.easyflashcards.ui.util.visible
+import io.github.tormundsmember.easyflashcards.ui.util.*
 
 open class SetFragment : BaseFragment() {
 
@@ -155,6 +151,7 @@ open class SetFragment : BaseFragment() {
         vTutorialBack.animate()
             .alpha(0.8F)
             .setDuration(300)
+            .resetListener()
             .start()
         listOf(
             txtTutorialPlay,
@@ -166,6 +163,7 @@ open class SetFragment : BaseFragment() {
                 .alpha(1F)
                 .setStartDelay(400)
                 .setDuration(300)
+                .resetListener()
                 .start()
         }
     }
@@ -173,16 +171,16 @@ open class SetFragment : BaseFragment() {
     private fun nextTutorialStep() {
         tutorialStep = when (tutorialStep) {
             TutorialStep.STEP1 -> {
-                btnPlay.animate().z(0F).setDuration(300).setListener(null).start()
-                btnPlayInverse.animate().z(8F).setDuration(300).setListener(null).start()
+                btnPlay.animate().z(0F).setDuration(300).resetListener().start()
+                btnPlayInverse.animate().z(8F).setDuration(300).resetListener().start()
                 txtTutorialPlay.animate()
                     .alpha(0F)
                     .setDuration(300)
-                    .setListener(object : AnimationListener() {
-                        override fun onAnimationEnd(animation: Animator?) {
+                    .setListener(
+                        onAnimationEnd = {
                             txtTutorialPlay.invisible()
                         }
-                    })
+                    )
                     .start()
                 txtTutorialPlayInverse.alpha = 0F
                 txtTutorialPlayInverse.visible()
@@ -190,11 +188,12 @@ open class SetFragment : BaseFragment() {
                     .alpha(1F)
                     .setDuration(300)
                     .setStartDelay(400)
+                    .resetListener()
                     .start()
                 TutorialStep.STEP2
             }
             TutorialStep.STEP2 -> {
-                btnPlay.animate().z(0F).setDuration(300).setListener(null).start()
+                btnPlay.animate().z(0F).setDuration(300).resetListener().start()
                 listOf(
                     vTutorialBack,
                     txtTutorialOk,
@@ -203,11 +202,11 @@ open class SetFragment : BaseFragment() {
                     it.animate()
                         .alpha(0F)
                         .setDuration(300)
-                        .setListener(object : AnimationListener() {
-                            override fun onAnimationEnd(animation: Animator?) {
+                        .setListener(
+                            onAnimationEnd = {
                                 it.gone()
                             }
-                        })
+                        )
                         .start()
                 }
                 TutorialStep.DONE
