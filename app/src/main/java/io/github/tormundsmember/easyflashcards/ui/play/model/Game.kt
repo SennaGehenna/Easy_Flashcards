@@ -14,10 +14,10 @@ class Game(
     private val database: Database
 ) {
 
-    var guesses: Int = 0
-        private set
-    var correctGuesses: Int = 0
-        private set
+    val guesses: Int
+        get() = cards.count { it.isCorrectGuess != null }
+    val correctGuesses: Int
+        get() = cards.count { it.isCorrectGuess == true }
     val cardCount = cards.size
 
     private var wasLastGuessCorrect: Boolean? = null
@@ -61,38 +61,36 @@ class Game(
 
     fun nextCard(correctGuess: Boolean) {
         wasLastGuessCorrect = correctGuess
-        guesses++
-        if (correctGuess) correctGuesses++
 
+        with(cards[currentCardIndex]) {
+            isCorrectGuess = correctGuess
+            val nextInterval: RehearsalInterval
+            val positiveCheckCount: Int
+            if (correctGuess) {
+                nextInterval = card.currentInterval.getNext()
+                positiveCheckCount = card.positiveCheckCount + 1
+            } else {
+                nextInterval = RehearsalInterval.STAGE_1
+                positiveCheckCount = card.positiveCheckCount
+            }
 
-        val card = cards[currentCardIndex].card
-
-        val nextInterval: RehearsalInterval
-        val positiveCheckCount: Int
-        if (correctGuess) {
-            nextInterval = card.currentInterval.getNext()
-            positiveCheckCount = card.positiveCheckCount + 1
-        } else {
-            nextInterval = RehearsalInterval.STAGE_1
-            positiveCheckCount = card.positiveCheckCount
-        }
-
-        val nextRecheck = System.currentTimeMillis().let { currentTime ->
-            TimeUnit.MILLISECONDS.toDays(currentTime).let { asDay ->
-                TimeUnit.DAYS.toMillis(asDay).let {
-                    it + TimeUnit.DAYS.toMillis(nextInterval.getInterval().toLong())
+            val nextRecheck = System.currentTimeMillis().let { currentTime ->
+                TimeUnit.MILLISECONDS.toDays(currentTime).let { asDay ->
+                    TimeUnit.DAYS.toMillis(asDay).let {
+                        it + TimeUnit.DAYS.toMillis(nextInterval.getInterval().toLong())
+                    }
                 }
             }
-        }
 
-        database.addOrUpdateCard(
-            card.copy(
-                currentInterval = nextInterval,
-                checkCount = card.checkCount + 1,
-                nextRecheck = nextRecheck,
-                positiveCheckCount = positiveCheckCount
+            database.addOrUpdateCard(
+                card.copy(
+                    currentInterval = nextInterval,
+                    checkCount = card.checkCount + 1,
+                    nextRecheck = nextRecheck,
+                    positiveCheckCount = positiveCheckCount
+                )
             )
-        )
+        }
 
 
 
@@ -105,17 +103,13 @@ class Game(
 
     fun undo() {
         currentCardIndex--
-        wasLastGuessCorrect?.let {
-            if (it) {
-                correctGuesses--
-            }
-        }
-        guesses--
     }
 
     data class FlippableCard(
         val card: Card,
         val isReverse: Boolean,
         val isFlipped: Boolean
-    )
+    ) {
+        var isCorrectGuess: Boolean? = null
+    }
 }
