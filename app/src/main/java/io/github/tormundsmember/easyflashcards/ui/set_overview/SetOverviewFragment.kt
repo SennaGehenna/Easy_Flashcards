@@ -1,6 +1,5 @@
 package io.github.tormundsmember.easyflashcards.ui.set_overview
 
-import android.animation.Animator
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -11,7 +10,6 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.github.tormundsmember.easyflashcards.R
-import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseAdapter
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_set.DialogAddEditSet
@@ -20,6 +18,8 @@ import io.github.tormundsmember.easyflashcards.ui.play.PlayKey
 import io.github.tormundsmember.easyflashcards.ui.set.SetKey
 import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 import io.github.tormundsmember.easyflashcards.ui.util.gone
+import io.github.tormundsmember.easyflashcards.ui.util.resetListener
+import io.github.tormundsmember.easyflashcards.ui.util.setListener
 import io.github.tormundsmember.easyflashcards.ui.util.visible
 import kotlin.properties.Delegates
 
@@ -139,6 +139,7 @@ class SetOverviewFragment : BaseFragment() {
         vTutorialBack.animate()
             .alpha(0.8F)
             .setDuration(300)
+            .resetListener()
             .start()
         listOf(
             txtTutorialPlay,
@@ -150,6 +151,7 @@ class SetOverviewFragment : BaseFragment() {
                 .alpha(1F)
                 .setStartDelay(400)
                 .setDuration(300)
+                .resetListener()
                 .start()
         }
     }
@@ -170,13 +172,13 @@ class SetOverviewFragment : BaseFragment() {
                 it.animate()
                     .alpha(1F)
                     .setDuration(300)
-                    .setListener(null)
+                    .resetListener()
                     .start()
                 it.animate()
                     .z(8F)
                     .setDuration(300)
                     .setStartDelay(300)
-                    .setListener(null)
+                    .resetListener()
                     .start()
             }
         } else {
@@ -185,11 +187,11 @@ class SetOverviewFragment : BaseFragment() {
                     .alpha(0F)
                     .setDuration(300)
                     .z(0F)
-                    .setListener(object : AnimationListener() {
-                        override fun onAnimationEnd(animation: Animator?) {
+                    .setListener(
+                        onAnimationEnd = {
                             it.gone()
                         }
-                    })
+                    )
                     .start()
             }
         }
@@ -201,11 +203,11 @@ class SetOverviewFragment : BaseFragment() {
                 txtTutorialPlay.animate()
                     .alpha(0F)
                     .setDuration(300)
-                    .setListener(object : AnimationListener() {
-                        override fun onAnimationEnd(animation: Animator?) {
+                    .setListener(
+                        onAnimationEnd = {
                             txtTutorialPlay.gone()
                         }
-                    })
+                    )
                     .start()
                 txtTutorialPlayInverse.alpha = 0F
                 txtTutorialPlayInverse.visible()
@@ -213,6 +215,7 @@ class SetOverviewFragment : BaseFragment() {
                     .alpha(1F)
                     .setDuration(300)
                     .setStartDelay(400)
+                    .resetListener()
                     .start()
                 TutorialStep.STEP2
             }
@@ -225,11 +228,11 @@ class SetOverviewFragment : BaseFragment() {
                     it.animate()
                         .alpha(0F)
                         .setDuration(300)
-                        .setListener(object : AnimationListener() {
-                            override fun onAnimationEnd(animation: Animator?) {
+                        .setListener(
+                            onAnimationEnd = {
                                 it.gone()
                             }
-                        })
+                        )
                         .start()
                 }
                 TutorialStep.DONE

@@ -11,6 +11,7 @@ import android.text.SpannableStringBuilder
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
 import android.view.View
+import android.view.ViewPropertyAnimator
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
@@ -65,11 +66,11 @@ fun View.animateInvisible() {
         animate()
             .alpha(0F)
             .setDuration(300)
-            .setListener(object : AnimationListener() {
-                override fun onAnimationEnd(animation: Animator?) {
+            .setListener(
+                onAnimationEnd = {
                     invisible()
                 }
-            })
+            )
             .start()
     }
 }
@@ -80,11 +81,11 @@ fun View.animateGone() {
         animate()
             .alpha(0F)
             .setDuration(300)
-            .setListener(object : AnimationListener() {
-                override fun onAnimationEnd(animation: Animator?) {
+            .setListener(
+                onAnimationEnd = {
                     gone()
                 }
-            })
+            )
             .start()
     }
 }
@@ -194,3 +195,29 @@ class factory<T>(val factory: () -> T) : ReadOnlyProperty<Any, T> {
 }
 
 typealias Action = () -> Unit
+
+fun ViewPropertyAnimator.resetListener(): ViewPropertyAnimator = setListener(null)
+
+fun ViewPropertyAnimator.setListener(
+    onAnimationRepeat: Action = {},
+    onAnimationCancel: Action = {},
+    onAnimationStart: Action = {},
+    onAnimationEnd: Action = {}
+
+): ViewPropertyAnimator = setListener(object : AnimationListener() {
+    override fun onAnimationRepeat(animation: Animator?) {
+        onAnimationRepeat()
+    }
+
+    override fun onAnimationCancel(animation: Animator?) {
+        onAnimationCancel()
+    }
+
+    override fun onAnimationStart(animation: Animator?) {
+        onAnimationStart()
+    }
+
+    override fun onAnimationEnd(animation: Animator?) {
+        onAnimationEnd()
+    }
+})

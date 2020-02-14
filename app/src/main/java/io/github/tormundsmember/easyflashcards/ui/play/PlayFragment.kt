@@ -15,8 +15,8 @@ import io.github.tormundsmember.easyflashcards.ui.PlayButtonsLayout
 import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
-import io.github.tormundsmember.easyflashcards.ui.util.gone
-import io.github.tormundsmember.easyflashcards.ui.util.visible
+import io.github.tormundsmember.easyflashcards.ui.util.*
+import java.util.concurrent.atomic.AtomicBoolean
 
 class PlayFragment : BaseFragment() {
 
@@ -36,6 +36,8 @@ class PlayFragment : BaseFragment() {
     private lateinit var lblCardCount: AppCompatTextView
     private lateinit var lblCurrentCardIndex: AppCompatTextView
     private lateinit var lblSeparator: AppCompatTextView
+
+    private val canclickButtons = AtomicBoolean(true)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -89,8 +91,8 @@ class PlayFragment : BaseFragment() {
                     vCard.animate()
                         .scaleX(0F)
                         .setDuration(150)
-                        .setListener(object : AnimationListener() {
-                            override fun onAnimationEnd(animation: Animator?) {
+                        .setListener(
+                            onAnimationEnd = {
                                 if (currentCard.isReverse) {
                                     txtCardText.text = currentCard.card.frontText
                                 } else {
@@ -99,18 +101,22 @@ class PlayFragment : BaseFragment() {
                                 vCard.animate()
                                     .scaleX(1F)
                                     .setDuration(150)
-                                    .setListener(null)
+                                    .setListener(
+                                        onAnimationEnd = {
+                                            canclickButtons.set(true)
+                                        }
+                                    )
                                     .start()
                             }
-                        })
+                        )
                         .start()
                     vPlayButtons.showFeedbackButtons()
                 } else {
                     vCard.animate()
                         .scaleX(0F)
                         .setDuration(150)
-                        .setListener(object : AnimationListener() {
-                            override fun onAnimationEnd(animation: Animator?) {
+                        .setListener(
+                            onAnimationEnd = {
                                 if (currentCard.isReverse) {
                                     txtCardText.text = currentCard.card.backText
                                 } else {
@@ -119,29 +125,44 @@ class PlayFragment : BaseFragment() {
                                 vCard.animate()
                                     .scaleX(1F)
                                     .setDuration(150)
-                                    .setListener(null)
+                                    .setListener(
+                                        onAnimationEnd = {
+                                            canclickButtons.set(true)
+                                        }
+                                    )
                                     .start()
                             }
-                        })
+                        )
                         .start()
                     vPlayButtons.showFlipButton()
                 }
             }
         }
 
-        vPlayButtons.btnFlip.setOnClickListener {
+
+
+        vPlayButtons.btnFlip.setThrottledOnClickListener {
             viewModel.flipCard()
         }
-        vPlayButtons.btnPositive.setOnClickListener {
+
+        vPlayButtons.btnPositive.setThrottledOnClickListener {
             viewModel.nextCard(true)
         }
-        vPlayButtons.btnNegative.setOnClickListener {
+        vPlayButtons.btnNegative.setThrottledOnClickListener {
             viewModel.nextCard(false)
         }
-        vPlayButtons.btnUndo.setOnClickListener {
+        vPlayButtons.btnUndo.setThrottledOnClickListener {
             viewModel.undo()
         }
         setHasOptionsMenu(true)
+    }
+
+    private inline fun View.setThrottledOnClickListener(crossinline action: Action) {
+        setOnClickListener {
+            if (canclickButtons.getAndSet(false)) {
+                action()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -174,11 +195,7 @@ class PlayFragment : BaseFragment() {
             it.animate().alpha(1F)
                 .setStartDelay(600)
                 .setDuration(300)
-                .setListener(object : AnimationListener() {
-                    override fun onAnimationEnd(animation: Animator?) {
-
-                    }
-                })
+                .resetListener()
         }
     }
 
@@ -191,11 +208,11 @@ class PlayFragment : BaseFragment() {
         listOf(vCard, vPlayButtons, lblSeparator, lblCardCount, lblCurrentCardIndex).forEach {
             it.animate().alpha(0F)
                 .setDuration(300)
-                .setListener(object : AnimationListener() {
-                    override fun onAnimationEnd(animation: Animator?) {
+                .setListener(
+                    onAnimationEnd = {
                         it.gone()
                     }
-                })
+                )
         }
         listOf<View>(
             txtCardsRehearsed,
@@ -209,11 +226,7 @@ class PlayFragment : BaseFragment() {
             it.animate().alpha(1F)
                 .setStartDelay(600)
                 .setDuration(300)
-                .setListener(object : AnimationListener() {
-                    override fun onAnimationEnd(animation: Animator?) {
-
-                    }
-                })
+                .resetListener()
         }
     }
 }
