@@ -14,6 +14,7 @@ import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseAdapter
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
+import io.github.tormundsmember.easyflashcards.ui.base_ui.MainScreen
 import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_card.DialogAddEditCard
 import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_set.DialogAddEditSet
 import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
@@ -40,7 +41,7 @@ open class SetFragment : BaseFragment() {
 
     private val adapter: MyAdapter = MyAdapter(onClick = {
         context?.let { ctx ->
-            DialogAddEditCard.show(ctx, it.setId, it)
+            showCardAddEditDialog(ctx)
         }
     }, onSomethingSelected = {
         somethingSelected = it
@@ -70,6 +71,16 @@ open class SetFragment : BaseFragment() {
             nextTutorialStep()
         }
 
+        with(Dependencies) {
+            if (!userData.hasSeenSetOverviewTutorial) {
+                val ctx = activity
+                (ctx as? MainScreen)?.showCardsTutorial(database.getSetById(getKey<SetKey>().setId).name) {
+                    userData.hasSeenSetOverviewTutorial = true
+                    showCardAddEditDialog(ctx)
+                }
+            }
+        }
+
         view.findViewById<RecyclerView>(R.id.list_sets).let {
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(view.context)
@@ -89,9 +100,11 @@ open class SetFragment : BaseFragment() {
                 else -> View.VISIBLE
             }
             if (adapter.items.isNotEmpty()) {
-                if (!Dependencies.userData.hasSeenSetOverviewTutorial) {
-                    Dependencies.userData.hasSeenSetOverviewTutorial = true
-                    showTutorial()
+                with(Dependencies.userData) {
+                    if (hasSeenSetOverviewTutorial && !hasSeenSetOverviewTutorialWithExistingItems) {
+                        hasSeenSetOverviewTutorialWithExistingItems = true
+                        showTutorial()
+                    }
                 }
             }
         }
@@ -117,11 +130,22 @@ open class SetFragment : BaseFragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
+    private fun showCardAddEditDialog(context: Context) {
+        DialogAddEditCard.show(context, getKey<SetKey>().setId) {
+            with(Dependencies.userData) {
+                if (hasSeenSetOverviewTutorial && !hasSeenSetOverviewTutorialWithExistingItems) {
+                    hasSeenSetOverviewTutorialWithExistingItems = true
+                    showTutorial()
+                }
+            }
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val ctx = context
         if (ctx != null) {
             when (item.itemId) {
-                R.id.action_add -> DialogAddEditCard.show(ctx, getKey<SetKey>().setId)
+                R.id.action_add -> showCardAddEditDialog(ctx)
                 R.id.action_edit -> DialogAddEditSet.show(
                     context = ctx,
                     setId = getKey<SetKey>().setId,

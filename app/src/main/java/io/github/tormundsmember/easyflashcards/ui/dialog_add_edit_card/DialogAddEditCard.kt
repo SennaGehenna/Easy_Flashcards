@@ -14,22 +14,20 @@ import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.dialog_delete_card.DialogDeleteCard
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
-import io.github.tormundsmember.easyflashcards.ui.util.gone
-import io.github.tormundsmember.easyflashcards.ui.util.isNotEmptyOrBlank
-import io.github.tormundsmember.easyflashcards.ui.util.putCursorInTextview
-import io.github.tormundsmember.easyflashcards.ui.util.visible
+import io.github.tormundsmember.easyflashcards.ui.util.*
 
 class DialogAddEditCard private constructor(
     private val dialog: AlertDialog,
     private val setId: Int,
     private val viewHolder: ViewHolder,
-    private val card: Card?
+    private val card: Card?,
+    private val onCardAdded: Action
 ) {
 
     companion object {
 
         @SuppressLint("InflateParams")
-        fun show(context: Context, setId: Int, card: Card? = null): DialogAddEditCard {
+        fun show(context: Context, setId: Int, card: Card? = null, onCardAdded: Action): DialogAddEditCard {
 
             val view = LayoutInflater.from(context).inflate(R.layout.dialog_add_edit_card, null, false)
 
@@ -41,7 +39,8 @@ class DialogAddEditCard private constructor(
                 dialog = dialog,
                 setId = setId,
                 viewHolder = ViewHolder(view),
-                card = card
+                card = card,
+                onCardAdded= onCardAdded
             ).also {
                 dialog.show()
             }
@@ -107,6 +106,7 @@ class DialogAddEditCard private constructor(
             )
 
             Dependencies.database.addOrUpdateCard(card)
+            onCardAdded()
             dismiss()
         }
     }

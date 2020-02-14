@@ -28,20 +28,22 @@ class PlayViewModel : BaseViewModel() {
 
     fun initialize(setIds: List<Int>, isInverse: Boolean) {
 
-        val setsById = if (Dependencies.userData.useSpacedRepetition) {
-            Dependencies.database.getCardsByMultipleSetIdsWithSpacedRepetion(setIds)
-        } else {
-            Dependencies.database.getCardsByMultipleSetIds(setIds)
+        with(Dependencies) {
+            val setsById = if (userData.useSpacedRepetition) {
+                database.getCardsByMultipleSetIdsWithSpacedRepetion(setIds)
+            } else {
+                database.getCardsByMultipleSetIds(setIds)
+            }
+            val cardsTmp = setsById.map { Game.FlippableCard(it, isInverse, false) }.shuffled()
+
+            val cards = if (userData.limitCards && userData.limitCardsAmount > 0) {
+                cardsTmp.take(userData.limitCardsAmount)
+            } else {
+                cardsTmp
+            }.toMutableList()
+
+            game = Game(cards, database)
         }
-        val cardsTmp = setsById.map { Game.FlippableCard(it, isInverse, false) }.shuffled()
-
-        val cards = if (Dependencies.userData.limitCards) {
-            cardsTmp.take(Dependencies.userData.limitCardsAmount)
-        } else {
-            cardsTmp
-        }.toMutableList()
-
-        game = Game(cards, Dependencies.database)
     }
 
     fun undo() {

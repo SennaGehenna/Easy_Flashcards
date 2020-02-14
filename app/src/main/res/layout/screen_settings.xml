@@ -97,6 +97,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:inputType="number"
+
                 android:minEms="2" />
         </LinearLayout>
 

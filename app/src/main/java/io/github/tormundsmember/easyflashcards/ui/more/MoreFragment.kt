@@ -10,7 +10,9 @@ import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatTextView
 import io.github.tormundsmember.easyflashcards.BuildConfig
 import io.github.tormundsmember.easyflashcards.R
+import io.github.tormundsmember.easyflashcards.ui.BuildVariant
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
+import io.github.tormundsmember.easyflashcards.ui.debug_settings.DebugSettingsKey
 import io.github.tormundsmember.easyflashcards.ui.duplicate_finder.DuplicateFinderKey
 import io.github.tormundsmember.easyflashcards.ui.licenses.LicensesKey
 import io.github.tormundsmember.easyflashcards.ui.settings.SettingsKey
@@ -36,6 +38,7 @@ class MoreFragment : BaseFragment() {
     override val titleText: String
         get() = getString(R.string.more)
 
+    private lateinit var txtDebugSettings: View
     private lateinit var txtExportToCsv: AppCompatTextView
     private lateinit var txtImportFromCsvSubtitle: AppCompatTextView
     private lateinit var txtImportFromCsv: AppCompatTextView
@@ -54,6 +57,7 @@ class MoreFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        txtDebugSettings = view.findViewById(R.id.txtDebugSettings)
         txtExportToCsv = view.findViewById(R.id.txtExportToCsv)
         txtImportFromCsvSubtitle = view.findViewById(R.id.txtImportFromCsvSubtitle)
         txtImportFromCsv = view.findViewById(R.id.txtImportFromCsv)
@@ -68,6 +72,10 @@ class MoreFragment : BaseFragment() {
         txtVersionCode.text = "v${BuildConfig.VERSION_NAME}"
 
         txtSettings.setOnClickListener { goTo(SettingsKey()) }
+        txtDebugSettings.setOnClickListener { goTo(DebugSettingsKey()) }
+        if(!BuildVariant.isProductionBuild()){
+            txtDebugSettings.visible()
+        }
 
         txtImportFromCsvSubtitle.setOnClickListener { importFromCsv() }
         txtImportFromCsv.setOnClickListener { importFromCsv() }

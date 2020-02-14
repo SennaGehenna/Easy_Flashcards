@@ -3,6 +3,7 @@ package io.github.tormundsmember.easyflashcards.ui.base_ui
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.zhuinden.simplestack.StateChange
+import io.github.tormundsmember.easyflashcards.R
 
 class FragmentStateChanger(
     private val fragmentManager: FragmentManager,
@@ -12,14 +13,25 @@ class FragmentStateChanger(
         fragmentManager.executePendingTransactions()
 
         val fragmentTransaction = fragmentManager.beginTransaction().apply {
-            //      when (stateChange.direction) {
-//        StateChange.FORWARD -> {
-//          setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_right, R.anim.slide_out_to_left)
-//        }
-//        StateChange.BACKWARD -> {
-//          setCustomAnimations(R.anim.slide_in_from_left, R.anim.slide_out_to_right, R.anim.slide_in_from_left, R.anim.slide_out_to_right)
-//        }
-//      }
+            when (stateChange.direction) {
+                StateChange.FORWARD -> {
+                    setCustomAnimations(
+                        R.anim.enter_animation,
+                        R.anim.exit_animation,
+                        R.anim.pop_enter_animation,
+                        R.anim.pop_exit_animation
+                    )
+                }
+                StateChange.BACKWARD -> {
+                    //this is funky and doesn't work how I thought it would
+//                    setCustomAnimations(
+//                        R.anim.exit_animation,
+//                        R.anim.enter_animation,
+//                        R.anim.pop_exit_animation,
+//                        R.anim.pop_enter_animation
+//                    )
+                }
+            }
             val previousState = stateChange.getPreviousKeys<BaseKey>()
             val newState = stateChange.getNewKeys<BaseKey>()
             for (oldKey in previousState) {
