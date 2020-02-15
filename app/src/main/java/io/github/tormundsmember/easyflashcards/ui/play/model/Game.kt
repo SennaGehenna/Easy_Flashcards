@@ -3,6 +3,7 @@ package io.github.tormundsmember.easyflashcards.ui.play.model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.github.tormundsmember.easyflashcards.data.Database
+import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.play.PlayViewModel
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
@@ -66,21 +67,29 @@ class Game(
             isCorrectGuess = correctGuess
             val nextInterval: RehearsalInterval
             val positiveCheckCount: Int
-            if (correctGuess) {
-                nextInterval = card.currentInterval.getNext()
-                positiveCheckCount = card.positiveCheckCount + 1
-            } else {
-                nextInterval = RehearsalInterval.STAGE_1
-                positiveCheckCount = card.positiveCheckCount
-            }
+            val nextRecheck: Long
+            if (Dependencies.userData.useSpacedRepetition) {
+                if (correctGuess) {
+                    nextInterval = card.currentInterval.getNext()
+                    positiveCheckCount = card.positiveCheckCount + 1
+                } else {
+                    nextInterval = RehearsalInterval.STAGE_1
+                    positiveCheckCount = card.positiveCheckCount
+                }
 
-            val nextRecheck = System.currentTimeMillis().let { currentTime ->
-                TimeUnit.MILLISECONDS.toDays(currentTime).let { asDay ->
-                    TimeUnit.DAYS.toMillis(asDay).let {
-                        it + TimeUnit.DAYS.toMillis(nextInterval.getInterval().toLong())
+                nextRecheck = System.currentTimeMillis().let { currentTime ->
+                    TimeUnit.MILLISECONDS.toDays(currentTime).let { asDay ->
+                        TimeUnit.DAYS.toMillis(asDay).let {
+                            it + TimeUnit.DAYS.toMillis(nextInterval.getInterval().toLong())
+                        }
                     }
                 }
+            } else {
+                nextInterval = card.currentInterval
+                positiveCheckCount = card.positiveCheckCount + if (correctGuess) 1 else 0
+                nextRecheck = card.nextRecheck
             }
+
 
             database.addOrUpdateCard(
                 card.copy(
