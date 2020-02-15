@@ -7,10 +7,10 @@ interface MainScreen {
 
     val backstack: Backstack
 
-    fun showSetsTutorial(onAddButtonClick: Action)
+    fun showSetsTutorial(onAddButtonClick: Action, onCancel: Action)
 
-    fun showCardsTutorial(setName: String, onAddButtonClick: Action)
+    fun showCardsTutorial(setName: String, onAddButtonClick: Action, onCancel: Action)
 
-    fun hideCurrentTutorial(onAddButtonClick: Action)
+    fun hideCurrentTutorial(onAddButtonClick: Action, onCancel: Action)
 
 }

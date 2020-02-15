@@ -24,7 +24,7 @@ import io.github.tormundsmember.easyflashcards.ui.util.*
 
 open class SetFragment : BaseFragment() {
 
-    override val layoutId: Int = R.layout.screen_set_overview
+    override val layoutId: Int = R.layout.screen_set
     override val titleText: String
         get() = Dependencies.database.getSetById(getKey<SetKey>().setId).name
 
@@ -73,11 +73,20 @@ open class SetFragment : BaseFragment() {
 
         with(Dependencies) {
             if (!userData.hasSeenSetOverviewTutorial) {
+                txtNoItems.gone()
                 val ctx = activity
-                (ctx as? MainScreen)?.showCardsTutorial(database.getSetById(getKey<SetKey>().setId).name) {
-                    userData.hasSeenSetOverviewTutorial = true
-                    showCardAddEditDialog(ctx)
-                }
+                (ctx as? MainScreen)?.showCardsTutorial(
+                    database.getSetById(getKey<SetKey>().setId).name,
+                    onAddButtonClick = {
+                        txtNoItems.animateVisible()
+                        userData.hasSeenSetOverviewTutorial = true
+                        showCardAddEditDialog(ctx)
+                    },
+                    onCancel = {
+                        userData.hasSeenSetOverviewTutorial = true
+                        txtNoItems.animateVisible()
+                    }
+                )
             }
         }
 
@@ -95,8 +104,9 @@ open class SetFragment : BaseFragment() {
                 btnPlayInverse.gone()
             }
             adapter.items = it ?: emptyList()
+
             txtNoItems.visibility = when {
-                it == null || it.isNotEmpty() -> View.GONE
+                !Dependencies.userData.hasSeenSetOverviewTutorial || it == null || it.isNotEmpty() -> View.GONE
                 else -> View.VISIBLE
             }
             if (adapter.items.isNotEmpty()) {
@@ -131,9 +141,10 @@ open class SetFragment : BaseFragment() {
     }
 
     private fun showCardAddEditDialog(context: Context) {
-        DialogAddEditCard.show(context, getKey<SetKey>().setId) {
-            with(Dependencies.userData) {
-                if (hasSeenSetOverviewTutorial && !hasSeenSetOverviewTutorialWithExistingItems) {
+        with(Dependencies.userData) {
+            hasSeenSetOverviewTutorial = true
+            DialogAddEditCard.show(context, getKey<SetKey>().setId) {
+                if (!hasSeenSetOverviewTutorialWithExistingItems) {
                     hasSeenSetOverviewTutorialWithExistingItems = true
                     showTutorial()
                 }

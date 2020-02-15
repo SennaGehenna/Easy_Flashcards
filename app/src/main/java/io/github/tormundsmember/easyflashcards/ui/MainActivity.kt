@@ -73,10 +73,10 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
         }
     }
 
-    override fun showSetsTutorial(onAddButtonClick: Action) {
+    override fun showSetsTutorial(onAddButtonClick: Action, onCancel: Action) {
         with(findViewById<View>(R.id.vTutorial)) {
             setOnClickListener {
-                hideCurrentTutorial {}
+                hideCurrentTutorial(onAddButtonClick = {}, onCancel = onCancel)
             }
             alpha = 0F
             visible()
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
                 .start()
             setOnClickListener {
                 setOnClickListener(null)
-                hideCurrentTutorial(onAddButtonClick)
+                hideCurrentTutorial(onAddButtonClick, {})
             }
         }
         with(findViewById<View>(R.id.txtTutorialSets)) {
@@ -114,11 +114,12 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
 
     override fun showCardsTutorial(
         setName: String,
-        onAddButtonClick: Action
+        onAddButtonClick: Action,
+        onCancel: Action
     ) {
         with(findViewById<View>(R.id.vTutorial)) {
             setOnClickListener {
-                hideCurrentTutorial {}
+                hideCurrentTutorial(onAddButtonClick = {}, onCancel = onCancel)
             }
             alpha = 0F
             visible()
@@ -139,7 +140,7 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
                 .start()
             setOnClickListener {
                 setOnClickListener(null)
-                hideCurrentTutorial(onAddButtonClick)
+                hideCurrentTutorial(onAddButtonClick, {})
             }
         }
         with(findViewById<AppCompatTextView>(R.id.txtTutorialCards)) {
@@ -155,7 +156,7 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
         }
     }
 
-    override fun hideCurrentTutorial(onAddButtonClick: Action) {
+    override fun hideCurrentTutorial(onAddButtonClick: Action, onCancel: Action) {
         listOf(
             R.id.vTutorial,
             R.id.imgTutorialMenuAdd,
@@ -173,6 +174,7 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
                         it.gone()
                         if (it.id == R.id.imgTutorialMenuAdd) {
                             onAddButtonClick()
+                            onCancel()
                         }
                     })
         }
