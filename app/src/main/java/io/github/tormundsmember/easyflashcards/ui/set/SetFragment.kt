@@ -42,7 +42,7 @@ open class SetFragment : BaseFragment() {
 
     private val adapter: MyAdapter = MyAdapter(onClick = {
         context?.let { ctx ->
-            showCardAddEditDialog(ctx)
+            showCardAddEditDialog(ctx, it)
         }
     }, onSomethingSelected = {
         somethingSelected = it
@@ -81,7 +81,7 @@ open class SetFragment : BaseFragment() {
                     onAddButtonClick = {
                         txtNoItems.animateVisible()
                         userData.hasSeenSetOverviewTutorial = true
-                        showCardAddEditDialog(ctx)
+                        showCardAddEditDialog(ctx,null)
                     },
                     onCancel = {
                         userData.hasSeenSetOverviewTutorial = true
@@ -141,10 +141,10 @@ open class SetFragment : BaseFragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun showCardAddEditDialog(context: Context) {
+    private fun showCardAddEditDialog(context: Context, card: Card?) {
         with(Dependencies.userData) {
             hasSeenSetOverviewTutorial = true
-            DialogAddEditCard.show(context, getKey<SetKey>().setId) {
+            DialogAddEditCard.show(context, getKey<SetKey>().setId, card) {
                 if (!hasSeenSetOverviewTutorialWithExistingItems) {
                     hasSeenSetOverviewTutorialWithExistingItems = true
                     showTutorial()
@@ -157,7 +157,7 @@ open class SetFragment : BaseFragment() {
         val ctx = context
         if (ctx != null) {
             when (item.itemId) {
-                R.id.action_add -> showCardAddEditDialog(ctx)
+                R.id.action_add -> showCardAddEditDialog(ctx, null)
                 R.id.action_edit -> DialogAddEditSet.show(
                     context = ctx,
                     setId = getKey<SetKey>().setId,
