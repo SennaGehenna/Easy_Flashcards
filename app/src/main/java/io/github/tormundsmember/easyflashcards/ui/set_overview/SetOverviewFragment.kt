@@ -21,6 +21,7 @@ import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
 import io.github.tormundsmember.easyflashcards.ui.play.PlayKey
 import io.github.tormundsmember.easyflashcards.ui.set.SetKey
 import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
+import io.github.tormundsmember.easyflashcards.ui.settings.SettingsKey
 import io.github.tormundsmember.easyflashcards.ui.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -100,6 +101,7 @@ class SetOverviewFragment : BaseFragment() {
                         txtNoItems.visible()
                     }
                 }
+                activity?.invalidateOptionsMenu()
             }
         }
 
@@ -150,7 +152,11 @@ class SetOverviewFragment : BaseFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_set_overview, menu)
+        if (adapter.items.isEmpty()) {
+            inflater.inflate(R.menu.menu_set_overview, menu)
+        } else {
+            inflater.inflate(R.menu.menu_set_overview_sets_existing, menu)
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -163,6 +169,10 @@ class SetOverviewFragment : BaseFragment() {
                 R.id.action_more -> {
                     adapter.deactiveAllItems()
                     goTo(MoreKey())
+                }
+                R.id.action_settings -> {
+                    adapter.deactiveAllItems()
+                    goTo(SettingsKey())
                 }
             }
         }

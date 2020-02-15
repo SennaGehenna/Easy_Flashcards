@@ -21,8 +21,8 @@
     <string name="back_text">Translated Text:</string>
     <string name="add">Add</string>
     <string name="edit_set">Edit Set</string>
-    <string name="repository">https://github.com/TormundsMember/Easy_Flashcards</string>
-    <string name="issueTracker">https://github.com/TormundsMember/Easy_Flashcards/issues</string>
+    <string name="repository">https://github.com/SennaGehenna/Easy_Flashcards</string>
+    <string name="issueTracker">https://github.com/SennaGehenna/Easy_Flashcards/issues/new/choose</string>
     <string name="enableDarkMode">Enable Dark Mode</string>
     <string name="export_csv">Export local sets as CSV</string>
     <string name="import_csv">Import sets from CSV</string>

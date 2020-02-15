@@ -20,6 +20,7 @@ import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_set.DialogAddE
 import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
 import io.github.tormundsmember.easyflashcards.ui.play.PlayKey
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
+import io.github.tormundsmember.easyflashcards.ui.settings.SettingsKey
 import io.github.tormundsmember.easyflashcards.ui.util.*
 
 open class SetFragment : BaseFragment() {
@@ -166,6 +167,10 @@ open class SetFragment : BaseFragment() {
                     onDeleted = {
                         goBack()
                     })
+                R.id.action_settings -> {
+                    goTo(SettingsKey())
+                    adapter.deactiveAllItems()
+                }
                 R.id.action_more -> {
                     goTo(MoreKey())
                     adapter.deactiveAllItems()

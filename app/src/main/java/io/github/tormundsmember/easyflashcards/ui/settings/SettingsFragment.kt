@@ -9,12 +9,15 @@ import android.widget.Switch
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatTextView
 import io.github.tormundsmember.easyflashcards.R
+import io.github.tormundsmember.easyflashcards.ui.BuildVariant
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.MainActivity
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
+import io.github.tormundsmember.easyflashcards.ui.debug_settings.DebugSettingsKey
 import io.github.tormundsmember.easyflashcards.ui.util.openUrlInCustomTabs
 import io.github.tormundsmember.easyflashcards.ui.util.prepareLinkText
 import io.github.tormundsmember.easyflashcards.ui.util.putCursorInTextview
+import io.github.tormundsmember.easyflashcards.ui.util.visible
 
 class SettingsFragment : BaseFragment() {
     override val layoutId: Int = R.layout.screen_settings
@@ -27,6 +30,7 @@ class SettingsFragment : BaseFragment() {
     private lateinit var switchCrashUsageData: Switch
     private lateinit var switchLimitCards: Switch
     private lateinit var txtCardLimit: AppCompatEditText
+    private lateinit var txtDebugSettings: View
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,6 +42,11 @@ class SettingsFragment : BaseFragment() {
         switchCrashUsageData = view.findViewById(R.id.switchCrashUsageData)
         switchLimitCards = view.findViewById(R.id.switchLimitCards)
         txtCardLimit = view.findViewById(R.id.txtCardLimit)
+        txtDebugSettings = view.findViewById(R.id.txtDebugSettings)
+
+        if(!BuildVariant.isProductionBuild()){
+            txtDebugSettings.visible()
+        }
 
         switchCrashUsageData.text = getString(R.string.enableCrashReporting).prepareLinkText(view.context)
         switchCrashUsageData.isChecked = Dependencies.userData.allowCrashReporting
@@ -73,6 +82,10 @@ class SettingsFragment : BaseFragment() {
         hintSpatialRepetition.text = getString(R.string.explanationSpacedRepetition).prepareLinkText(view.context)
         hintSpatialRepetition.setOnClickListener {
             openUrlInCustomTabs(it.context, Uri.parse("https://en.wikipedia.org/wiki/Spaced_repetition"))
+        }
+
+        txtDebugSettings.setOnClickListener {
+            goTo(DebugSettingsKey())
         }
     }
 

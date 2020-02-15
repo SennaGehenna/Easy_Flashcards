@@ -150,7 +150,7 @@ fun Context.showGeneralErrorMessage() {
 }
 
 
-fun String.prepareLinkText(context: Context): SpannableStringBuilder {
+fun CharSequence.prepareLinkText(context: Context): SpannableStringBuilder {
     fun makeLinkClickable(context: Context, strBuilder: SpannableStringBuilder, span: URLSpan) {
         val start = strBuilder.getSpanStart(span)
         val end = strBuilder.getSpanEnd(span)
@@ -167,7 +167,7 @@ fun String.prepareLinkText(context: Context): SpannableStringBuilder {
     }
 
     @Suppress("DEPRECATION") //what's the alternative? the other ones require SDK 28
-    val seq = Html.fromHtml(this)
+    val seq = Html.fromHtml(this.toString())
     val stringBuilder = SpannableStringBuilder(seq)
     val urls = stringBuilder.getSpans(0, seq.length, URLSpan::class.java)
 

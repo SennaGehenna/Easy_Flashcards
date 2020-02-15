@@ -9,6 +9,33 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtDebugSettings"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/transparent"
+            android:layout_marginTop="16dp"
+            android:gravity="start|center_vertical"
+            android:text="@string/debugSettings"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorAccent" />
+
+
+
         <Switch
             android:id="@+id/switchCrashUsageData"
             style="@style/TextStyle"

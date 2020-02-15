@@ -1,6 +1,5 @@
 package io.github.tormundsmember.easyflashcards.ui.play
 
-import android.animation.Animator
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
@@ -12,9 +11,9 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.PlayButtonsLayout
-import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
+import io.github.tormundsmember.easyflashcards.ui.settings.SettingsKey
 import io.github.tormundsmember.easyflashcards.ui.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -175,6 +174,9 @@ class PlayFragment : BaseFragment() {
         if (ctx != null) {
             when (item.itemId) {
                 R.id.action_more -> goTo(MoreKey())
+                R.id.action_settings -> {
+                    goTo(SettingsKey())
+                }
             }
         }
         return super.onOptionsItemSelected(item)

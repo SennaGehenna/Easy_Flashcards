@@ -21,8 +21,8 @@
     <string name="back_text">Übersetzung:</string>
     <string name="add">Hinzufügen</string>
     <string name="edit_set">Set Bearbeiten</string>
-    <string name="repository">https://github.com/TormundsMember/Easy_Flashcards</string>
-    <string name="issueTracker">https://github.com/TormundsMember/Easy_Flashcards/issues</string>
+    <string name="repository">https://github.com/SennaGehenna/Easy_Flashcards</string>
+    <string name="issueTracker">https://github.com/SennaGehenna/Easy_Flashcards/issues/new/choose</string>
     <string name="export_csv">Lokale Sets als CSV exportieren</string>
     <string name="import_csv">Sets aus CSV importieren</string>
     <string name="import_csv_subtitle">Benötigte Felder:\n\nsetId\nsetName\ncardId\nfrontText\nbackText\ncurrentInterval\nnextRecheck\ncheckCount\npositiveCheckCount</string>
