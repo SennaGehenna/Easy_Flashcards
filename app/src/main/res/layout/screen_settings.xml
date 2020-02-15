@@ -16,10 +16,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:background="@color/transparent"
-            android:layout_marginTop="16dp"
             android:gravity="start|center_vertical"
             android:text="@string/debugSettings"
             android:textStyle="bold"
@@ -27,13 +27,15 @@
             tools:visibility="visible" />
 
         <View
+            android:id="@+id/vDebugSettingsSeparator"
             android:layout_width="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:layout_height="1dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:background="@color/colorAccent" />
-
 
 
         <Switch

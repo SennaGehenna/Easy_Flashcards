@@ -31,6 +31,7 @@ class SettingsFragment : BaseFragment() {
     private lateinit var switchLimitCards: Switch
     private lateinit var txtCardLimit: AppCompatEditText
     private lateinit var txtDebugSettings: View
+    private lateinit var vDebugSettingsSeparator: View
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,9 +44,11 @@ class SettingsFragment : BaseFragment() {
         switchLimitCards = view.findViewById(R.id.switchLimitCards)
         txtCardLimit = view.findViewById(R.id.txtCardLimit)
         txtDebugSettings = view.findViewById(R.id.txtDebugSettings)
+        vDebugSettingsSeparator = view.findViewById(R.id.vDebugSettingsSeparator)
 
         if(!BuildVariant.isProductionBuild()){
             txtDebugSettings.visible()
+            vDebugSettingsSeparator.visible()
         }
 
         switchCrashUsageData.text = getString(R.string.enableCrashReporting).prepareLinkText(view.context)
