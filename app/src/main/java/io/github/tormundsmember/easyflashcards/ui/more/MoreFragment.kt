@@ -38,7 +38,6 @@ class MoreFragment : BaseFragment() {
     override val titleText: String
         get() = getString(R.string.more)
 
-    private lateinit var txtDebugSettings: View
     private lateinit var txtExportToCsv: AppCompatTextView
     private lateinit var txtImportFromCsvSubtitle: AppCompatTextView
     private lateinit var txtImportFromCsv: AppCompatTextView
@@ -46,7 +45,6 @@ class MoreFragment : BaseFragment() {
     private lateinit var txtSourceCode: AppCompatTextView
     private lateinit var txtIssueTracker: AppCompatTextView
     private lateinit var txtVersionCode: AppCompatTextView
-    private lateinit var txtSettings: AppCompatTextView
     private lateinit var txtDuplicateFinder: AppCompatTextView
     private lateinit var progressBar: ProgressBar
 
@@ -57,25 +55,17 @@ class MoreFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        txtDebugSettings = view.findViewById(R.id.txtDebugSettings)
         txtExportToCsv = view.findViewById(R.id.txtExportToCsv)
         txtImportFromCsvSubtitle = view.findViewById(R.id.txtImportFromCsvSubtitle)
         txtImportFromCsv = view.findViewById(R.id.txtImportFromCsv)
         txtLicenses = view.findViewById(R.id.txtLicenses)
         txtSourceCode = view.findViewById(R.id.txtSourceCode)
         txtIssueTracker = view.findViewById(R.id.txtIssueTracker)
-        txtSettings = view.findViewById(R.id.txtSettings)
         txtVersionCode = view.findViewById(R.id.txtVersionCode)
         txtDuplicateFinder = view.findViewById(R.id.txtDuplicateFinder)
         progressBar = view.findViewById(R.id.progressBar)
 
         txtVersionCode.text = "v${BuildConfig.VERSION_NAME}"
-
-        txtSettings.setOnClickListener { goTo(SettingsKey()) }
-        txtDebugSettings.setOnClickListener { goTo(DebugSettingsKey()) }
-        if(!BuildVariant.isProductionBuild()){
-            txtDebugSettings.visible()
-        }
 
         txtImportFromCsvSubtitle.setOnClickListener { importFromCsv() }
         txtImportFromCsv.setOnClickListener { importFromCsv() }
