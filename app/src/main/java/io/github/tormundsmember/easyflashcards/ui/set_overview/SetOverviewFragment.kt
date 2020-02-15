@@ -84,20 +84,22 @@ class SetOverviewFragment : BaseFragment() {
         }
 
         viewModel.sets.observe {
-            val items = it ?: emptyList()
-            adapter.items = items
-            if (items.isNotEmpty()) {
-                txtNoItems.gone()
-                if (items.size > 1) {
-                    with(Dependencies.userData) {
+            with(Dependencies.userData) {
+                val items = it ?: emptyList()
+                adapter.items = items
+                if (items.isNotEmpty()) {
+                    txtNoItems.gone()
+                    if (items.size > 1) {
                         if (!hasSeenSetsTutorialWithExistingItems) {
                             hasSeenSetsTutorialWithExistingItems = true
                             showTutorial()
                         }
                     }
+                } else {
+                    if (hasSeenSetsTutorial) {
+                        txtNoItems.visible()
+                    }
                 }
-            } else {
-                txtNoItems.visible()
             }
         }
 
@@ -111,10 +113,22 @@ class SetOverviewFragment : BaseFragment() {
         with(Dependencies.userData) {
             if (!hasSeenSetsTutorial) {
                 val activity = activity
-                (activity as? MainScreen)?.showSetsTutorial {
+                (activity as? MainScreen)?.showSetsTutorial(onAddButtonClick = {
+                    //region show NoItems
+                    if (adapter.items.isEmpty()) {
+                        txtNoItems.animateVisible()
+                    }
+                    //endregion
                     hasSeenSetsTutorial = true
                     showAddEditSetDialog(activity)
-                }
+                }, onCancel = {
+                    //region show NoItems
+                    if (adapter.items.isEmpty()) {
+                        txtNoItems.animateVisible()
+                    }
+                    //endregion
+                    hasSeenSetsTutorial = true
+                })
             }
         }
 
@@ -166,8 +180,10 @@ class SetOverviewFragment : BaseFragment() {
 
     private fun showTutorial() {
 
+        //region hide NoItemsText
+        txtNoItems.gone()
+        //endregion
         //region select adapter item
-
         itemRoot.alpha = 0F
         itemRoot.visible()
         itemRoot.animate()
@@ -206,7 +222,7 @@ class SetOverviewFragment : BaseFragment() {
             .resetListener()
             .start()
         //endregion
-        //region show Initial Tutorial Textx
+        //region show Initial Tutorial Text
         listOf(
             txtTutorialSelect,
             txtTutorialOk
@@ -282,7 +298,7 @@ class SetOverviewFragment : BaseFragment() {
                     .setDuration(300)
                     .setListener(
                         onAnimationEnd = {
-                            txtTutorialSelect.gone()
+                            txtTutorialSelect.invisible()
                         }
                     )
                     .start()
@@ -341,40 +357,7 @@ class SetOverviewFragment : BaseFragment() {
 
                 TutorialStep.SHOW_PLAY_INVERTED
             }
-            TutorialStep.SHOW_PLAY_INVERTED -> {
-
-                //region drop PlayInverseButton
-                btnPlayInverse.animate()
-                    .z(0F)
-                    .setDuration(300)
-                    .resetListener()
-                    .start()
-                //endregion
-                //region hide Everything
-                listOf(
-                    btnPlay,
-                    btnPlayInverse,
-                    vTutorialBack,
-                    txtTutorialOk,
-                    txtTutorialPlayInverse
-                ).forEach {
-                    it.animate()
-                        .alpha(0F)
-                        .setStartDelay(300)
-                        .setDuration(300)
-                        .setListener(
-                            onAnimationEnd = {
-                                it.gone()
-                            }
-                        )
-                        .start()
-                }
-                adapter.deactiveAllItems()
-                //endregion
-
-                TutorialStep.DONE
-            }
-            TutorialStep.DONE -> {
+            TutorialStep.SHOW_PLAY_INVERTED, TutorialStep.DONE -> {
 
                 //region drop PlayInverseButton
                 btnPlayInverse.animate()

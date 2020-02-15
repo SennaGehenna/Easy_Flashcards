@@ -54,7 +54,7 @@ fun View.animateVisible() {
         animate()
             .alpha(1F)
             .setDuration(300)
-            .setListener(null)
+            .resetListener()
             .start()
     }
 }

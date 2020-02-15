@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="flip">Flip</string>
+    <string name="tutorial_multiselect">Tap und halte ein Set um es auszuwählen.\n\nDu kannst mehrere Sets antappen um mehr als eines auszuwählen.</string>
+    <string name="tutorial_set_play">Sobald du Sets ausgewählt hast, kannst du Karten entweder so wie sie sind wiederholen…</string>
+    <string name="tutorial_set_play_inverse">…oder du wiederholst sie mit der anderen Seite oben.</string>
+    <string name="tutorial_play">Du kannst Karten entweder so wie sie sind wiederholen…</string>
+    <string name="tutorial_play_inverse">…oder du wiederholst sie mit der anderen Seite oben.</string>
+    <string name="results_cards_rehearsed">Karten heute wiederholt:</string>
+    <string name="results_cards_correctly_guessed">Karten korrekt wiederholt:</string>
+    <string name="okay_cool">Okay, cool!</string>
+    <string name="no_cards">Aktuell hast du keine Karten. Klick den + Button in der Toolbar um eine neue Karte hinzuzufügen!</string>
+    <string name="no_cards_tutorial">Du befindest dich jetzt in deinem neuen Set \"%s\", aber es ist leer! \n\nKlick den + Button in der Toolbar um eine neue Karte hinzuzufügen!</string>
+    <string name="no_sets">Du hast aktuell keine Sets. Klick den + Button in der Toolbar um neue Sets hinzuzufügen</string>
+    <string name="more">Mehr</string>
+    <string name="save_card">Karte Speichern</string>
+    <string name="save_set_title">Set Speichern</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="set_name">Set Name:</string>
+    <string name="front_text">Originaler Text:</string>
+    <string name="back_text">Übersetzung:</string>
+    <string name="add">Hinzufügen</string>
+    <string name="edit_set">Set Bearbeiten</string>
+    <string name="repository">https://github.com/TormundsMember/Easy_Flashcards</string>
+    <string name="issueTracker">https://github.com/TormundsMember/Easy_Flashcards/issues</string>
+    <string name="export_csv">Lokale Sets als CSV exportieren</string>
+    <string name="import_csv">Sets aus CSV importieren</string>
+    <string name="import_csv_subtitle">Benötigte Felder:\n\nsetId\nsetName\ncardId\nfrontText\nbackText\ncurrentInterval\nnextRecheck\ncheckCount\npositiveCheckCount</string>
+    <string name="licenses">Lizenzen</string>
+    <string name="sourceCodeOnGithub">Sourcecode auf Github</string>
+    <string name="openAnIssue">Feedback?\n\nÖffne ein Issue auf meiner Github Seite.</string>
+    <string name="generalError">Ups, etwas ist schiefgelaufen!</string>
+    <string name="delete">Löschen</string>
+    <string name="deleteSet">Set Löschen</string>
+    <string name="deleteCard">Karte Löschen</string>
+    <string name="confirmDeleteCard">Willst du diese Karte wirklich löschen?</string>
+    <string name="noRehearsal">Heute gibt es keine Karten zu wiederholen!</string>
+    <string name="useSpacedRepetition">Spaced Repetition verwenden</string>
+    <string name="promptExplanationSpacedRepetition">Was ist Spaced Repetition?</string>
+    <string name="explanationSpacedRepetition">Spaced Repetition ist eine Lerntechnik, bei der neue Karten häufiger geübt werden.\nLiegst du während des Übens richtig, steigt das Interval, wann die Karte das nächste Mal auftaucht. Ansonsten wird das Interval auf 1 Tag zurückgesetzt.\n\nAuf <a href="https://de.wikipedia.org/wiki/Spaced_repetition">Wikipedia</a> gibt eine detailiertere Erklärung.</string>
+    <string name="play">Spielen</string>
+    <string name="playReverse">Spiele mit der Rückseite zuerst</string>
+    <string name="enableCrashReporting">Easy Flashcards erlauben Crash- &amp; Nutzungsdaten zu sammeln. &lt;b&gt;Es werden KEINE persönlichen Daten gesammelt!&lt;b&gt;</string>
+    <string name="card_limit">Anzahl an zu wiederholenden Karten pro Sitzung:</string>
+    <string name="select_all">Alle Auswählen</string>
+    <string name="separator_slash">/</string>
+    <string name="flipSelected">Ausgewählte Karten umdrehen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="duplicateFinder">Duplikatfinder</string>
+    <string name="debugSettings">Debug Einstellungen</string>
+    <string name="confirmDeleteSet">Willst du dieses Set wirklich löschen?</string>
+    <string name="enableDarkMode">Dark Mode aktivieren</string>
+    <string name="useCardLimit">Pro Sitzung zu wiederholende Karten einschränken</string>
+</resources>

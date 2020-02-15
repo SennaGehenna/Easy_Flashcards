@@ -18,6 +18,7 @@
 
     <TextView
         android:id="@+id/txtNoItems"
+        style="@style/TextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -26,7 +27,6 @@
         android:text="@string/no_cards"
         android:textAlignment="center"
         android:textSize="30sp"
-        style="@style/TextStyle"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,11 +48,11 @@
 
     <TextView
         android:id="@+id/txtTutorialPlay"
+        style="@style/TextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        style="@style/TextStyle"
         android:elevation="1dp"
         android:gravity="center"
         android:text="@string/tutorial_play"
@@ -67,8 +67,8 @@
 
     <TextView
         android:id="@+id/txtTutorialPlayInverse"
-        android:layout_width="0dp"
         style="@style/TextStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
@@ -76,6 +76,7 @@
         android:gravity="center"
         android:text="@string/tutorial_play_inverse"
         android:textColor="@color/tutorialTextColor"
+        android:textSize="24sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,22 +85,28 @@
 
     <TextView
         android:id="@+id/txtTutorialOk"
+        style="@style/TextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:elevation="1dp"
         android:gravity="center"
         android:text="@android:string/ok"
-        style="@style/TextStyle"
         android:textColor="@color/tutorialTextColor"
         android:textSize="24sp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtTutorialPlay" />
+        app:layout_constraintTop_toBottomOf="@+id/barrier4" />
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="txtTutorialPlay,txtTutorialPlayInverse"
+        app:barrierDirection="bottom" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btnPlay"
@@ -133,6 +140,8 @@
         android:src="@drawable/ic_flipped_ace"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnPlay" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
