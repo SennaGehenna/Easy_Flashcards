@@ -13,25 +13,25 @@ class FragmentStateChanger(
         fragmentManager.executePendingTransactions()
 
         val fragmentTransaction = fragmentManager.beginTransaction().apply {
-            when (stateChange.direction) {
-                StateChange.FORWARD -> {
-                    setCustomAnimations(
-                        R.anim.enter_animation,
-                        R.anim.exit_animation,
-                        R.anim.pop_enter_animation,
-                        R.anim.pop_exit_animation
-                    )
-                }
-                StateChange.BACKWARD -> {
-                    //this is funky and doesn't work how I thought it would
+//            when (stateChange.direction) {
+//                StateChange.FORWARD -> {
+//                    setCustomAnimations(
+//                        R.anim.enter_animation,
+//                        R.anim.exit_animation,
+//                        R.anim.pop_enter_animation,
+//                        R.anim.pop_exit_animation
+//                    )
+//                }
+//                StateChange.BACKWARD -> {
+//                    //this is funky and doesn't work how I thought it would
 //                    setCustomAnimations(
 //                        R.anim.exit_animation,
 //                        R.anim.enter_animation,
 //                        R.anim.pop_exit_animation,
 //                        R.anim.pop_enter_animation
 //                    )
-                }
-            }
+//                }
+//            }
             val previousState = stateChange.getPreviousKeys<BaseKey>()
             val newState = stateChange.getNewKeys<BaseKey>()
             for (oldKey in previousState) {

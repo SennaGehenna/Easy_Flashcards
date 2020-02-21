@@ -5,19 +5,20 @@ import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseViewModel
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
 import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import java.io.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MoreViewModel : BaseViewModel() {
 
 
-    suspend fun importFromCsv(inputStream: InputStream) = withContext(Dispatchers.IO) {
+    suspend fun importFromCsv(inputStream: InputStream): Int {
         val (sets, cards) = obtainImportedData(inputStream)
         with(Dependencies.database) {
             addSets(sets)
             addOrUpdateCards(cards)
         }
+        return cards.size
     }
 
     fun obtainImportedData(inputStream: InputStream): Pair<List<Set>, List<Card>> {
@@ -38,16 +39,8 @@ class MoreViewModel : BaseViewModel() {
         val checkCountKey = "checkCount"
         val positiveCheckCountKey = "positiveCheckCount"
         val requiredColumns = listOf(
-            setIdKey,
-            setNameKey,
-            cardIdKey,
             frontTextKey,
             backTextKey
-            ,
-            currentIntervalKey,
-            nextRecheckKey,
-            checkCountKey,
-            positiveCheckCountKey
         )
 
 
@@ -68,22 +61,42 @@ class MoreViewModel : BaseViewModel() {
         val checkCount = columnNames[checkCountKey]
         val positiveCheckCount = columnNames[positiveCheckCountKey]
 
+        var lastSetId = 0
+
         try {
             if (columnNames.keys.containsAll(requiredColumns)) {
-                csv.drop(1).map { it.split(";") }.forEach { row: List<String> ->
-                    if (sets.none { it.id == row[setId!!].toInt() }) {
-                        val set = Set(row[setId!!].toInt(), row[setName!!])
-                        sets += set
+                csv.drop(1).map { it.split(";") }.forEachIndexed { index, row: List<String> ->
+                    if (columnNames.keys.contains(setIdKey)) {
+                        if (sets.none { it.id == row[setId!!].toInt() }) {
+                            val set = Set(row[setId!!].toInt(), row[setName!!])
+                            sets += set
+                        }
+                    } else {
+                        if (columnNames.keys.contains(setNameKey)) {
+                            val setNameExtracted = row[setName!!]
+                            if (sets.none { it.name == setNameExtracted })
+                                sets += Set(++lastSetId, setNameExtracted)
+                        } else {
+                            if (sets.isEmpty()) {
+                                sets += Set(
+                                    ++lastSetId,
+                                    "import_${SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(Date())}"
+                                )
+                            }
+                        }
                     }
-                    val _id = row.getOrNullWithNullableKey(cardId)?.toInt()!!
+                    val _id = row.getOrNullWithNullableKey(cardId)?.toInt() ?: index
                     val _frontText = row.getOrNullWithNullableKey(frontText)!!
                     val _backText = row.getOrNullWithNullableKey(backText)!!
                     val _currentInterval =
-                        RehearsalInterval.TypeConverter.fromString(row.getOrNullWithNullableKey(currentInterval)!!)
-                    val _nextRecheck = row.getOrNullWithNullableKey(nextRecheck)?.toLong()!!
-                    val _setId = row.getOrNullWithNullableKey(setId)?.toInt()!!
-                    val _checkCount = row.getOrNullWithNullableKey(checkCount)?.toInt()!!
-                    val _positiveCheckCount = row.getOrNullWithNullableKey(positiveCheckCount)?.toInt()!!
+                        RehearsalInterval.TypeConverter.fromString(
+                            row.getOrNullWithNullableKey(currentInterval) ?: RehearsalInterval.STAGE_1.name
+                        )
+                    val _nextRecheck =
+                        row.getOrNullWithNullableKey(nextRecheck)?.toLong() ?: RehearsalInterval.getNextRehearsalDate(0)
+                    val _setId = row.getOrNullWithNullableKey(setId)?.toInt() ?: 0
+                    val _checkCount = row.getOrNullWithNullableKey(checkCount)?.toInt() ?: 0
+                    val _positiveCheckCount = row.getOrNullWithNullableKey(positiveCheckCount)?.toInt() ?: 0
                     cards += Card(
                         id = _id,
                         frontText = _frontText,

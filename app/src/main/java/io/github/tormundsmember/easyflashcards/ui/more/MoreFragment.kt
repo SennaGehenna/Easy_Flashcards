@@ -7,7 +7,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.tormundsmember.easyflashcards.BuildConfig
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.BuildVariant
@@ -17,8 +19,10 @@ import io.github.tormundsmember.easyflashcards.ui.duplicate_finder.DuplicateFind
 import io.github.tormundsmember.easyflashcards.ui.licenses.LicensesKey
 import io.github.tormundsmember.easyflashcards.ui.settings.SettingsKey
 import io.github.tormundsmember.easyflashcards.ui.util.*
+import kotlinx.android.synthetic.main.listitem_set.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -131,14 +135,20 @@ class MoreFragment : BaseFragment() {
         if (requestCode == RQ_IMPORT && data1 != null) {
             showLoadingSpinner()
             CoroutineScope(Dispatchers.IO).launch {
+                delay(300)
                 activity?.applicationContext?.contentResolver?.openFileDescriptor(data1, "r")?.use {
-                    viewModel.importFromCsv(FileInputStream(it.fileDescriptor))
+                    val cardsImported = viewModel.importFromCsv(FileInputStream(it.fileDescriptor))
                     CoroutineScope(Dispatchers.Main).launch {
                         hideLoadingSpinner()
+                        showCardsImportedMessage(cardsImported)
                     }
                 }
             }
         }
+    }
+
+    private fun showCardsImportedMessage(cardsImported: Int) {
+        Toast.makeText(context,getString(R.string.cardsImported, cardsImported), Toast.LENGTH_SHORT).show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
