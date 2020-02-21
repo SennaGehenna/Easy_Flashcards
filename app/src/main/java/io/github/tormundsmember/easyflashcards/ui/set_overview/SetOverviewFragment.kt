@@ -61,6 +61,7 @@ class SetOverviewFragment : BaseFragment() {
     private lateinit var itemRoot: View
     private lateinit var card: CardView
     private lateinit var viewSelected: View
+    private lateinit var txtSetName: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -82,6 +83,7 @@ class SetOverviewFragment : BaseFragment() {
             itemRoot = by(R.id.itemRoot)
             viewSelected = by(R.id.viewSelected)
             card = by(R.id.card)
+            txtSetName = by(R.id.txtSetName)
         }
 
         viewModel.sets.observe {
@@ -190,6 +192,9 @@ class SetOverviewFragment : BaseFragment() {
 
     private fun showTutorial() {
 
+        //region setFakeItemText
+        txtSetName.text = adapter.items.firstOrNull()?.name ?: ""
+        //endregion
         //region hide NoItemsText
         txtNoItems.gone()
         //endregion

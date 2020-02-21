@@ -13,8 +13,8 @@
     <string name="no_cards_tutorial">"You're now in your new set called \"%s\", but it's empty!\n\nClick the + button in the toolbar to add a new card!"</string>
     <string name="no_sets">You currently have no sets. Click the + button in the toolbar to add a new set!</string>
     <string name="more">More</string>
-    <string name="save_card">Save Card</string>
-    <string name="save_set_title">Save Set</string>
+    <string name="save">Save</string>
+    <string name="edit_card">Edit Card</string>
     <string name="cancel">Cancel</string>
     <string name="set_name">Set Name:</string>
     <string name="front_text">Original Text:</string>
@@ -51,4 +51,5 @@
     <string name="settings">Settings</string>
     <string name="duplicateFinder">Duplicate Finder</string>
     <string name="debugSettings">Debug Settings</string>
+    <string name="delete_set_warning">Warning!\n\nIf you delete this set, all associated cards will be deleted aswell!</string>
 </resources>

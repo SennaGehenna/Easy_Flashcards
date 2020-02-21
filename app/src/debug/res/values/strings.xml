@@ -1,3 +1,3 @@
 <resources>
-    <string name="app_name">Debug - Easy Flashcards</string>
+    <string name="app_name" translatable="false">Debug - Easy Flashcards</string>
 </resources>
