@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Easy Flashcards</string>
+    <string name="app_name" translatable="false">Easy Flashcards</string>
+    <string name="delete_card">Delete Card</string>
 </resources>

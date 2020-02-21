@@ -12,6 +12,7 @@ import android.text.style.ClickableSpan
 import android.text.style.URLSpan
 import android.view.View
 import android.view.ViewPropertyAnimator
+import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
@@ -221,3 +222,14 @@ fun ViewPropertyAnimator.setListener(
         onAnimationEnd()
     }
 })
+
+fun View.width(function: (Int) -> Boolean) {
+    if (width == 0)
+        viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+                function(width)
+            }
+        })
+    else function(width)
+}

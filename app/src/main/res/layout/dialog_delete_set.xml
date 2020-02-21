@@ -6,17 +6,43 @@
     android:minWidth="300dp">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/lblOriginalTerm"
+        android:id="@+id/lblTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:text="@string/deleteSet"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/lblMessage"
         style="@style/TextStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginEnd="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
         android:text="@string/confirmDeleteSet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/lblTitle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/lblWarning"
+        style="@style/TextStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:text="@string/delete_set_warning"
+        android:textColor="@color/colorDelete"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblMessage" />
 
 
     <androidx.appcompat.widget.AppCompatButton
@@ -26,8 +52,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
         android:text="@string/deleteSet"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblOriginalTerm" />
+        app:layout_constraintTop_toBottomOf="@+id/lblWarning" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnCancel"
@@ -36,6 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
         android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnDeleteTerm"
-        app:layout_constraintTop_toBottomOf="@+id/lblOriginalTerm" />
+        app:layout_constraintTop_toBottomOf="@+id/lblWarning" />
 </androidx.constraintlayout.widget.ConstraintLayout>
