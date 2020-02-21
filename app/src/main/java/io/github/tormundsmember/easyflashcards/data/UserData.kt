@@ -15,7 +15,8 @@ class UserData(private val context: Context) {
         const val HAS_SEEN_OVERVIEW_TUTORIAL = "HAS_SEEN_OVERVIEW_TUTORIAL"
         const val HAS_SEEN_OVERVIEW_TUTORIAL_WITH_EXISTING_ITEMS = "HAS_SEEN_OVERVIEW_TUTORIAL_WITH_EXISTING_ITEMS"
         const val USE_DARKMODE = "USE_DARKMODE"
-        const val USE_SPACED_REPETITION = "USE_SPACED_REPETITION "
+        const val USE_SPACED_REPETITION = "USE_SPACED_REPETITION"
+        const val DO_NOT_SHOW_LEARNED_CARDS = "DO_NOT_SHOW_LEARNED_CARDS"
         const val ALLOW_CRASHREPORTING = "ALLOW_CRASHREPORTING"
         const val LIMIT_CARDS = "LIMIT_CARDS"
         const val LIMIT_CARDS_AMOUNT = "LIMIT_CARDS_AMOUNT"
@@ -43,6 +44,7 @@ class UserData(private val context: Context) {
 
     var limitCardsAmount: Int by sharedPrefInt(LIMIT_CARDS_AMOUNT)
 
+    var doNotShowLearnedCards: Boolean by sharedPrefBoolean(DO_NOT_SHOW_LEARNED_CARDS)
 
     private inner class sharedPrefBoolean(val key: String, val defaultValue: Boolean = false) : ReadWriteProperty<Any?, Boolean> {
         override fun getValue(thisRef: Any?, property: KProperty<*>): Boolean {

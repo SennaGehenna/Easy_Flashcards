@@ -53,4 +53,6 @@
     <string name="useCardLimit">Pro Sitzung zu wiederholende Karten einschränken</string>
     <string name="delete_card">Karte Löschen</string>
     <string name="delete_set_warning">Achtung!\n\nWenn du dieses Set löschst, löschst du auch alle Karten darin!</string>
+    <string name="dontRehearseLearnedTerms">Begriffe nicht mehr wiederholen, wenn ich sie mir bereits gemerkt habe</string>
+    <string name="dontRehearseLearnedTermsExplanation">Karten, die oft genug korrekt wiederholt wurden, werden dann nicht mehr angezeigt.</string>
 </resources>

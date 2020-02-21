@@ -85,11 +85,32 @@
             android:id="@+id/hintSpatialRepetition"
             style="@style/TextStyleHint"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_margin="@dimen/big_margin"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/big_margin"
+            android:layout_marginStart="@dimen/big_margin"
+            android:layout_marginEnd="@dimen/big_margin"
             android:gravity="center_vertical"
-            android:text="@string/promptExplanationSpacedRepetition"
-            tools:text="What is Spatial Repetition?" />
+            android:text="@string/explanationSpacedRepetition" />
+
+        <Switch
+            android:id="@+id/switchDontRehearseRememberedTerms"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/big_margin"
+            android:text="@string/dontRehearseLearnedTerms"
+            tools:checked="true" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/hintDontRehearseRememberedTerms"
+            style="@style/TextStyleHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/big_margin"
+            android:layout_marginEnd="@dimen/big_margin"
+            android:layout_marginBottom="@dimen/big_margin"
+            android:gravity="center_vertical"
+            android:text="@string/dontRehearseLearnedTermsExplanation" />
 
         <View
             android:layout_width="match_parent"
