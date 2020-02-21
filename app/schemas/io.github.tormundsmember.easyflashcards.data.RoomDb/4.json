@@ -1,0 +1,139 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "8af8a604c3954d5f19012a85d895923d",
+    "entities": [
+      {
+        "tableName": "Set",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Card",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `frontText` TEXT NOT NULL, `backText` TEXT NOT NULL, `currentInterval` TEXT NOT NULL, `nextRecheck` INTEGER NOT NULL, `setId` INTEGER NOT NULL, `checkCount` INTEGER NOT NULL, `positiveCheckCount` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`setId`) REFERENCES `Set`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "frontText",
+            "columnName": "frontText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "backText",
+            "columnName": "backText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentInterval",
+            "columnName": "currentInterval",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nextRecheck",
+            "columnName": "nextRecheck",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "setId",
+            "columnName": "setId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "checkCount",
+            "columnName": "checkCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "positiveCheckCount",
+            "columnName": "positiveCheckCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_Card_setId",
+            "unique": false,
+            "columnNames": [
+              "setId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Card_setId` ON `${TABLE_NAME}` (`setId`)"
+          },
+          {
+            "name": "index_Card_frontText",
+            "unique": false,
+            "columnNames": [
+              "frontText"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Card_frontText` ON `${TABLE_NAME}` (`frontText`)"
+          },
+          {
+            "name": "index_Card_backText",
+            "unique": false,
+            "columnNames": [
+              "backText"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_Card_backText` ON `${TABLE_NAME}` (`backText`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "Set",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "setId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8af8a604c3954d5f19012a85d895923d')"
+    ]
+  }
+}

@@ -18,10 +18,6 @@ import java.io.IOException
 class MigrationTest {
     private val TEST_DB = "migration-test"
 
-    // Array of all migrations
-    private val ALL_MIGRATIONS = arrayOf(
-        Migration1_2, Migration2_3
-    )
 
     @get:Rule
     val helper: MigrationTestHelper = MigrationTestHelper(
@@ -44,7 +40,7 @@ class MigrationTest {
             InstrumentationRegistry.getInstrumentation().targetContext,
             RoomDb::class.java,
             TEST_DB
-        ).addMigrations(*ALL_MIGRATIONS).build().apply {
+        ).addMigrations(*RoomDb.getMigrations()).build().apply {
             openHelper.writableDatabase
             close()
         }

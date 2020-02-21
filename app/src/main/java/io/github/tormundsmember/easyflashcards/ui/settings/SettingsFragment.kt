@@ -2,8 +2,6 @@ package io.github.tormundsmember.easyflashcards.ui.settings
 
 import android.net.Uri
 import android.os.Bundle
-import android.text.InputFilter
-import android.text.Spanned
 import android.view.View
 import android.widget.Switch
 import androidx.appcompat.widget.AppCompatEditText
@@ -32,6 +30,8 @@ class SettingsFragment : BaseFragment() {
     private lateinit var txtCardLimit: AppCompatEditText
     private lateinit var txtDebugSettings: View
     private lateinit var vDebugSettingsSeparator: View
+    private lateinit var switchDontRehearseRememberedTerms: Switch
+    private lateinit var hintDontRehearseRememberedTerms: View
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,8 +45,11 @@ class SettingsFragment : BaseFragment() {
         txtCardLimit = view.findViewById(R.id.txtCardLimit)
         txtDebugSettings = view.findViewById(R.id.txtDebugSettings)
         vDebugSettingsSeparator = view.findViewById(R.id.vDebugSettingsSeparator)
+        switchDontRehearseRememberedTerms = view.findViewById(R.id.switchDontRehearseRememberedTerms)
+        hintDontRehearseRememberedTerms = view.findViewById(R.id.hintDontRehearseRememberedTerms)
 
-        if(!BuildVariant.isProductionBuild()){
+
+        if (!BuildVariant.isProductionBuild()) {
             txtDebugSettings.visible()
             vDebugSettingsSeparator.visible()
         }
@@ -63,10 +66,22 @@ class SettingsFragment : BaseFragment() {
             (activity as MainActivity?)?.setDarkMode()
         }
 
-        switchSpatialRepetition.isChecked = Dependencies.userData.useSpacedRepetition
+        with(Dependencies.userData.useSpacedRepetition) {
+            switchSpatialRepetition.isChecked = this
+            switchDontRehearseRememberedTerms.isEnabled = this
+            hintDontRehearseRememberedTerms.isEnabled = this
+        }
         switchSpatialRepetition.setOnCheckedChangeListener { _, isChecked ->
             Dependencies.userData.useSpacedRepetition = isChecked
+            switchDontRehearseRememberedTerms.isEnabled = isChecked
+            hintDontRehearseRememberedTerms.isEnabled = isChecked
         }
+
+        switchDontRehearseRememberedTerms.isChecked = Dependencies.userData.doNotShowLearnedCards
+        switchDontRehearseRememberedTerms.setOnCheckedChangeListener { _, isChecked ->
+            Dependencies.userData.doNotShowLearnedCards = isChecked
+        }
+
 
         with(Dependencies.userData) {
             txtCardLimit.isEnabled = limitCards

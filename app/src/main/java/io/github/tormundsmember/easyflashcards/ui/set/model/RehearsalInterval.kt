@@ -1,5 +1,7 @@
 package io.github.tormundsmember.easyflashcards.ui.set.model
 
+import java.util.concurrent.TimeUnit
+
 enum class RehearsalInterval {
 
     STAGE_1,
@@ -9,13 +11,12 @@ enum class RehearsalInterval {
     STAGE_5,
     DONE;
 
-    fun getNext() = when (this) {
+    fun getNext(doNotShowLearnedCards: Boolean) = when (this) {
         STAGE_1 -> STAGE_2
         STAGE_2 -> STAGE_3
         STAGE_3 -> STAGE_4
         STAGE_4 -> STAGE_5
-        STAGE_5 -> DONE
-        DONE -> DONE
+        STAGE_5, DONE -> if (doNotShowLearnedCards) DONE else STAGE_5
     }
 
     fun getInterval() = when (this) {
@@ -38,4 +39,17 @@ enum class RehearsalInterval {
         @JvmStatic
         fun fromString(string: String) = valueOf(string)
     }
+
+
+    companion object {
+        fun getNextRehearsalDate(daysToAdd: Long) =
+            System.currentTimeMillis().let { currentTime ->
+                TimeUnit.MILLISECONDS.toDays(currentTime).let { asDay ->
+                    TimeUnit.DAYS.toMillis(asDay).let {
+                        it + TimeUnit.DAYS.toMillis(daysToAdd)
+                    }
+                }
+            }
+    }
 }
+

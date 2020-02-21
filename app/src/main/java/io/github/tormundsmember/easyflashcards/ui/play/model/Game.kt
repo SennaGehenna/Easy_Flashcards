@@ -8,7 +8,6 @@ import io.github.tormundsmember.easyflashcards.ui.play.PlayViewModel
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
 import io.github.tormundsmember.easyflashcards.ui.util.plusAssign
-import java.util.concurrent.TimeUnit
 
 class Game(
     private val cards: MutableList<FlippableCard>,
@@ -70,20 +69,13 @@ class Game(
             val nextRecheck: Long
             if (Dependencies.userData.useSpacedRepetition) {
                 if (correctGuess) {
-                    nextInterval = card.currentInterval.getNext()
+                    nextInterval = card.currentInterval.getNext(Dependencies.userData.doNotShowLearnedCards)
                     positiveCheckCount = card.positiveCheckCount + 1
                 } else {
                     nextInterval = RehearsalInterval.STAGE_1
                     positiveCheckCount = card.positiveCheckCount
                 }
-
-                nextRecheck = System.currentTimeMillis().let { currentTime ->
-                    TimeUnit.MILLISECONDS.toDays(currentTime).let { asDay ->
-                        TimeUnit.DAYS.toMillis(asDay).let {
-                            it + TimeUnit.DAYS.toMillis(nextInterval.getInterval().toLong())
-                        }
-                    }
-                }
+                nextRecheck = RehearsalInterval.getNextRehearsalDate(nextInterval.getInterval().toLong())
             } else {
                 nextInterval = card.currentInterval
                 positiveCheckCount = card.positiveCheckCount + if (correctGuess) 1 else 0
