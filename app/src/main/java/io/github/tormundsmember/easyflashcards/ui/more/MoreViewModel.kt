@@ -23,9 +23,8 @@ class MoreViewModel : BaseViewModel() {
     fun obtainImportedData(inputStream: InputStream): Pair<List<Set>, List<Card>> {
         fun List<String>.getOrNullWithNullableKey(key: Int?) = if (key != null) this.getOrNull(key) else null
 
-        var csv: List<String> = emptyList()
-        BufferedReader(InputStreamReader(inputStream, Charsets.UTF_8)).use {
-            csv = it.readLines()
+        val csv: List<String> = BufferedReader(InputStreamReader(inputStream, Charsets.UTF_8)).use {
+            it.readLines()
         }
 
 
