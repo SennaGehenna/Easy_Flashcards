@@ -3,8 +3,8 @@
     <color name="black">#000000</color>
     <color name="colorAccent">#B39DDB</color>
     <color name="card_background">#FFFFFF</color>
-    <color name="colorDelete">#C25074</color>
-    <color name="colorNegative">#944A63</color>
+    <color name="colorDelete">#C5597B</color>
+    <color name="colorNegative">#BB778F</color>
     <color name="colorNeutral">#977B4C</color>
     <color name="colorPositive">#77A081</color>
     <color name="colorPrimary">#5d0925</color>

@@ -7,6 +7,7 @@ import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.play.PlayViewModel
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
+import io.github.tormundsmember.easyflashcards.ui.util.getStartOfDay
 import io.github.tormundsmember.easyflashcards.ui.util.plusAssign
 
 class Game(
@@ -75,7 +76,7 @@ class Game(
                     nextInterval = RehearsalInterval.STAGE_1
                     positiveCheckCount = card.positiveCheckCount
                 }
-                nextRecheck = RehearsalInterval.getNextRehearsalDate(nextInterval.getInterval().toLong())
+                nextRecheck = getStartOfDay() + nextInterval.getInterval().toLong()
             } else {
                 nextInterval = card.currentInterval
                 positiveCheckCount = card.positiveCheckCount + if (correctGuess) 1 else 0

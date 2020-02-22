@@ -7,18 +7,18 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import io.github.tormundsmember.easyflashcards.BuildConfig
 import io.github.tormundsmember.easyflashcards.R
-import io.github.tormundsmember.easyflashcards.ui.BuildVariant
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
-import io.github.tormundsmember.easyflashcards.ui.debug_settings.DebugSettingsKey
+import io.github.tormundsmember.easyflashcards.ui.base_ui.exceptions.MissingRequiredKeysException
 import io.github.tormundsmember.easyflashcards.ui.duplicate_finder.DuplicateFinderKey
 import io.github.tormundsmember.easyflashcards.ui.licenses.LicensesKey
-import io.github.tormundsmember.easyflashcards.ui.settings.SettingsKey
 import io.github.tormundsmember.easyflashcards.ui.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -99,7 +99,7 @@ class MoreFragment : BaseFragment() {
                 RQ_EXPORT
             )
         } catch (e: Exception) {
-            context?.showGeneralErrorMessage()
+            context?.showErrorMessage(getString(R.string.generalErrorWithMessage, e.localizedMessage), e, true)
         }
     }
 
@@ -115,7 +115,7 @@ class MoreFragment : BaseFragment() {
             )
 
         } catch (e: java.lang.Exception) {
-            context?.showGeneralErrorMessage()
+            context?.showErrorMessage(getString(R.string.generalErrorWithMessage, e.localizedMessage), e, true)
         }
     }
 
@@ -131,14 +131,35 @@ class MoreFragment : BaseFragment() {
         if (requestCode == RQ_IMPORT && data1 != null) {
             showLoadingSpinner()
             CoroutineScope(Dispatchers.IO).launch {
+                delay(300)
                 activity?.applicationContext?.contentResolver?.openFileDescriptor(data1, "r")?.use {
-                    viewModel.importFromCsv(FileInputStream(it.fileDescriptor))
-                    CoroutineScope(Dispatchers.Main).launch {
-                        hideLoadingSpinner()
+                    try {
+                        val cardsImported = viewModel.importFromCsv(FileInputStream(it.fileDescriptor))
+                        CoroutineScope(Dispatchers.Main).launch {
+                            hideLoadingSpinner()
+                            showCardsImportedMessage(cardsImported)
+                        }
+                    } catch (mrkException: MissingRequiredKeysException) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            context?.showErrorMessage(
+                                getString(
+                                    R.string.missingKeysFromImport,
+                                    mrkException.missingKeys.joinToString(", ")
+                                )
+                            )
+                        }
+                    } catch (e: Exception) {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            context?.showErrorMessage(getString(R.string.generalErrorWithMessage, e.localizedMessage), e, true)
+                        }
                     }
                 }
             }
         }
+    }
+
+    private fun showCardsImportedMessage(cardsImported: Int) {
+        Toast.makeText(context, getString(R.string.cardsImported, cardsImported), Toast.LENGTH_SHORT).show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

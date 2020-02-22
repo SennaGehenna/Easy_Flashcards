@@ -41,15 +41,4 @@ enum class RehearsalInterval {
     }
 
 
-    companion object {
-        fun getNextRehearsalDate(daysToAdd: Long) =
-            System.currentTimeMillis().let { currentTime ->
-                TimeUnit.MILLISECONDS.toDays(currentTime).let { asDay ->
-                    TimeUnit.DAYS.toMillis(asDay).let {
-                        it + TimeUnit.DAYS.toMillis(daysToAdd)
-                    }
-                }
-            }
-    }
 }
-
