@@ -141,6 +141,7 @@ class MoreFragment : BaseFragment() {
                         }
                     } catch (mrkException: MissingRequiredKeysException) {
                         CoroutineScope(Dispatchers.Main).launch {
+                            hideLoadingSpinner()
                             context?.showErrorMessage(
                                 getString(
                                     R.string.missingKeysFromImport,
@@ -149,6 +150,7 @@ class MoreFragment : BaseFragment() {
                             )
                         }
                     } catch (e: Exception) {
+                        hideLoadingSpinner()
                         CoroutineScope(Dispatchers.Main).launch {
                             context?.showErrorMessage(getString(R.string.generalErrorWithMessage, e.localizedMessage), e, true)
                         }
