@@ -2,10 +2,12 @@ package io.github.tormundsmember.easyflashcards.ui.util
 
 import android.animation.Animator
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.style.ClickableSpan
@@ -15,17 +17,18 @@ import android.view.ViewPropertyAnimator
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toast
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import io.github.tormundsmember.easyflashcards.BuildConfig
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
+import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
@@ -143,21 +146,26 @@ fun openUrlInCustomTabs(context: Context, data: Uri) {
             i.data = data
             context.startActivity(i)
         } catch (e: Exception) {
-            context.showGeneralErrorMessage()
+            context.showErrorMessage(context.getString(R.string.generalErrorWithMessage, e.localizedMessage), e, false)
         }
     }
 }
 
-fun Context.showGeneralErrorMessage() {
-    showErrorMessage(R.string.generalError)
-}
+fun Context.showErrorMessage(string: String, exception: Exception? = null, showIssueTrackerButton: Boolean = false) {
+    val message = MaterialAlertDialogBuilder(this).setMessage(string)
+    if (showIssueTrackerButton) {
+        val bugTemplate = URLEncoder.encode(getBugTemplate(exception), Charsets.UTF_8.name())
+        message.setNeutralButton(R.string.createIssue) { _, _ ->
+            openUrlInCustomTabs(this, Uri.parse(getString(R.string.createIssueUrl, bugTemplate)))
+        }
+    }
+    message.setPositiveButton(R.string.okay_cool) { _, _ ->
 
-fun Context.showErrorMessage(@StringRes stringRes: Int) {
-    showErrorMessage(getString(stringRes))
-}
-
-fun Context.showErrorMessage(string: String) {
-    Toast.makeText(this, string, Toast.LENGTH_SHORT).show()
+    }
+    val dialog = message.create()
+    dialog.show()
+    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(R.color.textColor))
+    dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(getColor(R.color.colorAccent))
 }
 
 
@@ -246,4 +254,51 @@ fun View.width(function: (Int) -> Boolean) {
 
 fun getStartOfDay(timestamp: Long = System.currentTimeMillis()) = TimeUnit.MILLISECONDS.toDays(timestamp).let { asDay ->
     TimeUnit.DAYS.toMillis(asDay)
+}
+
+fun getDeviceName(): String {
+    val manufacturer = Build.MANUFACTURER
+    fun String.capitalize() = this.split(" ").joinToString { it.first().toUpperCase() + it.drop(1) }
+
+    val model = Build.MODEL
+    return if (model.startsWith(manufacturer)) {
+        model.capitalize()
+    } else {
+        manufacturer.capitalize() + " " + model
+    }
+}
+
+
+fun getBugTemplate(exception: Exception?): String {
+    return """  |**Describe the bug**
+                |A clear and concise description of what the bug is.
+                |
+                |**To Reproduce**
+                |Steps to reproduce the behavior:
+                |1. Go to '...'
+                |2. Click on '....'
+                |3. Scroll down to '....'
+                |4. See error
+                |
+                |**Expected behavior**
+                |A clear and concise description of what you expected to happen.
+                |
+                |**Screenshots**
+                |If applicable, add screenshots to help explain your problem.
+                |
+                |
+                |**Smartphone
+                | - Device: ${getDeviceName()}
+                | - OS: ${Build.VERSION.SDK_INT}
+                | - Version ${BuildConfig.VERSION_NAME}
+                |
+                |**Additional context**
+                |
+                """.trimMargin("|") +
+            if (exception != null) {
+                "Stacktrace: \n```java\n${exception.message + "\n    " + exception.stackTrace.joinToString("\n    ")}```\n"
+            } else {
+                "Add any other context about the problem here.\n"
+            }
+
 }

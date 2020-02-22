@@ -21,8 +21,6 @@
     <string name="back_text">Übersetzung:</string>
     <string name="add">Hinzufügen</string>
     <string name="edit_set">Set Bearbeiten</string>
-    <string name="repository">https://github.com/SennaGehenna/Easy_Flashcards</string>
-    <string name="issueTracker">https://github.com/SennaGehenna/Easy_Flashcards/issues/new/choose</string>
     <string name="export_csv">Lokale Sets als CSV exportieren</string>
     <string name="import_csv">Sets aus CSV importieren</string>
     <string name="import_csv_subtitle">Benötigte Felder:\n\nfrontText - Text\nbackText - Text\n\nOptionale Felder:\n\nsetId - Zahl\nsetName - Text\ncardId - Zahl\ncurrentInterval - {STAGE_1, STAGE_2, STAGE_3, STAGE_4, STAGE_5, DONE}\nnextRecheck- Datum_Millisekunden\ncheckCount - Zahl\npositiveCheckCount - Zahl</string>
@@ -58,4 +56,5 @@
     <string name="cardsImported">%d Karten importiert!</string>
     <string name="missingKeysFromImport">Ein Fehler ist während dem Import aufgetreten, die folgenden verpflichtenden Spaltenköpfe wurden nicht gefunden:\n\n%s</string>
     <string name="generalErrorWithMessage">Ups, etwas ist schiefgelaufen! Der folgende Fehler ist aufgetreten: \n\n%s</string>
+    <string name="createIssue">Issue erstellen</string>
 </resources>

@@ -99,7 +99,7 @@ class MoreFragment : BaseFragment() {
                 RQ_EXPORT
             )
         } catch (e: Exception) {
-            context?.showGeneralErrorMessage()
+            context?.showErrorMessage(getString(R.string.generalErrorWithMessage, e.localizedMessage), e, true)
         }
     }
 
@@ -115,7 +115,7 @@ class MoreFragment : BaseFragment() {
             )
 
         } catch (e: java.lang.Exception) {
-            context?.showGeneralErrorMessage()
+            context?.showErrorMessage(getString(R.string.generalErrorWithMessage, e.localizedMessage), e, true)
         }
     }
 
@@ -140,14 +140,18 @@ class MoreFragment : BaseFragment() {
                             showCardsImportedMessage(cardsImported)
                         }
                     } catch (mrkException: MissingRequiredKeysException) {
-                        context?.showErrorMessage(
-                            getString(
-                                R.string.missingKeysFromImport,
-                                mrkException.missingKeys.joinToString(", ")
+                        CoroutineScope(Dispatchers.Main).launch {
+                            context?.showErrorMessage(
+                                getString(
+                                    R.string.missingKeysFromImport,
+                                    mrkException.missingKeys.joinToString(", ")
+                                )
                             )
-                        )
+                        }
                     } catch (e: Exception) {
-                        context?.showErrorMessage(getString(R.string.generalErrorWithMessage, e.localizedMessage))
+                        CoroutineScope(Dispatchers.Main).launch {
+                            context?.showErrorMessage(getString(R.string.generalErrorWithMessage, e.localizedMessage), e, true)
+                        }
                     }
                 }
             }

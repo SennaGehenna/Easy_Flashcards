@@ -67,6 +67,7 @@ class MoreViewModel : BaseViewModel() {
 
         if (columnNames.keys.containsAll(requiredColumns)) {
             csv.drop(1).map { it.split(";") }.forEachIndexed { index, row: List<String> ->
+                //region handle set
                 if (isKeyInCsv(setIdKey)) {
                     if (sets.none { it.id == row[colSetId!!].toInt() }) {
                         val set = Set(row[colSetId!!].toInt(), row[colSetName!!])
@@ -86,6 +87,8 @@ class MoreViewModel : BaseViewModel() {
                         }
                     }
                 }
+                //endregion
+                //region handle card
                 val id: Int = row.getOrNullWithNullableKey(colCardId)?.toInt() ?: index + 1
                 val frontText: String = row[colFrontText]
                 val backText: String = row[colBackText]
@@ -107,12 +110,12 @@ class MoreViewModel : BaseViewModel() {
                     checkCount = checkCount,
                     positiveCheckCount = positiveCheckCount
                 )
-
+                //endregion
             }
-
         } else {
-            val missingKeys = requiredColumns.filterNot { isKeyInCsv(it) }
-            throw MissingRequiredKeysException("Not all required keys supplied. Missing keys", missingKeys)
+            throw MissingRequiredKeysException(
+                "Not all required keys supplied. Missing keys",
+                requiredColumns.filterNot { isKeyInCsv(it) })
         }
 
         return Pair(sets, cards)

@@ -15,9 +15,6 @@ import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.data.Database
 import io.github.tormundsmember.easyflashcards.data.RoomDb
 import io.github.tormundsmember.easyflashcards.data.UserData
-import io.github.tormundsmember.easyflashcards.data.migrations.Migration1_2
-import io.github.tormundsmember.easyflashcards.data.migrations.Migration2_3
-import io.github.tormundsmember.easyflashcards.data.migrations.Migration3_4
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseKey
 import io.github.tormundsmember.easyflashcards.ui.base_ui.FragmentStateChanger

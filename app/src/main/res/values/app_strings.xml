@@ -21,8 +21,6 @@
     <string name="back_text">Translated Text:</string>
     <string name="add">Add</string>
     <string name="edit_set">Edit Set</string>
-    <string name="repository">https://github.com/SennaGehenna/Easy_Flashcards</string>
-    <string name="issueTracker">https://github.com/SennaGehenna/Easy_Flashcards/issues/new/choose</string>
     <string name="enableDarkMode">Enable Dark Mode</string>
     <string name="export_csv">Export local sets as CSV</string>
     <string name="import_csv">Import sets from CSV</string>
@@ -57,4 +55,5 @@
     <string name="cardsImported">%d cards imported!</string>
     <string name="missingKeysFromImport">An error occurred during the import, the following required columnheaders were not supplied:\n\n%s</string>
     <string name="generalErrorWithMessage">Oops, something went wrong! The following error occurred: \n\n%s</string>
+    <string name="createIssue">Create Issue</string>
 </resources>
