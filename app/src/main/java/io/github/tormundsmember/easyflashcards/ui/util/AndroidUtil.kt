@@ -296,7 +296,7 @@ fun getBugTemplate(exception: Exception?): String {
                 |
                 """.trimMargin("|") +
             if (exception != null) {
-                "Stacktrace: \n```java\n${exception.message + "\n    " + exception.stackTrace.joinToString("\n    ")}```\n"
+                "Stacktrace: \n```java\n${"    " + exception.stackTrace.joinToString("\n    ")}```\n"
             } else {
                 "Add any other context about the problem here.\n"
             }

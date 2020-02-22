@@ -150,8 +150,8 @@ class MoreFragment : BaseFragment() {
                             )
                         }
                     } catch (e: Exception) {
-                        hideLoadingSpinner()
                         CoroutineScope(Dispatchers.Main).launch {
+                            hideLoadingSpinner()
                             context?.showErrorMessage(getString(R.string.generalErrorWithMessage, e.localizedMessage), e, true)
                         }
                     }

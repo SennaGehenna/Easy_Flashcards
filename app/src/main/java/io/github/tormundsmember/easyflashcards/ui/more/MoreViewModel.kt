@@ -56,8 +56,8 @@ class MoreViewModel : BaseViewModel() {
         val colSetId = columnNames[setIdKey]
         val colSetName = columnNames[setNameKey]
         val colCardId = columnNames[cardIdKey]
-        val colFrontText = columnNames[frontTextKey]!!
-        val colBackText = columnNames[backTextKey]!!
+        val colFrontText = columnNames[frontTextKey]
+        val colBackText = columnNames[backTextKey]
         val colCurrentInterval = columnNames[currentIntervalKey]
         val colNextRecheck = columnNames[nextRecheckKey]
         val colCheckCount = columnNames[checkCountKey]
@@ -90,8 +90,8 @@ class MoreViewModel : BaseViewModel() {
                 //endregion
                 //region handle card
                 val id: Int = row.getOrNullWithNullableKey(colCardId)?.toInt() ?: index + 1
-                val frontText: String = row[colFrontText]
-                val backText: String = row[colBackText]
+                val frontText: String = row[colFrontText!!]
+                val backText: String = row[colBackText!!]
                 val currentInterval = row.getOrNullWithNullableKey(colCurrentInterval)?.let {
                     RehearsalInterval.valueOf(it)
                 } ?: RehearsalInterval.STAGE_1
