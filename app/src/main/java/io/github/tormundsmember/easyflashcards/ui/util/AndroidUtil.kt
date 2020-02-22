@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
+import java.util.concurrent.TimeUnit
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -147,7 +149,15 @@ fun openUrlInCustomTabs(context: Context, data: Uri) {
 }
 
 fun Context.showGeneralErrorMessage() {
-    Toast.makeText(this, R.string.generalError, Toast.LENGTH_SHORT).show()
+    showErrorMessage(R.string.generalError)
+}
+
+fun Context.showErrorMessage(@StringRes stringRes: Int) {
+    showErrorMessage(getString(stringRes))
+}
+
+fun Context.showErrorMessage(string: String) {
+    Toast.makeText(this, string, Toast.LENGTH_SHORT).show()
 }
 
 
@@ -232,4 +242,8 @@ fun View.width(function: (Int) -> Boolean) {
             }
         })
     else function(width)
+}
+
+fun getStartOfDay(timestamp: Long = System.currentTimeMillis()) = TimeUnit.MILLISECONDS.toDays(timestamp).let { asDay ->
+    TimeUnit.DAYS.toMillis(asDay)
 }

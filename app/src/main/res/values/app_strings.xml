@@ -26,7 +26,7 @@
     <string name="enableDarkMode">Enable Dark Mode</string>
     <string name="export_csv">Export local sets as CSV</string>
     <string name="import_csv">Import sets from CSV</string>
-    <string name="import_csv_subtitle">Required fields:\n\nfrontText\nbackText\n\nOptional fields: \n\nsetId\nsetName\ncardId\ncurrentInterval\nnextRecheck\ncheckCount\npositiveCheckCount</string>
+    <string name="import_csv_subtitle">Required fields:\n\nfrontText - Text\nbackText - Text\n\nOptional fields: \n\nsetId - Number\nsetName - Text\ncardId - Number\ncurrentInterval - {STAGE_1, STAGE_2, STAGE_3, STAGE_4, STAGE_5, DONE}\nnextRecheck - Date_Milliseconds\ncheckCount - Number\npositiveCheckCount - Number</string>
     <string name="licenses">Licenses</string>
     <string name="sourceCodeOnGithub">Sourcecode on Github</string>
     <string name="openAnIssue">Feedback?\n\nOpen an issue on my github page.</string>
@@ -55,4 +55,6 @@
     <string name="dontRehearseLearnedTerms">Do not rehearse terms that you have already remembered</string>
     <string name="dontRehearseLearnedTermsExplanation">Terms that have been correctly rehearsed often enough will no longer show up.</string>
     <string name="cardsImported">%d cards imported!</string>
+    <string name="missingKeysFromImport">An error occurred during the import, the following required columnheaders were not supplied:\n\n%s</string>
+    <string name="generalErrorWithMessage">Oops, something went wrong! The following error occurred: \n\n%s</string>
 </resources>
