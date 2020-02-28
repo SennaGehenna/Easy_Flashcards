@@ -56,4 +56,5 @@
     <string name="missingKeysFromImport">An error occurred during the import, the following required columnheaders were not supplied:\n\n%s</string>
     <string name="generalErrorWithMessage">Oops, something went wrong! The following error occurred: \n\n%s</string>
     <string name="createIssue">Create Issue</string>
+    <string name="delete_card">Delete Card</string>
 </resources>
