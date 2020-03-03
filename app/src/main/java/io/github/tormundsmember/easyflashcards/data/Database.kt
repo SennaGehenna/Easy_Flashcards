@@ -12,7 +12,7 @@ interface Database {
     @Query("select coalesce(max(id),0)+1 from `set`")
     fun getHighestSetId(): Int
 
-    @Query("select coalesce(max(id),0)+1 from card where setId = :setId")
+    @Query("select coalesce(max(id),0)+1 from card")
     fun getHighestCardIdForSet(setId: Int): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
