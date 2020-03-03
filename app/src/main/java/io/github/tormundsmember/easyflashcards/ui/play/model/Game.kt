@@ -9,6 +9,7 @@ import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
 import io.github.tormundsmember.easyflashcards.ui.util.getStartOfDay
 import io.github.tormundsmember.easyflashcards.ui.util.plusAssign
+import java.util.concurrent.TimeUnit
 
 class Game(
     private val cards: MutableList<FlippableCard>,
@@ -76,7 +77,7 @@ class Game(
                     nextInterval = RehearsalInterval.STAGE_1
                     positiveCheckCount = card.positiveCheckCount
                 }
-                nextRecheck = getStartOfDay() + nextInterval.getInterval().toLong()
+                nextRecheck = getStartOfDay() + TimeUnit.DAYS.toMillis(nextInterval.getInterval().toLong())
             } else {
                 nextInterval = card.currentInterval
                 positiveCheckCount = card.positiveCheckCount + if (correctGuess) 1 else 0
