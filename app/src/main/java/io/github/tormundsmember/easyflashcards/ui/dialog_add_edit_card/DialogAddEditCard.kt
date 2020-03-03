@@ -95,7 +95,7 @@ class DialogAddEditCard private constructor(
     private fun saveCard(originalTerm: String, revealedTerm: String) {
         if (originalTerm.isNotEmptyOrBlank() && revealedTerm.isNotEmptyOrBlank()) {
             val card = card?.copy(frontText = originalTerm, backText = revealedTerm) ?: Card(
-                id = Dependencies.database.getHighestCardIdForSet(setId),
+                id = Dependencies.database.getHighestCardIdForSet(),
                 frontText = originalTerm,
                 backText = revealedTerm,
                 currentInterval = RehearsalInterval.STAGE_1,
