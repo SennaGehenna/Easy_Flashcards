@@ -135,6 +135,7 @@
             android:layout_marginEnd="@dimen/big_margin">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/lblCardLimit"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
