@@ -9,19 +9,20 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.uiautomator.UiDevice
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.MainActivity
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
+import io.mockk.every
+import org.junit.After
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-
 
 @RunWith(AndroidJUnit4::class)
 class SetOverviewTest {
@@ -30,8 +31,17 @@ class SetOverviewTest {
     var activityActivityTestRule: ActivityTestRule<MainActivity> = ActivityTestRule<MainActivity>(MainActivity::class.java)
 
     @Before
-    fun setup() {
-        with(Dependencies.database) {
+    fun setUp() {
+        with(Dependencies.database){
+            getSets().forEach {
+                deleteSet(it)
+            }
+        }
+    }
+
+    @After
+    fun tearDown() {
+        with(Dependencies.database){
             getSets().forEach {
                 deleteSet(it)
             }
@@ -41,6 +51,8 @@ class SetOverviewTest {
     @Test
     fun shouldAddSet() {
 
+        setupTutorials()
+
         val text = "TestSet 1"
 
         addSet(text)
@@ -48,11 +60,15 @@ class SetOverviewTest {
         assertTrue(Dependencies.database.getSets().any { it.name == text })
     }
 
+    @LargeTest
     @Test
     fun shouldAddCardToSet() {
+        setupTutorials()
+
         val text = "TestSet 1"
         val frontText = "FrontText"
         val backText = "BackText"
+
 
         addSet(text)
         addCard(frontText, backText)
@@ -61,15 +77,20 @@ class SetOverviewTest {
             val firstOrNull = getSets().firstOrNull { it.name == text }
             assertTrue(firstOrNull != null && firstOrNull.name == text)
             require(firstOrNull != null)
-            getCardsBySetId(firstOrNull.id).first().let {
+            val cardsBySetId = getCardsBySetId(firstOrNull.id)
+            assertNotEquals(0, cardsBySetId.size)
+            cardsBySetId.first().let {
                 assertEquals(frontText, it.frontText)
                 assertEquals(backText, it.backText)
             }
         }
     }
 
+    @LargeTest
     @Test
     fun shouldAddTwoSetsAndOneCardEach() {
+        setupTutorials()
+
         val set1 = "TestSet 1"
         val set2 = "TestSet 2"
         val frontText1 = "FrontText 1"
@@ -87,7 +108,9 @@ class SetOverviewTest {
             val set1FromDb = getSets().firstOrNull { it.name == set1 }
             assertTrue(set1FromDb != null && set1FromDb.name == set1)
             require(set1FromDb != null)
-            getCardsBySetId(set1FromDb.id).first().let {
+            val cardsBySetId = getCardsBySetId(set1FromDb.id)
+            assertNotEquals(0, cardsBySetId.size)
+            cardsBySetId.first().let {
                 assertEquals(frontText1, it.frontText)
                 assertEquals(backText1, it.backText)
             }
@@ -96,7 +119,9 @@ class SetOverviewTest {
             val set2FromDb = getSets().firstOrNull { it.name == set2 }
             assertTrue(set2FromDb != null && set2FromDb.name == set2)
             require(set2FromDb != null)
-            getCardsBySetId(set2FromDb.id).first().let {
+            val cardsBySetId = getCardsBySetId(set2FromDb.id)
+            assertNotEquals(0, cardsBySetId.size)
+            cardsBySetId.first().let {
                 assertEquals(frontText2, it.frontText)
                 assertEquals(backText2, it.backText)
             }
@@ -159,5 +184,20 @@ class SetOverviewTest {
         private fun getViewAssertion(visibility: ViewMatchers.Visibility): ViewAssertion? {
             return ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(visibility))
         }
+
+
+        fun setupTutorials(
+            hasSeenSetOverviewTutorial: Boolean = true,
+            hasSeenSetOverviewTutorialWithExistingItems: Boolean = true,
+            hasSeenSetsTutorial: Boolean = true,
+            hasSeenSetsTutorialWithExistingItems: Boolean = true
+        ) {
+            every { Dependencies.userData.hasSeenSetOverviewTutorial } returns hasSeenSetOverviewTutorial
+            every { Dependencies.userData.hasSeenSetOverviewTutorialWithExistingItems } returns hasSeenSetOverviewTutorialWithExistingItems
+            every { Dependencies.userData.hasSeenSetsTutorial } returns hasSeenSetsTutorial
+            every { Dependencies.userData.hasSeenSetsTutorialWithExistingItems } returns hasSeenSetsTutorialWithExistingItems
+        }
     }
+
+
 }

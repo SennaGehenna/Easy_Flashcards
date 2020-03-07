@@ -2,6 +2,7 @@ package io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_card
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -9,6 +10,7 @@ import android.view.inputmethod.EditorInfo.IME_ACTION_NEXT
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.widget.addTextChangedListener
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.dialog_delete_card.DialogDeleteCard
@@ -19,7 +21,7 @@ import io.github.tormundsmember.easyflashcards.ui.util.*
 class DialogAddEditCard private constructor(
     private val dialog: AlertDialog,
     private val setId: Int,
-    private val viewHolder: ViewHolder,
+    private var viewHolder: ViewHolder?,
     private val card: Card?,
     private val onCardAdded: Action
 ) {
@@ -40,18 +42,34 @@ class DialogAddEditCard private constructor(
                 setId = setId,
                 viewHolder = ViewHolder(view),
                 card = card,
-                onCardAdded= onCardAdded
+                onCardAdded = onCardAdded
             ).also {
                 dialog.show()
             }
         }
     }
 
+    private var textWatcherFrontText: TextWatcher? = null
+    private var textWatcherBackText: TextWatcher? = null
+
     init {
-        with(viewHolder) {
+        with(viewHolder!!) {
             val card = card
             txtOriginalTerm.setText(card?.frontText)
             txtRevealedTerm.setText(card?.backText)
+
+            textWatcherFrontText = txtOriginalTerm.addTextChangedListener {
+                btnSaveTerm.isEnabled =
+                    !(txtOriginalTerm.text?.trim().isNullOrEmpty() || txtRevealedTerm.text?.trim().isNullOrEmpty())
+            }
+            textWatcherBackText = txtRevealedTerm.addTextChangedListener {
+                btnSaveTerm.isEnabled =
+                    !(txtOriginalTerm.text?.trim().isNullOrEmpty() || txtRevealedTerm.text?.trim().isNullOrEmpty())
+            }
+
+            btnSaveTerm.isEnabled =
+                !(txtOriginalTerm.text?.trim().isNullOrEmpty() || txtRevealedTerm.text?.trim().isNullOrEmpty())
+
 
             txtOriginalTerm.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == IME_ACTION_NEXT)
@@ -89,6 +107,13 @@ class DialogAddEditCard private constructor(
     }
 
     private fun dismiss() {
+        viewHolder?.run {
+            textWatcherFrontText?.let { txtOriginalTerm.removeTextChangedListener(it) }
+            textWatcherBackText?.let { txtRevealedTerm.removeTextChangedListener(it) }
+        }
+        viewHolder = null
+        textWatcherFrontText = null
+        textWatcherBackText = null
         dialog.dismiss()
     }
 

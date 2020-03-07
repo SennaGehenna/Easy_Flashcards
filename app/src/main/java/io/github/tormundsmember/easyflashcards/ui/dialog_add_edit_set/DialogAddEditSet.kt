@@ -2,12 +2,14 @@ package io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_set
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.widget.addTextChangedListener
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.dialog_delete_set.DialogDeleteSet
@@ -19,7 +21,7 @@ import io.github.tormundsmember.easyflashcards.ui.util.visible
 
 class DialogAddEditSet private constructor(
     private val dialog: AlertDialog,
-    viewHolder: ViewHolder,
+    private var viewHolder: ViewHolder?,
     private val set: Set?,
     private val onDeleted: Action,
     private val onSetAdded: (Int) -> Unit
@@ -48,10 +50,13 @@ class DialogAddEditSet private constructor(
         }
     }
 
+    private var txtListener: TextWatcher? = null
+
     init {
-        with(viewHolder) {
+        viewHolder?.run {
             val set = set
             txtOriginalTerm.setText(set?.name ?: "")
+            btnSaveTerm.isEnabled = !set?.name?.trim().isNullOrEmpty()
 
             btnSaveTerm.setOnClickListener {
                 addOrSaveTerm(txtOriginalTerm.text.toString())
@@ -78,10 +83,18 @@ class DialogAddEditSet private constructor(
             } else {
                 btnDelete.gone()
             }
+            txtListener = txtOriginalTerm.addTextChangedListener(onTextChanged = { text, _, _, _ ->
+                btnSaveTerm.isEnabled = !text?.trim().isNullOrEmpty()
+            })
         }
     }
 
     private fun dismiss() {
+        txtListener?.let {
+            viewHolder?.txtOriginalTerm?.removeTextChangedListener(txtListener)
+        }
+        viewHolder = null
+        txtListener = null
         dialog.dismiss()
     }
 

@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        initDependencies()
         setDarkMode()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -176,21 +175,5 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
                         }
                     })
         }
-    }
-
-    private fun initDependencies() {
-        Dependencies.init(object : MainModule {
-            private val roomDb: RoomDb by lazy {
-                Room.databaseBuilder(applicationContext, RoomDb::class.java, "flashcards_db")
-                    .addMigrations(
-                        *RoomDb.getMigrations()
-                    )
-                    .allowMainThreadQueries()
-                    .build()
-
-            }
-            override val database: Database by factory { roomDb.getDao() }
-            override val userData: UserData by factory { UserData(applicationContext) }
-        })
     }
 }
