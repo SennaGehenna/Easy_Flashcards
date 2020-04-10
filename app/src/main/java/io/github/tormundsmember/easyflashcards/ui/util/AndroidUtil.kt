@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.tormundsmember.easyflashcards.BuildConfig
 import io.github.tormundsmember.easyflashcards.R
-import io.github.tormundsmember.easyflashcards.ui.base_ui.AnimationListener
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 import kotlin.properties.ReadOnlyProperty
@@ -225,7 +224,7 @@ fun ViewPropertyAnimator.setListener(
     onAnimationStart: Action = {},
     onAnimationEnd: Action = {}
 
-): ViewPropertyAnimator = setListener(object : AnimationListener() {
+): ViewPropertyAnimator = setListener(object : Animator.AnimatorListener {
     override fun onAnimationRepeat(animation: Animator?) {
         onAnimationRepeat()
     }

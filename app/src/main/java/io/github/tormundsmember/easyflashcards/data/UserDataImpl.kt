@@ -26,27 +26,27 @@ class UserDataImpl(private val context: Context) : UserData {
         get() = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE)
 
 
-    override var hasSeenSetsTutorial: Boolean by sharedPrefBoolean(HAS_SEEN_TUTORIAL)
+    override var hasSeenSetsTutorial: Boolean by SharedPrefBoolean(HAS_SEEN_TUTORIAL)
 
-    override var hasSeenSetsTutorialWithExistingItems: Boolean by sharedPrefBoolean(HAS_SEEN_TUTORIAL_WITH_EXISTING_ITEMS)
+    override var hasSeenSetsTutorialWithExistingItems: Boolean by SharedPrefBoolean(HAS_SEEN_TUTORIAL_WITH_EXISTING_ITEMS)
 
-    override var hasSeenSetOverviewTutorial: Boolean by sharedPrefBoolean(HAS_SEEN_OVERVIEW_TUTORIAL)
+    override var hasSeenSetOverviewTutorial: Boolean by SharedPrefBoolean(HAS_SEEN_OVERVIEW_TUTORIAL)
 
-    override var hasSeenSetOverviewTutorialWithExistingItems: Boolean by sharedPrefBoolean(HAS_SEEN_OVERVIEW_TUTORIAL_WITH_EXISTING_ITEMS)
+    override var hasSeenSetOverviewTutorialWithExistingItems: Boolean by SharedPrefBoolean(HAS_SEEN_OVERVIEW_TUTORIAL_WITH_EXISTING_ITEMS)
 
-    override var useDarkMode: Boolean by sharedPrefBoolean(USE_DARKMODE)
+    override var useDarkMode: Boolean by SharedPrefBoolean(USE_DARKMODE)
 
-    override var useSpacedRepetition: Boolean by sharedPrefBoolean(USE_SPACED_REPETITION)
+    override var useSpacedRepetition: Boolean by SharedPrefBoolean(USE_SPACED_REPETITION)
 
-    override var allowCrashReporting: Boolean by sharedPrefBoolean(ALLOW_CRASHREPORTING)
+    override var allowCrashReporting: Boolean by SharedPrefBoolean(ALLOW_CRASHREPORTING)
 
-    override var limitCards: Boolean by sharedPrefBoolean(LIMIT_CARDS)
+    override var limitCards: Boolean by SharedPrefBoolean(LIMIT_CARDS)
 
-    override var limitCardsAmount: Int by sharedPrefInt(LIMIT_CARDS_AMOUNT)
+    override var limitCardsAmount: Int by SharedPrefInt(LIMIT_CARDS_AMOUNT)
 
-    override var doNotShowLearnedCards: Boolean by sharedPrefBoolean(DO_NOT_SHOW_LEARNED_CARDS)
+    override var doNotShowLearnedCards: Boolean by SharedPrefBoolean(DO_NOT_SHOW_LEARNED_CARDS)
 
-    private inner class sharedPrefBoolean(val key: String, val defaultValue: Boolean = false) : ReadWriteProperty<Any?, Boolean> {
+    private inner class SharedPrefBoolean(val key: String, val defaultValue: Boolean = false) : ReadWriteProperty<Any?, Boolean> {
         override fun getValue(thisRef: Any?, property: KProperty<*>): Boolean {
             return sharedPrefs.getBoolean(key, defaultValue)
         }
@@ -59,7 +59,7 @@ class UserDataImpl(private val context: Context) : UserData {
 
     }
 
-    private inner class sharedPrefInt(val key: String) : ReadWriteProperty<Any?, Int> {
+    private inner class SharedPrefInt(val key: String) : ReadWriteProperty<Any?, Int> {
         override fun getValue(thisRef: Any?, property: KProperty<*>): Int {
             return sharedPrefs.getInt(key, -1)
         }
