@@ -15,6 +15,7 @@ class UserDataImpl(private val context: Context) : UserData {
         const val HAS_SEEN_OVERVIEW_TUTORIAL = "HAS_SEEN_OVERVIEW_TUTORIAL"
         const val HAS_SEEN_OVERVIEW_TUTORIAL_WITH_EXISTING_ITEMS = "HAS_SEEN_OVERVIEW_TUTORIAL_WITH_EXISTING_ITEMS"
         const val USE_DARKMODE = "USE_DARKMODE"
+        const val CURRENT_DARKMODE_SETTING = "CURRENT_DARKMODE_SETTING"
         const val USE_SPACED_REPETITION = "USE_SPACED_REPETITION"
         const val DO_NOT_SHOW_LEARNED_CARDS = "DO_NOT_SHOW_LEARNED_CARDS"
         const val ALLOW_CRASHREPORTING = "ALLOW_CRASHREPORTING"
@@ -32,9 +33,16 @@ class UserDataImpl(private val context: Context) : UserData {
 
     override var hasSeenSetOverviewTutorial: Boolean by SharedPrefBoolean(HAS_SEEN_OVERVIEW_TUTORIAL)
 
-    override var hasSeenSetOverviewTutorialWithExistingItems: Boolean by SharedPrefBoolean(HAS_SEEN_OVERVIEW_TUTORIAL_WITH_EXISTING_ITEMS)
+    override var hasSeenSetOverviewTutorialWithExistingItems: Boolean by SharedPrefBoolean(
+        HAS_SEEN_OVERVIEW_TUTORIAL_WITH_EXISTING_ITEMS
+    )
 
     override var useDarkMode: Boolean by SharedPrefBoolean(USE_DARKMODE)
+
+    override var currentDarkModeSetting: Int by SharedPrefInt(CURRENT_DARKMODE_SETTING)
+
+    override val hasOldDarkModeSetting: Boolean
+        get() = sharedPrefs.contains(USE_DARKMODE)
 
     override var useSpacedRepetition: Boolean by SharedPrefBoolean(USE_SPACED_REPETITION)
 
@@ -45,6 +53,12 @@ class UserDataImpl(private val context: Context) : UserData {
     override var limitCardsAmount: Int by SharedPrefInt(LIMIT_CARDS_AMOUNT)
 
     override var doNotShowLearnedCards: Boolean by SharedPrefBoolean(DO_NOT_SHOW_LEARNED_CARDS)
+
+    override fun removeOldDarkModeSetting() {
+        sharedPrefs.edit {
+            remove(USE_DARKMODE)
+        }
+    }
 
     private inner class SharedPrefBoolean(val key: String, val defaultValue: Boolean = false) : ReadWriteProperty<Any?, Boolean> {
         override fun getValue(thisRef: Any?, property: KProperty<*>): Boolean {

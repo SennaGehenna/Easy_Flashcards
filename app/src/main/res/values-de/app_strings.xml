@@ -47,7 +47,7 @@
     <string name="duplicateFinder">Duplikatfinder</string>
     <string name="debugSettings">Debug Einstellungen</string>
     <string name="confirmDeleteSet">Willst du dieses Set wirklich löschen?</string>
-    <string name="enableDarkMode">Dark Mode aktivieren</string>
+    <string name="darkmodeSetting">Dark-Mode Einstellung:</string>
     <string name="useCardLimit">Pro Sitzung zu wiederholende Karten einschränken</string>
     <string name="delete_card">Karte Löschen</string>
     <string name="delete_set_warning">Achtung!\n\nWenn du dieses Set löschst, löschst du auch alle Karten darin!</string>
@@ -57,4 +57,7 @@
     <string name="missingKeysFromImport">Ein Fehler ist während dem Import aufgetreten, die folgenden verpflichtenden Spaltenköpfe wurden nicht gefunden:\n\n%s</string>
     <string name="generalErrorWithMessage">Ups, etwas ist schiefgelaufen! Der folgende Fehler ist aufgetreten: \n\n%s</string>
     <string name="createIssue">Issue erstellen</string>
+    <string name="darkMode_system">System-Einstellung verwenden</string>
+    <string name="darkMode_Day">Immer Hell</string>
+    <string name="darkMode_Night">Immer Dunkel</string>
 </resources>

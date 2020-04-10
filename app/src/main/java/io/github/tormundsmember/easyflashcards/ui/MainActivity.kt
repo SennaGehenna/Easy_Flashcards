@@ -1,20 +1,17 @@
 package io.github.tormundsmember.easyflashcards.ui
 
+import android.media.AudioManager
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.room.Room
 import com.zhuinden.simplestack.Backstack
 import com.zhuinden.simplestack.History
 import com.zhuinden.simplestack.SimpleStateChanger
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.navigator.Navigator
 import io.github.tormundsmember.easyflashcards.R
-import io.github.tormundsmember.easyflashcards.data.Database
-import io.github.tormundsmember.easyflashcards.data.RoomDb
-import io.github.tormundsmember.easyflashcards.data.UserData
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseKey
 import io.github.tormundsmember.easyflashcards.ui.base_ui.FragmentStateChanger
@@ -63,10 +60,23 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
     }
 
     fun setDarkMode() {
-        if (Dependencies.userData.useDarkMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        with(Dependencies.userData) {
+            if (hasOldDarkModeSetting) {
+                currentDarkModeSetting = if (useDarkMode) {
+                    AppCompatDelegate.MODE_NIGHT_YES
+                } else {
+                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                }
+                removeOldDarkModeSetting()
+            }
+            if(!listOf(
+                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+                AppCompatDelegate.MODE_NIGHT_YES,
+                AppCompatDelegate.MODE_NIGHT_NO
+            ).contains(currentDarkModeSetting)){
+                currentDarkModeSetting = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+            }
+            AppCompatDelegate.setDefaultNightMode(currentDarkModeSetting)
         }
     }
 

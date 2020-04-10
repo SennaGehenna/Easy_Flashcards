@@ -21,7 +21,7 @@
     <string name="back_text">Translated Text:</string>
     <string name="add">Add</string>
     <string name="edit_set">Edit Set</string>
-    <string name="enableDarkMode">Enable Dark Mode</string>
+    <string name="darkmodeSetting">Dark Mode settings:</string>
     <string name="export_csv">Export local sets as CSV</string>
     <string name="import_csv">Import sets from CSV</string>
     <string name="import_csv_subtitle">Required fields:\n\nfrontText - Text\nbackText - Text\n\nOptional fields: \n\nsetId - Number\nsetName - Text\ncardId - Number\ncurrentInterval - {STAGE_1, STAGE_2, STAGE_3, STAGE_4, STAGE_5, DONE}\nnextRecheck - Date_Milliseconds\ncheckCount - Number\npositiveCheckCount - Number</string>
@@ -57,4 +57,7 @@
     <string name="generalErrorWithMessage">Oops, something went wrong! The following error occurred: \n\n%s</string>
     <string name="createIssue">Create Issue</string>
     <string name="delete_card">Delete Card</string>
+    <string name="darkMode_system">Use System-Settings</string>
+    <string name="darkMode_Day">Always Light</string>
+    <string name="darkMode_Night">Always Dark</string>
 </resources>
