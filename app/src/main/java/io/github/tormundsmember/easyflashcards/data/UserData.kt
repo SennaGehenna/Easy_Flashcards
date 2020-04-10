@@ -11,7 +11,11 @@ interface UserData {
 
     var hasSeenSetOverviewTutorialWithExistingItems: Boolean 
 
-    var useDarkMode: Boolean 
+    var useDarkMode: Boolean
+
+    var currentDarkModeSetting: Int
+
+    val hasOldDarkModeSetting: Boolean
 
     var useSpacedRepetition: Boolean 
 
@@ -22,5 +26,6 @@ interface UserData {
     var limitCardsAmount: Int
 
     var doNotShowLearnedCards: Boolean 
-    
+
+    fun removeOldDarkModeSetting()
 }

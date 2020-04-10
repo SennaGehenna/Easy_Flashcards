@@ -3,9 +3,10 @@ package io.github.tormundsmember.easyflashcards.ui.settings
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Switch
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.appcompat.widget.AppCompatTextView
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.databinding.ScreenSettingsBinding
 import io.github.tormundsmember.easyflashcards.ui.BuildVariant
@@ -43,10 +44,38 @@ class SettingsFragment : BaseFragment() {
                 Dependencies.userData.allowCrashReporting = isChecked
             }
 
-            switchDarkMode.isChecked = Dependencies.userData.useDarkMode
-            switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
-                Dependencies.userData.useDarkMode = isChecked
-                (activity as MainActivity?)?.setDarkMode()
+            val adapterItems = listOf(
+                R.string.darkMode_system,
+                R.string.darkMode_Day,
+                R.string.darkMode_Night
+            ).map {
+                getString(it)
+            }
+
+            spinnerDarkMode.adapter = ArrayAdapter(view.context, android.R.layout.simple_list_item_1, adapterItems)
+            spinnerDarkMode.setSelection(
+                when (Dependencies.userData.currentDarkModeSetting) {
+                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM -> 0
+                    AppCompatDelegate.MODE_NIGHT_NO -> 1
+                    AppCompatDelegate.MODE_NIGHT_YES -> 2
+                    else -> 2
+                }
+            )
+
+            spinnerDarkMode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    Dependencies.userData.currentDarkModeSetting = when (position) {
+                        0 -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                        1 -> AppCompatDelegate.MODE_NIGHT_NO
+                        else -> AppCompatDelegate.MODE_NIGHT_YES
+                    }
+                    (activity as? MainActivity)?.setDarkMode()
+                }
+
             }
 
             with(Dependencies.userData.useSpacedRepetition) {
