@@ -81,7 +81,7 @@ open class SetFragment : BaseFragment() {
                     onAddButtonClick = {
                         txtNoItems.animateVisible()
                         userData.hasSeenSetOverviewTutorial = true
-                        showCardAddEditDialog(ctx,null)
+                        showCardAddEditDialog(ctx, null)
                     },
                     onCancel = {
                         userData.hasSeenSetOverviewTutorial = true
@@ -257,7 +257,7 @@ open class SetFragment : BaseFragment() {
         }
     }
 
-    protected class MyAdapter(onClick: (Card) -> Unit, onSomethingSelected: ((Boolean) -> Unit)) :
+    protected class MyAdapter(onClick: Click<Card>, onSomethingSelected: ((Boolean) -> Unit)) :
         BaseAdapter<Card>(onClick = onClick, onSomethingSelected = onSomethingSelected) {
         override fun getItemLayoutId(viewType: Int): Int = R.layout.listitem_card
 

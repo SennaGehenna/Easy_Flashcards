@@ -5,8 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import io.github.tormundsmember.easyflashcards.R
+import io.github.tormundsmember.easyflashcards.ui.util.Click
 
-abstract class BaseAdapter<T>(val onSomethingSelected: ((Boolean) -> Unit) = {}, val onClick: (T) -> Unit = {}) :
+abstract class BaseAdapter<T>(val onSomethingSelected: ((Boolean) -> Unit) = {}, val onClick: Click<T> = {}) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var items: List<T> = emptyList()

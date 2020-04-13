@@ -46,7 +46,10 @@ class SetOverviewFragment : BaseFragment() {
         }
     }
 
-    private val viewModel: SetOverviewViewModel by lazy { getViewModel<SetOverviewViewModel>() }
+    private val viewModel: SetOverviewViewModel by lazy {
+        @Suppress("RemoveExplicitTypeArguments") //doesn't compile otherwise
+        getViewModel<SetOverviewViewModel>()
+    }
 
     private var tutorialStep: TutorialStep = TutorialStep.SHOW_MULTISELECT
 
@@ -71,19 +74,19 @@ class SetOverviewFragment : BaseFragment() {
         }
 
         with(view) {
-            card = by(R.id.card)
-            txtNoItems = by(R.id.txtNoItems)
-            vTutorialBack = by(R.id.vTutorialBack)
-            txtTutorialPlay = by(R.id.txtTutorialPlay)
-            txtTutorialPlayInverse = by(R.id.txtTutorialPlayInverse)
-            txtTutorialOk = by(R.id.txtTutorialOk)
-            btnPlay = by(R.id.btnPlay)
-            btnPlayInverse = by(R.id.btnPlayInverse)
-            txtTutorialSelect = by(R.id.txtTutorialSelect)
-            itemRoot = by(R.id.itemRoot)
-            viewSelected = by(R.id.viewSelected)
-            card = by(R.id.card)
-            txtSetName = by(R.id.txtSetName)
+            card = findViewById(R.id.card)
+            txtNoItems = findViewById(R.id.txtNoItems)
+            vTutorialBack = findViewById(R.id.vTutorialBack)
+            txtTutorialPlay = findViewById(R.id.txtTutorialPlay)
+            txtTutorialPlayInverse = findViewById(R.id.txtTutorialPlayInverse)
+            txtTutorialOk = findViewById(R.id.txtTutorialOk)
+            btnPlay = findViewById(R.id.btnPlay)
+            btnPlayInverse = findViewById(R.id.btnPlayInverse)
+            txtTutorialSelect = findViewById(R.id.txtTutorialSelect)
+            itemRoot = findViewById(R.id.itemRoot)
+            viewSelected = findViewById(R.id.viewSelected)
+            card = findViewById(R.id.card)
+            txtSetName = findViewById(R.id.txtSetName)
         }
 
         viewModel.sets.observe {
@@ -413,7 +416,7 @@ class SetOverviewFragment : BaseFragment() {
         adapter.deactiveAllItems()
     }
 
-    private class Adapter(onSomethingSelected: (Boolean) -> Unit, onClick: (Set) -> Unit) :
+    private class Adapter(onSomethingSelected: (Boolean) -> Unit, onClick: Click<Set>) :
         BaseAdapter<Set>(onSomethingSelected = onSomethingSelected, onClick = onClick) {
 
         fun selectFirst() {

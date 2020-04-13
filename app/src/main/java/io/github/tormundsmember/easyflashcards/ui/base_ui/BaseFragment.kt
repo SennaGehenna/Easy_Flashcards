@@ -33,6 +33,10 @@ abstract class BaseFragment : Fragment() {
         activity?.title = titleText
     }
 
+    @Deprecated(
+        "use findViewById instead",
+        ReplaceWith("this.findViewById(id)")
+    )
     fun <V:View> View.by(@IdRes id: Int) : V = findViewById(id)
 
     fun <T> LiveData<T>.observe(action: (T?) -> Unit) {
