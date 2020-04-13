@@ -8,10 +8,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.text.Editable
 import android.text.Html
 import android.text.SpannableStringBuilder
-import android.text.TextWatcher
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
 import android.view.View
@@ -303,3 +301,5 @@ fun getBugTemplate(exception: Exception?): String {
             }
 
 }
+
+typealias Click<T> = (T) -> Unit

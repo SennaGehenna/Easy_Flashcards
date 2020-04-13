@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -33,11 +32,6 @@ abstract class BaseFragment : Fragment() {
         activity?.title = titleText
     }
 
-    @Deprecated(
-        "use findViewById instead",
-        ReplaceWith("this.findViewById(id)")
-    )
-    fun <V:View> View.by(@IdRes id: Int) : V = findViewById(id)
 
     fun <T> LiveData<T>.observe(action: (T?) -> Unit) {
         observe(viewLifecycleOwner, Observer { action(it) })
