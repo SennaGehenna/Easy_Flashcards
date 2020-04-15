@@ -20,4 +20,11 @@ jobs:
     - name: add permission
       run: chmod +x gradlew  
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew assembleRelease
+    - name: Upload artifact
+    uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+      name: app-release.apk 
+      # Directory containing files to upload
+      path: ../../app/release
