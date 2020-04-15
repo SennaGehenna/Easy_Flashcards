@@ -21,5 +21,5 @@ jobs:
       run: chmod +x gradlew  
     - name: Build with Gradle and run unit tests
       run: ./gradlew build
-    - name: Android Emulator
-      uses: vgaidarji/android-github-actions-emulator@v1.0.1
+#     - name: Android Emulator # this doesn't work at the moment
+#       uses: vgaidarji/android-github-actions-emulator@v1.0.1
