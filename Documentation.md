@@ -48,4 +48,4 @@ When the user opens the screen when there is more than one set and hasn't seen t
 
 #### The User has opened this dialog by clicking the 'Add'-Button in the SetOverview
 
-The dialog opens, they keyboard is visible and the cursor is placed in the 
+The dialog opens, they keyboard is visible and the cursor is placed in the first edit-text.
