@@ -5,60 +5,64 @@ import androidx.room.*
 import io.github.tormundsmember.easyflashcards.ui.more.model.CardWithSetData
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
 import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
+import java.util.*
 
 @Dao
-interface Database {
+abstract class Database {
 
     @Query("select coalesce(max(id),0)+1 from `set`")
-    fun getHighestSetId(): Int
+    abstract fun getHighestSetId(): Int
 
     @Query("select coalesce(max(id),0)+1 from card")
-    fun getHighestCardIdForSet(): Int
+    abstract fun getHighestCardIdForSet(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addSet(set: Set)
+    abstract fun addSet(set: Set)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addSets(set: List<Set>)
+    abstract fun addSets(set: List<Set>)
 
     @Update
-    fun updateSet(set: Set)
+    abstract fun updateSet(set: Set)
 
     @Query("select * from `set`")
-    fun getSets(): List<Set>
+    abstract fun getSets(): List<Set>
 
     @Query("select s.id as setId,s.name,c.id as cardId, c.frontText, c.backText, c.currentInterval, c.nextRecheck, c.checkCount, c.positiveCheckCount from card c join `set` s on c.setId = s.id")
-    fun getCardsWithSetNames(): List<CardWithSetData>
+    abstract fun getCardsWithSetNames(): List<CardWithSetData>
 
     @Query("select * from `set`")
-    fun observeSets(): LiveData<List<Set>>
+    abstract fun observeSets(): LiveData<List<Set>>
 
     @Query("select * from card where setId = :setId")
-    fun observeSet(setId: Int): LiveData<List<Card>>
+    abstract fun observeSet(setId: Int): LiveData<List<Card>>
 
     @Query("select * from card where setId = :id")
-    fun getCardsBySetId(id: Int): List<Card>
+    abstract fun getCardsBySetId(id: Int): List<Card>
 
     @Query("select * from card where setId in (:ids)")
-    fun getCardsByMultipleSetIds(ids: List<Int>): List<Card>
+    abstract fun getCardsByMultipleSetIds(ids: List<Int>): List<Card>
 
     @Query("select * from card where setId in (:ids) and card.nextRecheck <= :currentTime")
-    fun getCardsByMultipleSetIdsWithSpacedRepetion(ids: List<Int>, currentTime: Long = System.currentTimeMillis()): List<Card>
+    abstract fun getCardsByMultipleSetIdsWithSpacedRepetion(
+        ids: List<Int>,
+        currentTime: Long = System.currentTimeMillis()
+    ): List<Card>
 
     @Query("select * from `set` where id = :id")
-    fun getSetById(id: Int): Set
+    abstract fun getSetById(id: Int): Set
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addOrUpdateCard(card: Card)
+    abstract fun addOrUpdateCard(card: Card)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addOrUpdateCards(card: List<Card>)
+    abstract fun addOrUpdateCards(card: List<Card>)
 
     @Delete
-    fun deleteSet(set: Set)
+    abstract fun deleteSet(set: Set)
 
     @Delete
-    fun deleteCard(card: Card)
+    abstract fun deleteCard(card: Card)
 
 
     @Query(
@@ -66,6 +70,17 @@ interface Database {
   frontText in (select frontText from Card group by frontText having count(*) != 1) or
   backText in (select backText from Card group by frontText having count(*) != 1)"""
     )
-    fun getDuplicates(): List<Card>
+    abstract fun getDuplicates(): List<Card>
 
+
+    @Query(
+        """
+        select * from Card where
+            lower(frontText) like :term or
+             lower(backText) like :term
+    """
+    )
+    protected abstract fun getCardsByPartialName(term: String): List<Card>
+
+    fun getCardsBySearchTerm(term: String) = getCardsByPartialName("%$term%".toLowerCase(Locale.getDefault()))
 }

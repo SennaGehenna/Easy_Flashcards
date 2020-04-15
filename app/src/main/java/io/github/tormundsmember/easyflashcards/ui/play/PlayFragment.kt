@@ -21,7 +21,10 @@ class PlayFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.screen_play
 
-    private val viewModel: PlayViewModel by lazy { getViewModel<PlayViewModel>() }
+    private val viewModel: PlayViewModel by lazy {
+        @Suppress("RemoveExplicitTypeArguments") //doesn't compile otherwise
+        getViewModel<PlayViewModel>()
+    }
 
     private lateinit var vCard: CardView
     private lateinit var txtCardText: AppCompatTextView

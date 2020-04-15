@@ -31,6 +31,7 @@ class DuplicateFinderFragment : BaseFragment() {
 
     lateinit var listDuplicates: RecyclerView
     private val viewModel: DuplicateFinderViewModel by lazy {
+        @Suppress("RemoveExplicitTypeArguments") //doesn't compile otherwise
         getViewModel<DuplicateFinderViewModel>()
     }
 

@@ -49,10 +49,42 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:background="@color/colorAccent"
-            app:layout_constraintBottom_toTopOf="@+id/txtExportToCsv"
+            app:layout_constraintBottom_toTopOf="@+id/txtSearch"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtDuplicateFinder" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtSearch"
+            style="@style/TextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/transparent"
+            android:gravity="start|center_vertical"
+            android:text="@string/searchInDatabase"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/divSearch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtDuplicateFinder" />
+
+        <View
+            android:id="@+id/divSearch"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorAccent"
+            app:layout_constraintBottom_toTopOf="@+id/txtExportToCsv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtSearch" />
+
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtExportToCsv"
@@ -69,7 +101,7 @@
             app:layout_constraintBottom_toTopOf="@+id/view14"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view13" />
+            app:layout_constraintTop_toBottomOf="@+id/divSearch" />
 
         <View
             android:id="@+id/view14"

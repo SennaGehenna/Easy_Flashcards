@@ -3,4 +3,5 @@
     <string name="createIssueUrl" translatable="false">https://github.com/SennaGehenna/Easy_Flashcards/issues/new/?template=bug_report.md&amp;labels=bug&amp;body=%s</string>
     <string name="repository" translatable="false">https://github.com/SennaGehenna/Easy_Flashcards</string>
     <string name="issueTracker" translatable="false">https://github.com/SennaGehenna/Easy_Flashcards/issues/new/choose</string>
+    <string name="searchInDatabase">Search term in database</string>
 </resources>

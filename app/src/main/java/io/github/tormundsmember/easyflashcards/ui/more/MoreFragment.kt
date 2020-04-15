@@ -8,13 +8,14 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.appcompat.widget.AppCompatTextView
 import io.github.tormundsmember.easyflashcards.BuildConfig
 import io.github.tormundsmember.easyflashcards.R
+import io.github.tormundsmember.easyflashcards.databinding.ScreenMoreBinding
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.base_ui.exceptions.MissingRequiredKeysException
 import io.github.tormundsmember.easyflashcards.ui.duplicate_finder.DuplicateFinderKey
 import io.github.tormundsmember.easyflashcards.ui.licenses.LicensesKey
+import io.github.tormundsmember.easyflashcards.ui.search.SearchKey
 import io.github.tormundsmember.easyflashcards.ui.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,50 +39,39 @@ class MoreFragment : BaseFragment() {
     override val titleText: String
         get() = getString(R.string.more)
 
-    private lateinit var txtExportToCsv: AppCompatTextView
-    private lateinit var txtImportFromCsvSubtitle: AppCompatTextView
-    private lateinit var txtImportFromCsv: AppCompatTextView
-    private lateinit var txtLicenses: AppCompatTextView
-    private lateinit var txtSourceCode: AppCompatTextView
-    private lateinit var txtIssueTracker: AppCompatTextView
-    private lateinit var txtVersionCode: AppCompatTextView
-    private lateinit var txtDuplicateFinder: AppCompatTextView
-    private lateinit var progressBar: ProgressBar
+    private lateinit var loadingSpinner: ProgressBar
 
-    private val viewModel: MoreViewModel by lazy { getViewModel<MoreViewModel>() }
+
+    private val viewModel: MoreViewModel by lazy {
+        @Suppress("RemoveExplicitTypeArguments") //doesn't compile otherwise
+        getViewModel<MoreViewModel>()
+    }
 
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        txtExportToCsv = view.findViewById(R.id.txtExportToCsv)
-        txtImportFromCsvSubtitle = view.findViewById(R.id.txtImportFromCsvSubtitle)
-        txtImportFromCsv = view.findViewById(R.id.txtImportFromCsv)
-        txtLicenses = view.findViewById(R.id.txtLicenses)
-        txtSourceCode = view.findViewById(R.id.txtSourceCode)
-        txtIssueTracker = view.findViewById(R.id.txtIssueTracker)
-        txtVersionCode = view.findViewById(R.id.txtVersionCode)
-        txtDuplicateFinder = view.findViewById(R.id.txtDuplicateFinder)
-        progressBar = view.findViewById(R.id.progressBar)
-
-        txtVersionCode.text = "v${BuildConfig.VERSION_NAME}"
-
-        txtImportFromCsvSubtitle.setOnClickListener { importFromCsv() }
-        txtImportFromCsv.setOnClickListener { importFromCsv() }
-        txtExportToCsv.setOnClickListener { exportToCsv() }
-        txtLicenses.setOnClickListener { goTo(LicensesKey()) }
-        txtSourceCode.setOnClickListener { openUrlInCustomTabs(it.context, Uri.parse(getString(R.string.repository))) }
-        txtIssueTracker.setOnClickListener { openUrlInCustomTabs(it.context, Uri.parse(getString(R.string.issueTracker))) }
-        txtDuplicateFinder.setOnClickListener { goTo(DuplicateFinderKey()) }
+        ScreenMoreBinding.bind(view).apply {
+            loadingSpinner = progressBar
+            txtImportFromCsvSubtitle.setOnClickListener { importFromCsv() }
+            txtImportFromCsv.setOnClickListener { importFromCsv() }
+            txtExportToCsv.setOnClickListener { exportToCsv() }
+            txtLicenses.setOnClickListener { goTo(LicensesKey()) }
+            txtSourceCode.setOnClickListener { openUrlInCustomTabs(it.context, Uri.parse(getString(R.string.repository))) }
+            txtIssueTracker.setOnClickListener { openUrlInCustomTabs(it.context, Uri.parse(getString(R.string.issueTracker))) }
+            txtDuplicateFinder.setOnClickListener { goTo(DuplicateFinderKey()) }
+            txtSearch.setOnClickListener { goTo(SearchKey()) }
+            txtVersionCode.text = "v${BuildConfig.VERSION_NAME}"
+        }
     }
 
     private fun showLoadingSpinner() {
-        progressBar.visible()
+        loadingSpinner.visible()
     }
 
     private fun hideLoadingSpinner() {
-        progressBar.gone()
+        loadingSpinner.gone()
     }
 
     private fun continueWithExport() {
