@@ -1,6 +1,5 @@
 package io.github.tormundsmember.easyflashcards.ui.play
 
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -23,7 +22,10 @@ class PlayFragment : BaseFragment() {
 
     private val viewModel: PlayViewModel by lazy {
         @Suppress("RemoveExplicitTypeArguments") //doesn't compile otherwise
-        getViewModel<PlayViewModel>()
+        getViewModel<PlayViewModel>().apply {
+            val key = getKey<PlayKey>()
+            initialize(key.setIds, key.reverseCards)
+        }
     }
 
     private lateinit var vCard: CardView
@@ -41,12 +43,6 @@ class PlayFragment : BaseFragment() {
 
     private val canclickButtons = AtomicBoolean(true)
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        getKey<PlayKey>().let {
-            viewModel.initialize(it.setIds, it.reverseCards)
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

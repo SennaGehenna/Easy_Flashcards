@@ -17,7 +17,8 @@ class PlayViewModel : BaseViewModel() {
         get() = cards.count { it.isCorrectGuess != null }
     val correctGuesses: Int
         get() = cards.count { it.isCorrectGuess == true }
-    val cardCount = cards.size
+    val cardCount: Int
+        get() = cards.size
 
     private var wasLastGuessCorrect: Boolean? = null
 
@@ -38,19 +39,10 @@ class PlayViewModel : BaseViewModel() {
     val isFinished: LiveData<GameState>
         get() = _isFinished
 
-    private val _currentCard: MutableLiveData<FlippableCard> = MutableLiveData<FlippableCard>().apply {
-        this += cards.getOrNull(0)
-    }
+    private val _currentCard: MutableLiveData<FlippableCard> = MutableLiveData<FlippableCard>()
+
     val currentCard: LiveData<FlippableCard>
         get() = _currentCard
-
-    init {
-        if (cards.isEmpty()) {
-            _isFinished += GameState.NoCardsToRehearse
-        } else {
-            _isFinished += GameState.Running
-        }
-    }
 
     fun flipCard() {
         _currentCard += _currentCard.value?.let {
@@ -74,7 +66,10 @@ class PlayViewModel : BaseViewModel() {
                     nextInterval = RehearsalInterval.STAGE_1
                     positiveCheckCount = card.positiveCheckCount
                 }
-                nextRecheck = io.github.tormundsmember.easyflashcards.ui.util.getStartOfDay() + java.util.concurrent.TimeUnit.DAYS.toMillis(nextInterval.getInterval().toLong())
+                nextRecheck =
+                    io.github.tormundsmember.easyflashcards.ui.util.getStartOfDay() + java.util.concurrent.TimeUnit.DAYS.toMillis(
+                        nextInterval.getInterval().toLong()
+                    )
             } else {
                 nextInterval = card.currentInterval
                 positiveCheckCount = card.positiveCheckCount + if (correctGuess) 1 else 0
@@ -129,6 +124,12 @@ class PlayViewModel : BaseViewModel() {
                 cardsTmp
             }.toMutableList()
 
+            if (cards.isEmpty()) {
+                _isFinished += GameState.NoCardsToRehearse
+            } else {
+                _currentCard += cards.getOrNull(0)
+                _isFinished += GameState.Running
+            }
         }
     }
 
