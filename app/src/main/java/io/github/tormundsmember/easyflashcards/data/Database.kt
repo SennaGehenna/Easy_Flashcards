@@ -37,6 +37,9 @@ abstract class Database {
     @Query("select * from card where setId = :setId")
     abstract fun observeSet(setId: Int): LiveData<List<Card>>
 
+    @Query("select * from card where id = :id")
+    abstract fun getCardById(id: Int): Card
+
     @Query("select * from card where setId = :id")
     abstract fun getCardsBySetId(id: Int): List<Card>
 
@@ -63,6 +66,9 @@ abstract class Database {
 
     @Delete
     abstract fun deleteCard(card: Card)
+
+    @Query("UPDATE Card SET nextRecheck = 0, currentInterval = 'STAGE_1' WHERE id in (:ids)")
+    abstract fun resetProgressFor(ids: List<Int>)
 
 
     @Query(

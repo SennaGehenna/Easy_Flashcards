@@ -60,4 +60,12 @@
     <string name="darkMode_system">Use System-Settings</string>
     <string name="darkMode_Day">Always Light</string>
     <string name="darkMode_Night">Always Dark</string>
+    <string name="importTerms">Import</string>
+    <string name="importmode_overwrite">Overwrite existing IDs in sets/cards</string>
+    <string name="importmode_insert">Generate new IDs for sets/cards</string>
+    <string name="headerAsColumns">Use first line for column-names</string>
+    <string name="searchInDatabase">Search term in database</string>
+    <string name="upload_file">Upload File</string>
+    <string name="resetProgress">Reset selected cards to day 0</string>
+    <string name="didResetSelectedCards">The selected cards were reset.</string>
 </resources>

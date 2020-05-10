@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.tormundsmember.easyflashcards.BuildConfig
 import io.github.tormundsmember.easyflashcards.R
@@ -175,7 +176,7 @@ fun CharSequence.prepareLinkText(context: Context): SpannableStringBuilder {
         val flags = strBuilder.getSpanFlags(span)
 
         val clickable = object : ClickableSpan() {
-            override fun onClick(widget: View?) {
+            override fun onClick(widget: View) {
                 openUrlInCustomTabs(context, Uri.parse(span.url))
             }
         }

@@ -13,4 +13,8 @@ interface MainScreen {
 
     fun hideCurrentTutorial(onAddButtonClick: Action, onCancel: Action)
 
+    fun showFullProgressBar()
+
+    fun hideFullProgressBar()
+
 }

@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_set.DialogAddE
 import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
 import io.github.tormundsmember.easyflashcards.ui.play.PlayKey
 import io.github.tormundsmember.easyflashcards.ui.set.SetKey
+import io.github.tormundsmember.easyflashcards.ui.set_overview.model.LoadingState
 import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 import io.github.tormundsmember.easyflashcards.ui.settings.SettingsKey
 import io.github.tormundsmember.easyflashcards.ui.util.*
@@ -171,6 +173,7 @@ class SetOverviewFragment : BaseFragment() {
             when (item.itemId) {
                 R.id.action_add -> showAddEditSetDialog(ctx)
                 R.id.action_select_all -> adapter.activateAllItems()
+                R.id.action_reset_progress -> resetProgressForSelected()
                 R.id.action_more -> {
                     adapter.deactiveAllItems()
                     goTo(MoreKey())
@@ -182,6 +185,20 @@ class SetOverviewFragment : BaseFragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun resetProgressForSelected() {
+        viewModel.resetProgress(adapter.getSelectedItems()).observe {
+            when (it) {
+                LoadingState.Loading -> (activity as? MainScreen)?.showFullProgressBar()
+                LoadingState.Done -> {
+                    (activity as? MainScreen)?.hideFullProgressBar()
+                    adapter.deactiveAllItems()
+                    Toast.makeText(context, getString(R.string.didResetSelectedCards), Toast.LENGTH_SHORT).show()
+                }
+                else -> (activity as? MainScreen)?.hideFullProgressBar()
+            }
+        }
     }
 
     override fun canGoBack(): Boolean {
@@ -419,13 +436,6 @@ class SetOverviewFragment : BaseFragment() {
     private class Adapter(onSomethingSelected: (Boolean) -> Unit, onClick: Click<Set>) :
         BaseAdapter<Set>(onSomethingSelected = onSomethingSelected, onClick = onClick) {
 
-        fun selectFirst() {
-            if (items.isNotEmpty()) {
-                activeItems.add(0)
-                notifyItemChanged(0)
-            }
-        }
-
         override fun getItemLayoutId(viewType: Int): Int = R.layout.listitem_set
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -450,6 +460,7 @@ class SetOverviewFragment : BaseFragment() {
 
     }
 
+    @Suppress("ClassName")
     private sealed class TutorialStep {
         object SHOW_MULTISELECT : TutorialStep()
         object SHOW_PLAY_NORMAL : TutorialStep()

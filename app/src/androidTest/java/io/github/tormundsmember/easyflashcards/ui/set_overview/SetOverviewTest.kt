@@ -16,6 +16,10 @@ import androidx.test.uiautomator.UiDevice
 import io.github.tormundsmember.easyflashcards.R
 import io.github.tormundsmember.easyflashcards.ui.Dependencies
 import io.github.tormundsmember.easyflashcards.ui.MainActivity
+import io.github.tormundsmember.easyflashcards.ui.set.SetViewModel
+import io.github.tormundsmember.easyflashcards.ui.set.model.Card
+import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
+import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 import io.mockk.every
 import org.junit.After
 import org.junit.Assert.*
@@ -23,6 +27,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 class SetOverviewTest {
@@ -32,7 +37,7 @@ class SetOverviewTest {
 
     @Before
     fun setUp() {
-        with(Dependencies.database){
+        with(Dependencies.database) {
             getSets().forEach {
                 deleteSet(it)
             }
@@ -41,7 +46,7 @@ class SetOverviewTest {
 
     @After
     fun tearDown() {
-        with(Dependencies.database){
+        with(Dependencies.database) {
             getSets().forEach {
                 deleteSet(it)
             }
@@ -125,6 +130,42 @@ class SetOverviewTest {
                 assertEquals(frontText2, it.frontText)
                 assertEquals(backText2, it.backText)
             }
+        }
+    }
+
+    @LargeTest
+    @Test
+    fun shouldResetProperly() {
+        setupTutorials()
+
+        with(Dependencies.database) {
+            val set = Set(1, "Set 1")
+            addSet(set)
+            val card = Card(
+                id = 1,
+                frontText = "front",
+                backText = "back",
+                currentInterval = RehearsalInterval.STAGE_4,
+                nextRecheck = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(3),
+                setId = set.id,
+                checkCount = 13,
+                positiveCheckCount = 12
+            )
+            addOrUpdateCard(
+                card
+            )
+
+            SetViewModel().resetProgress(listOf(card))
+
+            val newCard = getCardById(card.id)
+            assertEquals(card.id, newCard.id)
+            assertEquals(card.frontText, newCard.frontText)
+            assertEquals(card.backText, newCard.backText)
+            assertEquals(RehearsalInterval.STAGE_1, newCard.currentInterval)
+            assertEquals(0, newCard.nextRecheck)
+            assertEquals(card.setId, newCard.setId)
+            assertEquals(card.checkCount, newCard.checkCount)
+            assertEquals(card.positiveCheckCount, newCard.positiveCheckCount)
         }
     }
 

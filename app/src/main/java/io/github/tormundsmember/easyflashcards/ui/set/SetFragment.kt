@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ import io.github.tormundsmember.easyflashcards.ui.dialog_add_edit_set.DialogAddE
 import io.github.tormundsmember.easyflashcards.ui.more.MoreKey
 import io.github.tormundsmember.easyflashcards.ui.play.PlayKey
 import io.github.tormundsmember.easyflashcards.ui.set.model.Card
+import io.github.tormundsmember.easyflashcards.ui.set_overview.model.LoadingState
 import io.github.tormundsmember.easyflashcards.ui.settings.SettingsKey
 import io.github.tormundsmember.easyflashcards.ui.util.*
 
@@ -175,6 +177,7 @@ open class SetFragment : BaseFragment() {
                     goTo(MoreKey())
                     adapter.deactiveAllItems()
                 }
+                R.id.action_reset_progress -> resetProgressForSelected()
                 R.id.action_flip_selected -> {
                     viewModel.flipCards(adapter.getSelectedItems())
                     adapter.deactiveAllItems()
@@ -182,6 +185,20 @@ open class SetFragment : BaseFragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun resetProgressForSelected() {
+        viewModel.resetProgress(adapter.getSelectedItems()).observe {
+            when (it) {
+                LoadingState.Loading -> (activity as? MainScreen)?.showFullProgressBar()
+                LoadingState.Done -> {
+                    (activity as? MainScreen)?.hideFullProgressBar()
+                    adapter.deactiveAllItems()
+                    Toast.makeText(context, getString(R.string.didResetSelectedCards), Toast.LENGTH_SHORT).show()
+                }
+                else -> (activity as? MainScreen)?.hideFullProgressBar()
+            }
+        }
     }
 
     private fun showTutorial() {

@@ -13,6 +13,12 @@
         app:showAsAction="never"
         />
 
+    <item
+        android:id="@+id/action_reset_progress"
+        android:title="@string/resetProgress"
+        app:showAsAction="never" />
+
+
     <item android:id="@+id/action_settings"
         android:title="@string/settings"
         app:showAsAction="never"
