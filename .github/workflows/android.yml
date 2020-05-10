@@ -2,8 +2,20 @@ name: Android CI
 
 on:
   push:
+    paths:
+    - '**.kt'
+    - '**.java'
+    - '**.xml'
+    - '**.gradle'
+    - '**.yml'
     branches: [ master ]
   pull_request:
+    paths:
+    - '**.kt'
+    - '**.java'
+    - '**.xml'
+    - '**.gradle'
+    - '**.yml'
     branches: [ master ]
 
 jobs:

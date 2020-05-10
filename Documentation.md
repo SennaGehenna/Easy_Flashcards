@@ -1,14 +1,14 @@
 # Easy Flashcards
 #### Screens
-1. SetOverview
-1. AddOrEditSetDialog
-1. Set
-1. AddOrEditCardDialog
-1. Play
-1. Settings
-1. More
-1. DuplicateFinder
-1. Licenses
+1. [SetOverview](https://github.com/SennaGehenna/Easy_Flashcards/blob/master/Documentation.md#SetOverview)
+1. [AddOrEditSetDialog](https://github.com/SennaGehenna/Easy_Flashcards/blob/master/Documentation.md#AddOrEditSetDialog)
+1. [Set](https://github.com/SennaGehenna/Easy_Flashcards/blob/master/Documentation.md#Set)
+1. [AddOrEditCardDialog](https://github.com/SennaGehenna/Easy_Flashcards/blob/master/Documentation.md#AddOrEditCardDialog)
+1. [Play](https://github.com/SennaGehenna/Easy_Flashcards/blob/master/Documentation.md#Play)
+1. [Settings](https://github.com/SennaGehenna/Easy_Flashcards/blob/master/Documentation.md#Settings)
+1. [More](https://github.com/SennaGehenna/Easy_Flashcards/blob/master/Documentation.md#More)
+1. [DuplicateFinder](https://github.com/SennaGehenna/Easy_Flashcards/blob/master/Documentation.md#DuplicateFinder)
+1. [Licenses](https://github.com/SennaGehenna/Easy_Flashcards/blob/master/Documentation.md#Licenses)
 ## SetOverview
 
 The dialog consists of: 
@@ -48,4 +48,4 @@ When the user opens the screen when there is more than one set and hasn't seen t
 
 #### The User has opened this dialog by clicking the 'Add'-Button in the SetOverview
 
-The dialog opens, they keyboard is visible and the cursor is placed in the 
+The dialog opens, they keyboard is visible and the cursor is placed in the first edit-text.
