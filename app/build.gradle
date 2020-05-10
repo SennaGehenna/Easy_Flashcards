@@ -10,11 +10,11 @@ android {
     def versionPatch = 9
     def versionBuild = 0
 
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "io.github.tormundsmember.easyflashcards"
         minSdkVersion 23
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         testInstrumentationRunner "io.github.tormundsmember.easyflashcards.CustomTestRunner"
@@ -116,6 +116,6 @@ dependencies {
     androidTestImplementation 'com.android.support:support-annotations:28.0.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test:rules:1.0.2'
-    androidTestImplementation 'io.mockk:mockk-android:1.9.3.kotlin12'
+    androidTestImplementation 'io.mockk:mockk-android:1.10.0'
     androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
 }

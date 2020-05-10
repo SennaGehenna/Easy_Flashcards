@@ -19,17 +19,21 @@
     <item
         android:id="@+id/action_flip_selected"
         android:title="@string/flipSelected"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never" />
 
-    <item android:id="@+id/action_settings"
+    <item
+        android:id="@+id/action_reset_progress"
+        android:title="@string/resetProgress"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
         android:title="@string/settings"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never" />
 
-    <item android:id="@+id/action_more"
+    <item
+        android:id="@+id/action_more"
         android:title="@string/more"
-        app:showAsAction="never"
-        />
+        app:showAsAction="never" />
 
 </menu>

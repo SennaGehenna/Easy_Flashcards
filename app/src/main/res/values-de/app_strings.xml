@@ -60,4 +60,12 @@
     <string name="darkMode_system">System-Einstellung verwenden</string>
     <string name="darkMode_Day">Immer Hell</string>
     <string name="darkMode_Night">Immer Dunkel</string>
+    <string name="importTerms">Importieren</string>
+    <string name="importmode_overwrite">Existierende IDs in Sets/Karten überschreiben</string>
+    <string name="importmode_insert">Existierende IDs in Sets/Karten verwerfen und neu generieren</string>
+    <string name="headerAsColumns">Die erste Zeile für Spaltennamen verwenden</string>
+    <string name="searchInDatabase">Begriff in der Datenbank suchen</string>
+    <string name="upload_file">Datei hochladen</string>
+    <string name="resetProgress">Ausgewählte Karten auf Tag 0 zurücksetzen</string>
+    <string name="didResetSelectedCards">Die ausgewählten Karten wurden zurückgesetzt.</string>
 </resources>

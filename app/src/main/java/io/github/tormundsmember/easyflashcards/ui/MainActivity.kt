@@ -1,6 +1,5 @@
 package io.github.tormundsmember.easyflashcards.ui
 
-import android.media.AudioManager
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -16,8 +15,12 @@ import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseFragment
 import io.github.tormundsmember.easyflashcards.ui.base_ui.BaseKey
 import io.github.tormundsmember.easyflashcards.ui.base_ui.FragmentStateChanger
 import io.github.tormundsmember.easyflashcards.ui.base_ui.MainScreen
+import io.github.tormundsmember.easyflashcards.ui.set.model.Card
+import io.github.tormundsmember.easyflashcards.ui.set.model.RehearsalInterval
 import io.github.tormundsmember.easyflashcards.ui.set_overview.SetOverviewKey
+import io.github.tormundsmember.easyflashcards.ui.set_overview.model.Set
 import io.github.tormundsmember.easyflashcards.ui.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * design available in https://projects.invisionapp.com/freehand/document/Qjl32e0Ze
@@ -26,6 +29,8 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
 
     private lateinit var fragmentStateChanger: FragmentStateChanger
     override lateinit var backstack: Backstack
+
+    private lateinit var fullSpinner: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -37,6 +42,8 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
         backstack = Navigator.configure()
             .setStateChanger(SimpleStateChanger(this))
             .install(this, findViewById(R.id.fragmentContainer), History.single(SetOverviewKey()))
+
+        fullSpinner = findViewById(R.id.fullSpinner)
     }
 
     override fun onNavigationEvent(stateChange: StateChange) {
@@ -69,11 +76,12 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
                 }
                 removeOldDarkModeSetting()
             }
-            if(!listOf(
-                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
-                AppCompatDelegate.MODE_NIGHT_YES,
-                AppCompatDelegate.MODE_NIGHT_NO
-            ).contains(currentDarkModeSetting)){
+            if (!listOf(
+                    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
+                    AppCompatDelegate.MODE_NIGHT_YES,
+                    AppCompatDelegate.MODE_NIGHT_NO
+                ).contains(currentDarkModeSetting)
+            ) {
                 currentDarkModeSetting = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
             }
             AppCompatDelegate.setDefaultNightMode(currentDarkModeSetting)
@@ -185,5 +193,17 @@ class MainActivity : AppCompatActivity(), MainScreen, SimpleStateChanger.Navigat
                         }
                     })
         }
+    }
+
+    override fun showFullProgressBar() {
+        fullSpinner.setOnClickListener {
+            //intentionally left blank, this should block the user completely
+        }
+        fullSpinner.visible()
+    }
+
+    override fun hideFullProgressBar() {
+        fullSpinner.setOnClickListener(null)
+        fullSpinner.gone()
     }
 }

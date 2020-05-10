@@ -30,7 +30,7 @@ class PlayViewModel : BaseViewModel() {
             _canUndoCard += value > 0
         }
 
-    private val _canUndoCard = MutableLiveData<Boolean>().apply { postValue(false) }
+    private val _canUndoCard = MutableLiveData(false)
     val canUndoCard: LiveData<Boolean>
         get() = _canUndoCard
 
